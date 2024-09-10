@@ -16,4 +16,9 @@ export namespace egress {
         email: string,
         name: string
     }
+
+    // Prompt related
+    export interface InterviewPrompt extends Request {
+        promptId: string
+    }
 }

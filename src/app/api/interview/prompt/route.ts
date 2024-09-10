@@ -1,7 +1,7 @@
 import { egress } from "../../../../models/egress";
 import { CoreService } from "../../../../services/core-service";
 import { handleNextError, handleNextSuccess } from "../../../../utils/response-generator";
-import { enrichRequest } from "../../../../utils/validations";
+import { enrichRequest, validateRequiredFields } from "../../../../utils/validations";
 
 export const POST = async (req: Request) => {
     try {
@@ -16,8 +16,5 @@ export const POST = async (req: Request) => {
         console.log("Error in POST:interview/prompt", error)
         return handleNextError(error);
     }
-}
-function validateRequiredFields(requestBody: any, arg1: string[]) {
-    throw new Error("Function not implemented.");
 }
 

@@ -1,12 +1,18 @@
 export enum SubscriptionTierKey {
     FREE = "FREE",
-    PRO = "PRO",
-    UNLIMITED = "UNLIMITED"
+    PLUS = "PLUS",
+    PREMIUM = "PREMIUM"
 }
 
 export enum UserStatus {
     INVITED = "INVITED",
     INITIALIZED = "INITIALIZED",
     ACTIVE = "ACTIVE",
-    DIACTIVE = "DIACTIVE"
+    DIACTIVE = "DEACTIVE"
+}
+
+export enum UserInterviewStatus {
+    ONGOING = "ONGOING",    
+    COMPLETED = "COMPLETED",
+    CANCELLED = "CANCELLED"
 }

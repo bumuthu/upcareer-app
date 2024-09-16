@@ -4,19 +4,20 @@ import { UserModel } from '../../models/entities';
 export interface UserDocument extends Document, Omit<UserModel, '_id'> { }
 
 const userSchema = new Schema({
-    name: String,
-    email: String,
-    providerUserId: String,
-    status: String,
-    notifications: [{
-        createdAt: Number,
-        title: String,
-        description: String,
-        hasRead: Boolean
-    }],
-    imageUrl: String,
-    thumbnailUrl: String,
-    createdAt: Number,
+    name: { type: String, required: true },
+    email: { type: String, required: true },
+    providerUserId: { type: String, required: true },
+    status: { type: String, required: true, enum: ["INVITED", "INITIALIZED", "ACTIVE", "DEACTIVE"] },
+    notifications: {
+        required: false, type: [{
+            createdAt: { type: Number, required: true },
+            title: { type: String, required: true },
+            description: { type: String, required: false },
+            hasRead: { type: Boolean, required: false }
+        }]
+    },
+    resumeUrl: { type: String, required: false },
+    createdAt: { type: Number, required: true }
 });
 
 const UserDBModel = mongoose.models['User'] || mongoose.model<UserDocument>('User', userSchema);

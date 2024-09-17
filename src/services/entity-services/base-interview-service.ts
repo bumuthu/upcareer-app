@@ -11,6 +11,7 @@ export class BaseInterviewService extends EntityService<BaseInterviewModel, Base
     }
 
     async getBaseInterviews(queryInput: egress.BaseInterviewQueryInput): Promise<BaseInterviewModel[]> {
+        console.log("Mocking base interviews response")
         return baseInterviews;
     }
 }

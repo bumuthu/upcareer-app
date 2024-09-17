@@ -7,7 +7,7 @@ export const GET = async (req: Request) => {
         const baseInterviews = await baseInterviewService.getBaseInterviews({});
         return handleNextSuccess(baseInterviews)
     } catch (error) {
-        console.log("Error in GET:/user", error)
+        console.log("Error in GET:/public/base-interviews", error)
         return handleNextError(error);
     }
 }

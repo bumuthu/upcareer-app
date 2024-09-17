@@ -18,6 +18,6 @@ const dialogueSchema = new Schema({
     createdAt: { type: Number, required: true }
 });
 
-const DialogueDBModel = mongoose.models['Dialogue'] || mongoose.model<DialogueDocument>('Dialogue', dialogueSchema);
+const DialogueDBModel = (mongoose.models || {})['Dialogue'] || mongoose.model<DialogueDocument>('Dialogue', dialogueSchema);
 
 export default DialogueDBModel;

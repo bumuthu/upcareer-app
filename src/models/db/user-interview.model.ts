@@ -15,6 +15,6 @@ const userInterviewSchema = new Schema({
     duration: { type: Number, required: true }
 });
 
-const UserInterviewDBModel = mongoose.models['UserInterview'] || mongoose.model<UserInterviewDocument>('UserInterview', userInterviewSchema);
+const UserInterviewDBModel = (mongoose.models || {})['UserInterview'] || mongoose.model<UserInterviewDocument>('UserInterview', userInterviewSchema);
 
 export default UserInterviewDBModel;

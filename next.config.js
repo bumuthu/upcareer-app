@@ -16,6 +16,7 @@ module.exports = {
             }
         });
         config.resolve.fallback = {
+            aws4: false,
             fs: false,
             net: false,
             dns: false,

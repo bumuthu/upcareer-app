@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose';
-import { BaseInterviewModel, SubscriptionModel } from '../../models/entities';
+import { BaseInterviewModel } from '../../models/entities';
 
 export interface BaseInterviewDocument extends Document, Omit<BaseInterviewModel, '_id'> { }
 
@@ -12,6 +12,6 @@ const baseInterviewSchema = new Schema({
     rating: { type: Number, required: false }
 });
 
-const BaseInterviewDBModel = mongoose.models['BaseInterview'] || mongoose.model<BaseInterviewDocument>('BaseInterview', baseInterviewSchema);
+const BaseInterviewDBModel = (mongoose.models || {})['BaseInterview'] || mongoose.model<BaseInterviewDocument>('BaseInterview', baseInterviewSchema);
 
 export default BaseInterviewDBModel;

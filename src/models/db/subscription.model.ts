@@ -9,6 +9,6 @@ const subscriptionSchema = new Schema({
     stripeMonthlyLookUpKey: { type: String, required: true }
 });
 
-const SubscriptionDBModel = mongoose.models['Subscription'] || mongoose.model<SubscriptionDocument>('Subscription', subscriptionSchema);
+const SubscriptionDBModel = (mongoose.models || {})['Subscription'] || mongoose.model<SubscriptionDocument>('Subscription', subscriptionSchema);
 
 export default SubscriptionDBModel;

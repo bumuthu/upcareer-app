@@ -1,5 +1,5 @@
 import { RestClient } from "./rest-client";
-import { UserModel } from "../../models/entities";
+import { BaseInterviewModel, UserModel } from "../../models/entities";
 import { egress } from "../../models/egress";
 
 export class PrivateRestService {

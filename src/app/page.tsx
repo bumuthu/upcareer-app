@@ -1,21 +1,29 @@
 'use client'
 
-import React, { useEffect } from 'react'
-import { PrivateRestService } from '../services/api-services/private-rest-service';
+import React, { useEffect, useState } from 'react'
+import WithTopNavBar from '../components/layouts/WithTopNavBar';
+import BaseInterviewGrid from '../components/base-interviews/BaseInterviewGrid';
+import { PublicRestService } from '../services/api-services/public-rest-service';
 
+import { BaseInterviewModel } from '../models/entities';
 const Home: React.FC = () => {
-  const privateService = new PrivateRestService();
+  const [baseInterviews, setBaseInterviews] = useState<BaseInterviewModel[]>([])
+  const publicService = new PublicRestService();
+
   useEffect(() => {
-    const users = async () => {
-      await privateService.getUser();
+    const queryBaseInterviews = async () => {
+      const baseInterviewRes = await publicService.queryBaseInterviews({})
+      setBaseInterviews(baseInterviewRes)
     }
-    users()
+    queryBaseInterviews()
   }, [])
   return (
     <main >
-      <div className="flex min-h-screen flex-col items-center justify-between p-12">
-        Welcome to UpCareer
-      </div>
+      <WithTopNavBar>
+        <div style={{ maxWidth: '1200px', width: '75%', margin: '100px auto' }}>
+          <BaseInterviewGrid baseInterviews={baseInterviews}/>
+        </div>
+      </WithTopNavBar>
     </main>
   )
 }

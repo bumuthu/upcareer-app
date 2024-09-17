@@ -11,23 +11,19 @@ export const metadata: Metadata = {
   icons: '/icon-256.svg',
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body suppressHydrationWarning={true}>
-          <AuthContextProvider>
-            <SubscriptionContextProvider>
-              <GlobalContextProvider>
-                <AppThemeProvider>
-                      {children}
-                </AppThemeProvider>
-              </GlobalContextProvider>
-            </SubscriptionContextProvider>
-          </AuthContextProvider>
+        <AuthContextProvider>
+          <SubscriptionContextProvider>
+            <GlobalContextProvider>
+              <AppThemeProvider>
+                {children}
+              </AppThemeProvider>
+            </GlobalContextProvider>
+          </SubscriptionContextProvider>
+        </AuthContextProvider>
       </body>
     </html>
   )

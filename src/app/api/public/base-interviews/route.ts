@@ -1,4 +1,4 @@
-import { BaseInterviewService } from "../../../../services/entity-services/base-interview-service";
+import { BaseInterviewService } from "../../../../services/server-side/entity-services/base-interview-service";
 import { handleNextError, handleNextSuccess } from "../../../../utils/response-generator";
 
 export const GET = async (req: Request) => {

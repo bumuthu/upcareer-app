@@ -1,7 +1,11 @@
 import React from 'react';
 import { Col, Row, Button } from 'antd';
+import { LoginLink } from '@kinde-oss/kinde-auth-nextjs/components';
+import { useAuthContext } from '../../context/AuthContext';
 
 const TopNavBar = () => {
+    const authContext = useAuthContext();
+
     const onClickInterviews = () => {
         console.log("Clicked interviews")
     }
@@ -13,12 +17,17 @@ const TopNavBar = () => {
                 </Col>
                 <Col span={8}>
                     <Row justify="end" >
-                        <Button type="text" size='large' onClick={onClickInterviews} style={{ fontWeight: 600 }}>
+                        <Button type="text" size='middle' onClick={onClickInterviews} style={{ fontWeight: 600 }}>
                             Interviews
                         </Button>
-                        <Button type="text" size='large' onClick={onClickInterviews} style={{ fontWeight: 600, marginLeft: 20 }}>
+                        <Button type="text" size='middle' onClick={onClickInterviews} style={{ fontWeight: 600, marginLeft: 20 }}>
                             Tutorial
                         </Button>
+                        {
+                            !authContext.isAuthenticated && <Button type="primary" size='middle' style={{ fontWeight: 600, marginLeft: 50 }}>
+                                <LoginLink>Log in</LoginLink>
+                            </Button>
+                        }
                     </Row>
                 </Col>
             </Row>

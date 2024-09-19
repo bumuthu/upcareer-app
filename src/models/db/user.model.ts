@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import { UserModel } from '../../models/entities';
 
-export interface UserDocument extends Document,  Omit<UserModel, '_id'> { }
+export interface UserDocument extends Document, Omit<UserModel, '_id'> { }
 
 const userSchema = new Schema({
     name: { type: String, required: true },
@@ -17,7 +17,25 @@ const userSchema = new Schema({
         }]
     },
     resumeUrl: { type: String, required: false },
-    createdAt: { type: Number, required: true }
+    createdAt: { type: Number, required: true },
+    stripeSubscriptionId: { type: String, required: false },
+    subscription: { type: mongoose.Schema.Types.ObjectId, ref: 'Subscription', required: false },
+    subscriptionStatus: { type: String, required: false },
+    subscriptionEvents: [{
+        eventType: String,
+        tier: { type: mongoose.Schema.Types.ObjectId, ref: 'Subscription' },
+        createdAt: Number,
+    }],
+    subscriptionUsages: [{
+        usedCredits: Number,
+        billingCycleStartsAt: Number,
+        billingCycleEndsAt: Number
+    }],
+    subscriptionCurrentUsage: {
+        usedCredits: Number,
+        billingCycleStartsAt: Number,
+        billingCycleEndsAt: Number
+    },
 });
 
 const UserDBModel = (mongoose.models || {})['User'] || mongoose.model<UserDocument>('User', userSchema);

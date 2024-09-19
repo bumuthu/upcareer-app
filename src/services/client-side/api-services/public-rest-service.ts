@@ -1,5 +1,5 @@
-import { egress } from "../../models/egress";
-import { BaseInterviewModel, UserModel } from "../../models/entities";
+import { egress } from "../../../models/egress";
+import { BaseInterviewModel, UserModel } from "../../../models/entities";
 import { RestClient } from "./rest-client";
 
 

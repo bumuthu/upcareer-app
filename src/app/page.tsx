@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import WithTopNavBar from '../components/layouts/WithTopNavBar';
 import BaseInterviewGrid from '../components/base-interviews/BaseInterviewGrid';
-import { PublicRestService } from '../services/api-services/public-rest-service';
+import { PublicRestService } from '../services/client-side/api-services/public-rest-service';
 
 import { BaseInterviewModel } from '../models/entities';
 const Home: React.FC = () => {

@@ -1,5 +1,5 @@
 import { egress } from "../../../../models/egress";
-import { CoreService } from "../../../../services/core-service";
+import { CoreService } from "../../../../services/server-side/core-service";
 import { handleNextError, handleNextSuccess } from "../../../../utils/response-generator";
 import { enrichRequest, validateRequiredFields } from "../../../../utils/validations";
 

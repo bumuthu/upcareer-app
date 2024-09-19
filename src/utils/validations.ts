@@ -1,6 +1,6 @@
 import { egress } from "../models/egress";
-import { AuthService } from "../services/auth-service";
-import { UserService } from "../services/entity-services/user-service";
+import { ServerAuthService } from "../services/server-side/server-auth-service";
+import { UserService } from "../services/server-side/entity-services/user-service";
 import { ValidationError } from "../utils/exceptions";
 
 export function ValidateFields(data: any, model: any) {
@@ -51,7 +51,7 @@ export async function enrichRequest( request?: egress.Request): Promise<egress.R
     console.log("Request:", request);
     if (request == null) request = {};
 
-    const authUser = await AuthService.getUser();
+    const authUser = await ServerAuthService.getUser();
     const userService = new UserService();
     const user = await userService.getUserByEmail(authUser.email);
     request.userId = user?._id.toString();

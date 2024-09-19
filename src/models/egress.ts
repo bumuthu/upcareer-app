@@ -1,3 +1,4 @@
+import { SubscriptionTierKey } from "./enum"
 
 export namespace egress {
 
@@ -27,5 +28,14 @@ export namespace egress {
         baseInterviewId?: string,
         searchText?: string,
         categoryId?: string
+    }
+
+    // Subscription
+    export interface SubscriptionCreateInput extends Request {
+        userId: string,
+        subscriptionKey: SubscriptionTierKey
+    }
+    export interface StripeDetailsInput extends Request {
+        userId: string,
     }
 }

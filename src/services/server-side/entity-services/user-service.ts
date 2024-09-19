@@ -1,8 +1,8 @@
-import UserDBModel, { UserDocument } from "../../models/db/user.model";
-import { egress } from "../../models/egress";
-import { UserModel } from "../../models/entities";
-import { UserStatus } from "../../models/enum";
-import { DataNotFoundError, ValidationError } from "../../utils/exceptions";
+import UserDBModel, { UserDocument } from "../../../models/db/user.model";
+import { egress } from "../../../models/egress";
+import { UserModel } from "../../../models/entities";
+import { UserStatus } from "../../../models/enum";
+import { DataNotFoundError, ValidationError } from "../../../utils/exceptions";
 import { EntityService } from "./entity.service";
 
 

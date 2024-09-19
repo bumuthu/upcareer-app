@@ -1,4 +1,4 @@
-import { SubscriptionTierKey, UserInterviewStatus, UserStatus } from "./enum";
+import { SubscriptionEventType, SubscriptionStatus, SubscriptionTierKey, UserInterviewStatus, UserStatus } from "./enum";
 
 
 export interface Entity {
@@ -20,8 +20,24 @@ export interface UserModel extends Entity {
     status: UserStatus,
     providerUserId: string,
     notifications: Notification[],
-    resumeUrl?: string
+    resumeUrl?: string,
     createdAt: number,
+    stripeSubscriptionId?: string,
+    subscription?: string | SubscriptionModel, // defaulting to Free tier
+    subscriptionStatus?: SubscriptionStatus,
+    subscriptionEvents?: UserSubscritipnEvent[],
+    subscriptionUsages?: UserSubscriptionUsage[], // past usages
+    subscriptionCurrentUsage?: UserSubscriptionUsage // current usage
+}
+export interface UserSubscritipnEvent {
+    eventType: SubscriptionEventType,
+    tier: string | SubscriptionModel,
+    createdAt: number
+}
+export interface UserSubscriptionUsage {
+    usedCredits: number,
+    billingCycleStartsAt: number,
+    billingCycleEndsAt: number
 }
 
 

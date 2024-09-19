@@ -2,8 +2,8 @@
 import jwksClient from "jwks-rsa";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import { egress } from "../models/egress";
-import { UserModel } from "../models/entities";
+import { egress } from "../../models/egress";
+import { UserModel } from "../../models/entities";
 import { UserService } from "./entity-services/user-service";
 
 interface IKindeUserCreated {
@@ -18,10 +18,6 @@ const client = jwksClient({
 });
 
 export class KindeAuthService {
-
-    static handleLogin(router: AppRouterInstance) {
-        router.push("/api/auth/login")
-    }
 
     async handleWebhook(token: string) {
         const { header } = jwt.decode(token, { complete: true })!;

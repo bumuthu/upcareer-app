@@ -1,4 +1,4 @@
-import { KindeAuthService } from "../../../../services/kinde-auth-service";
+import { KindeAuthService } from "../../../../services/server-side/kinde-auth-service";
 import { handleNextError, handleNextSuccess } from "../../../../utils/response-generator";
 
 

@@ -1,6 +1,6 @@
 import { Document, Model } from "mongoose";
-import connectToTheDatabase from "../../utils/mongo-connection";
-import { Entity } from "../../models/entities";
+import connectToTheDatabase from "../../../utils/mongo-connection";
+import { Entity } from "../../../models/entities";
 
 export class EntityService<E extends Entity, D extends Document> {
     protected dbModel: Model<D>;

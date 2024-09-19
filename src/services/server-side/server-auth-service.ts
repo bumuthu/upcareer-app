@@ -5,13 +5,12 @@ export interface IAuthUser {
     email: string
 }
 
-export class AuthService {
+export class ServerAuthService {
     public static async getUser(): Promise<IAuthUser> {
         const user = await getKindeServerSession().getUser();
-
         if (!user || !user.id || !user.email) {
             throw new Error("Invalid user found")
         }
-        return { email: user.email, providerId: user.id};
+        return { email: user.email, providerId: user.id };
     }
 }

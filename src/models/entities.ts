@@ -25,8 +25,8 @@ export interface UserModel extends Entity {
     stripeSubscriptionId?: string,
     subscription?: string | SubscriptionModel, // defaulting to Free tier
     subscriptionStatus?: SubscriptionStatus,
-    subscriptionEvents?: UserSubscritipnEvent[],
-    subscriptionUsages?: UserSubscriptionUsage[], // past usages
+    subscriptionEvents: UserSubscritipnEvent[],
+    subscriptionUsages: UserSubscriptionUsage[], // past usages
     subscriptionCurrentUsage?: UserSubscriptionUsage // current usage
 }
 export interface UserSubscritipnEvent {

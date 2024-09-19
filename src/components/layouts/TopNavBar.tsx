@@ -2,9 +2,11 @@ import React from 'react';
 import { Col, Row, Button } from 'antd';
 import { LoginLink } from '@kinde-oss/kinde-auth-nextjs/components';
 import { useAuthContext } from '../../context/AuthContext';
+import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
 
 const TopNavBar = () => {
     const authContext = useAuthContext();
+    const authUser = useKindeBrowserClient();
 
     const onClickInterviews = () => {
         console.log("Clicked interviews")
@@ -24,7 +26,7 @@ const TopNavBar = () => {
                             Tutorial
                         </Button>
                         {
-                            !authContext.isAuthenticated && <Button type="primary" size='middle' style={{ fontWeight: 600, marginLeft: 50 }}>
+                            !authContext.isAuthenticated && <Button loading={authUser.isLoading!} type="primary" size='middle' style={{ fontWeight: 600, marginLeft: 50 }}>
                                 <LoginLink>Log in</LoginLink>
                             </Button>
                         }

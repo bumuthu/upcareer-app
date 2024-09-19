@@ -47,7 +47,7 @@ export const GlobalContextProvider: React.FC<any> = ({ children }) => {
             subscriptionContext.setActiveSubscription!(activeSubscription)
         } catch (err) {
             console.log("Terminated private initial data retrieval", err)
-            unauthorizedCallback()
+            // unauthorizedCallback() // TODO: check looping issue due to this
         }
     }
 

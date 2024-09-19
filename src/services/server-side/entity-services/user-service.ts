@@ -55,7 +55,9 @@ export class UserService extends EntityService<UserModel, UserDocument> {
                 status: UserStatus.INITIALIZED,
                 providerUserId: '',
                 notifications: [notification],
-                createdAt: Date.now()
+                createdAt: Date.now(),
+                subscriptionEvents: [],
+                subscriptionUsages: []
             };
             user = await this.create(newUserDB);
         } else {
@@ -69,5 +71,9 @@ export class UserService extends EntityService<UserModel, UserDocument> {
         }
 
         return user!;
+    }
+
+    async getUserByStripeSubscriptionId(subscriptionId: string): Promise<UserModel> {
+        throw new Error("getUserByStripeSubscriptionId not implemented")
     }
 }

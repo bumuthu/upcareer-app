@@ -57,7 +57,9 @@ export interface BaseInterviewModel extends Entity {
     jobDescription: string,
     saves?: number,
     uses?: number,
-    rating?: number
+    rating?: number,
+    openAIAssistantId: string,
+    opneAIVectorStoreId: string
 }
 
 
@@ -82,8 +84,7 @@ export interface UserInterviewScoreModel {
 export interface UserInterviewModel extends Entity {
     user: string | UserModel,
     baseInterview: string | BaseInterviewModel,
-    jobDescription?: string, // override or extend baseInterview jobDescription
-    overideJobDescription?: boolean, // if overideJobDescription true, jobDescription required
+    jobDescription?: string, // append to baseInterview jobDescription
     resumeMatchingScores?: UserMatchingScoreModel,
     interviewScores?: UserInterviewScoreModel, // if status is COMPLETED, required
     status: UserInterviewStatus,

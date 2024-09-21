@@ -3,9 +3,6 @@
 const path = require('path');
 
 module.exports = {
-    eslint: {
-        ignoreDuringBuilds: true,
-      },
     webpack: (config, { dev, isServer }) => {
         config.module.rules.forEach(rule => {
             if (rule.test && rule.test.toString().includes('tsx|ts')) {

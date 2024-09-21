@@ -19,4 +19,9 @@ export class PublicRestService {
     async queryBaseInterviews(queryInput: egress.BaseInterviewQueryInput): Promise<BaseInterviewModel[]> {
         return this.restClient.get<BaseInterviewModel[]>("public/base-interviews", queryInput);
     }
+
+    async queryBaseInterviewById(queryInput: egress.BaseInterviewQueryInput): Promise<BaseInterviewModel> {
+        const url = `public/base-interviews/${queryInput.baseInterviewId}`;
+        return this.restClient.get<BaseInterviewModel>(url);
+    }
 }

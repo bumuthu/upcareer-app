@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 import WithTopNavBar from '../components/layouts/WithTopNavBar';
 import BaseInterviewGrid from '../components/base-interviews/BaseInterviewGrid';
 import { PublicRestService } from '../services/client-side/api-services/public-rest-service';
@@ -21,7 +21,9 @@ const Home: React.FC = () => {
     <main >
       <WithTopNavBar>
         <div style={{ maxWidth: '1200px', width: '75%', margin: '100px auto' }}>
+          <Suspense>
           <BaseInterviewGrid baseInterviews={baseInterviews}/>
+          </Suspense>
         </div>
       </WithTopNavBar>
     </main>

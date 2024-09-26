@@ -28,6 +28,9 @@ export namespace egress {
         searchText?: string,
         categoryId?: string
     }
+    export interface BaseInterviewSingleQueryInput extends Request {
+        baseInterviewId: string,
+    }
 
     // Subscription
     export interface SubscriptionCreateInput extends Request {

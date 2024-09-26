@@ -7,16 +7,23 @@ import { ClientAuthService } from "../services/client-side/client-auth-service";
 import { PrivateRestService } from "../services/client-side/api-services/private-rest-service";
 import { useSubscriptionContext } from "./SubscriptionContext";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { CategoryModel, KeywordModel } from "../models/entities";
+import { PublicRestService } from "../services/client-side/api-services/public-rest-service";
 
 export interface GlobalContextType {
-    isLoading?: boolean,
+    isLoading: boolean,
     setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>,
+    keywords: KeywordModel[],
+    categories: CategoryModel[]
 }
 
-const GlobalContext = createContext<GlobalContextType>({});
+const GlobalContext = createContext<GlobalContextType>({ isLoading: false, keywords: [], categories: [] });
 
 export const GlobalContextProvider: React.FC<any> = ({ children }) => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [keywords, setKeywords] = useState<KeywordModel[]>([]);
+    const [categories, setCategories] = useState<CategoryModel[]>([]);
+
     const authUser = useKindeBrowserClient();
     const authContext = useAuthContext();
     const subscriptionContext = useSubscriptionContext();
@@ -51,9 +58,24 @@ export const GlobalContextProvider: React.FC<any> = ({ children }) => {
         }
     }
 
+    const fetchPublicData = async () => {
+        try {
+            const publicService = new PublicRestService()
+            const allSystemParams = await publicService.getSystemParams();
+            setKeywords(allSystemParams.keywords);
+            setCategories(allSystemParams.categories);
+        } catch (err) {
+            console.log("Error while retrieving system params", err)
+        }
+    }
+
     useEffect(() => {
         const loadData = async () => {
             setIsLoading(true);
+            await fetchPublicData()
+            if (!authUser.user) {
+                return
+            }
             if (authUser.error) {
                 console.error("Error while retrieving user session")
                 ClientAuthService.handleLogin(router)
@@ -62,9 +84,9 @@ export const GlobalContextProvider: React.FC<any> = ({ children }) => {
             await fetchPrivateData()
             setIsLoading(false);
         }
-        if (authUser.user) {
-            loadData();
-        }
+
+        loadData();
+
         if (!authUser.user && !authUser.isLoading) {
             setIsLoading(false);
         }
@@ -74,6 +96,8 @@ export const GlobalContextProvider: React.FC<any> = ({ children }) => {
         <GlobalContext.Provider value={{
             isLoading,
             setIsLoading,
+            keywords,
+            categories
         }}>
             {children}
         </GlobalContext.Provider>

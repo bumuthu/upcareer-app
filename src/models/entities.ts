@@ -55,6 +55,9 @@ export interface SubscriptionModel extends Entity {
 export interface BaseInterviewModel extends Entity {
     title: string,
     jobDescription: string,
+    aboutInterview: string,
+    category: string,
+    keywords: string[],
     saves?: number,
     uses?: number,
     rating?: number,
@@ -107,4 +110,19 @@ export interface DialogueModel extends Entity {
     askedByAI?: boolean, // If AI, set to true
     feedback?: DialogueFeedback
     createdAt: number
+}
+
+
+
+// System Parameter related
+export interface CategoryModel extends Entity {
+    name: string
+}
+export interface KeywordModel extends Entity {
+    name: string
+}
+export interface SystemParameterModel extends Entity {
+    categories: CategoryModel[],
+    keywords: KeywordModel[],
+    superAdminEmails: string[],
 }

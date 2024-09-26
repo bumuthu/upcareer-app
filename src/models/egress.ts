@@ -25,7 +25,6 @@ export namespace egress {
 
     // intervew related
     export interface BaseInterviewQueryInput extends Request {
-        baseInterviewId?: string,
         searchText?: string,
         categoryId?: string
     }

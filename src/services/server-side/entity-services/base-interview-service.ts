@@ -11,13 +11,6 @@ export class BaseInterviewService extends EntityService<BaseInterviewModel, Base
     }
 
     async getBaseInterviews(queryInput: egress.BaseInterviewQueryInput): Promise<BaseInterviewModel[]> {
-        console.log("Mocking base interviews response")
-        return baseInterviews;
-    }
-
-    async getBaseInterviewById(queryInput: egress.BaseInterviewQueryInput): Promise<BaseInterviewModel | undefined> {
-        console.log("getBaseInterviewById response")
-        return baseInterviews.find((baseInterview) => baseInterview._id === queryInput.baseInterviewId);
-    
+        return this.dbModel.find(); // TODO: implement filters
     }
 }

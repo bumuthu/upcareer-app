@@ -22,8 +22,6 @@ const UserInterviewContainer = (props: UserInterviewProps) => {
         if (props.userInterview) {
             getBaseInterview()
             setCustomJobDescription(props.userInterview?.jobDescription!)
-        } else {
-            setIsloading(true)
         }
     }, [props.userInterview])
 

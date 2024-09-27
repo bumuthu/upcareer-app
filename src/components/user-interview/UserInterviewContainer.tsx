@@ -1,5 +1,5 @@
 'use client'
-import { BaseInterviewModel, UserInterviewModel } from '@/models/entities'
+import { BaseInterviewModel, CategoryModel, UserInterviewModel } from '@/models/entities'
 import { PrivateRestService } from '@/services/client-side/api-services/private-rest-service'
 import { PublicRestService } from '@/services/client-side/api-services/public-rest-service'
 import { ClearOutlined, UploadOutlined } from '@ant-design/icons'
@@ -50,7 +50,7 @@ const UserInterviewContainer = (props: UserInterviewProps) => {
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <div>
                         <Title level={2} style={{ margin: 0 }}>{baseInterview?.title}</Title>
-                        <Paragraph style={{ color: "blue" }}>{baseInterview?.category}</Paragraph>
+                        <Paragraph style={{ color: "blue" }}>{(baseInterview?.category as CategoryModel).name}</Paragraph>
                     </div>
 
                     <Button type="primary" size="large" style={{

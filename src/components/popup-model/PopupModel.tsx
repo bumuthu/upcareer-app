@@ -1,10 +1,6 @@
 "use client";
-import { useAuthContext } from "@/context/AuthContext";
-import { baseInterviews } from "@/data/base-interviews";
-import { BaseInterviewModel } from "@/models/entities";
-import { UserInterviewStatus } from "@/models/enum";
+import { BaseInterviewModel, CategoryModel } from "@/models/entities";
 import { PrivateRestService } from "@/services/client-side/api-services/private-rest-service";
-import { UserInterviewService } from "@/services/server-side/entity-services/user-interview-service";
 import { ShareAltOutlined, StarTwoTone } from "@ant-design/icons";
 import { ChatBubbleOvalLeftIcon, StarIcon } from "@heroicons/react/24/outline";
 import { MicrophoneIcon } from "@heroicons/react/24/outline";
@@ -18,7 +14,7 @@ interface popupProps {
 }
 const PopupModel = (props: popupProps) => {
     const jobTags = ["UI", "UX", "Photoshop", "UX", "Photoshop"];
-    const[isLoading, setIsloading] = useState<boolean>()
+    const [isLoading, setIsloading] = useState<boolean>()
     const router = useRouter();
     const startClick = async () => {
         try {
@@ -50,17 +46,21 @@ const PopupModel = (props: popupProps) => {
             <Modal
                 width={1200}
                 open={props.isOpened!}
-                onCancel={() => props.setIsOpened!(false)}
-                style={{ backdropFilter: "blur(10px)" }}
+                onCancel={() => {
+                    router.push('/');
+                    props.setIsOpened!(false)
+                }}
+                style={{ backdropFilter: "blur(10px)", top: "5vh" }}
                 footer={[]}
-                bodyStyle={{ overflowY: "auto", maxHeight: "80vh" }}
+                closeIcon={false}
+                bodyStyle={{ overflowY: "auto", maxHeight: "85vh" }}
             >
-                <div style={{ padding: "40px", maxWidth: "1200px" }}>
+                <div style={{ padding: "20px", paddingTop: "10px", maxWidth: "1200px" }}>
                     {/* Job Description Section */}
                     <Row justify="space-between" align="middle">
                         <Col>
                             <h1>{props.baseInterview?.title!}</h1>
-                            <p style={{ color: "blue", margin: "0 0 20px 0" }}>{props.baseInterview?.category}</p>
+                            <p style={{ color: "blue", margin: "0 0 20px 0" }}>{(props.baseInterview?.category as CategoryModel).name}</p>
                             <div>
                                 {props.baseInterview?.keywords.map((tag, index) => (
                                     <Tag key={index} style={{ marginBottom: "8px" }}>
@@ -71,7 +71,7 @@ const PopupModel = (props: popupProps) => {
                         </Col>
                         <Col style={{ marginBottom: "60px" }}>
                             <Button
-                            loading = {isLoading}
+                                loading={isLoading}
                                 onClick={() => startClick()}
                                 type="primary"
                                 size="large"
@@ -104,7 +104,7 @@ const PopupModel = (props: popupProps) => {
                         <Col span={24}>
                             <h3>About Interview</h3>
                             <p>
-                               {props.baseInterview?.aboutInterview}
+                                {props.baseInterview?.aboutInterview}
                             </p>
                         </Col>
                     </Row>

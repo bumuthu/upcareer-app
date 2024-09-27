@@ -7,9 +7,9 @@ const baseInterviewSchema = new Schema({
     title: { type: String, required: true, },
     jobDescription: { type: String, required: true },
     aboutInterview: { type: String, required: true },
-    category: { type: String, required: true },
+    category: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Category'  },
     keywords: {
-        type: [{ type: mongoose.Schema.Types.ObjectId, required: true }],
+        type: [String],
         required: true
     },
     saves: { type: Number, required: false },

@@ -12,6 +12,7 @@ export enum UserStatus {
 }
 
 export enum UserInterviewStatus {
+    INITIALIZED = "INITIALIZED",
     ONGOING = "ONGOING",    
     COMPLETED = "COMPLETED",
     CANCELLED = "CANCELLED"

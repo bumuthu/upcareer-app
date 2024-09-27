@@ -10,6 +10,7 @@
     "listen-stripe": "stripe listen --forward-to localhost:3000/api/webhook/stripe"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.5.1",
     "@ant-design/nextjs-registry": "^1.0.1",
     "@heroicons/react": "^2.1.1",
     "@kinde-oss/kinde-auth-nextjs": "^2.2.10",

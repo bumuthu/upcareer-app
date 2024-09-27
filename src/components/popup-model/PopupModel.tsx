@@ -67,11 +67,11 @@ const PopupModel = (props: popupProps) => {
                             <h1 style={{ marginBottom: "0" }}>{props.baseInterview?.title!}</h1>
                             {
                                 props.baseInterview?.category &&
-                                <p style={{ color: "blue", marginBottom: "30px", marginTop: "0" }}>{(props.baseInterview?.category as CategoryModel).name}</p>
+                                <p style={{ color: "blue", marginBottom: "20px", marginTop: "0" }}>{(props.baseInterview?.category as CategoryModel).name}</p>
                             }
                             <div>
                                 {props.baseInterview?.keywords.map((tag, index) => (
-                                    <Tag key={index} style={{ marginBottom: "8px" }}>
+                                    <Tag color="blue" bordered={false} key={index} style={{ marginBottom: "8px" }}>
                                         {tag}
                                     </Tag>
                                 ))}

@@ -56,7 +56,7 @@ export interface BaseInterviewModel extends Entity {
     title: string,
     jobDescription: string,
     aboutInterview: string,
-    category: string,
+    category: string | CategoryModel,
     keywords: string[],
     saves?: number,
     uses?: number,
@@ -116,13 +116,9 @@ export interface DialogueModel extends Entity {
 
 // System Parameter related
 export interface CategoryModel extends Entity {
-    name: string
-}
-export interface KeywordModel extends Entity {
-    name: string
+    name: string,
+    lookupKey: string
 }
 export interface SystemParameterModel extends Entity {
-    categories: CategoryModel[],
-    keywords: KeywordModel[],
     superAdminEmails: string[],
 }

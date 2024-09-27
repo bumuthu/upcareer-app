@@ -24,7 +24,7 @@ const BaseInterviewGrid: React.FC<BaseInterviewGridProp> = (
       const OpenedIdFromDb = searchParams.get("opened");
       if (OpenedIdFromDb) {
         const openedBaseInterviewFromDB =
-          await publicRestService.queryBaseInterviewById({
+          await publicRestService.getBaseInterviewById({
             baseInterviewId: OpenedIdFromDb,
           });
         if (openedBaseInterviewFromDB) {

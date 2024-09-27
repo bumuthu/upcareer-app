@@ -1,4 +1,3 @@
-import { baseInterviews } from "../../../data/base-interviews";
 import BaseInterviewDBModel, { BaseInterviewDocument } from "../../../models/db/base-interview.model";
 import { egress } from "../../../models/egress";
 import { BaseInterviewModel } from "../../../models/entities";
@@ -11,6 +10,6 @@ export class BaseInterviewService extends EntityService<BaseInterviewModel, Base
     }
 
     async getBaseInterviews(queryInput: egress.BaseInterviewQueryInput): Promise<BaseInterviewModel[]> {
-        return this.dbModel.find(); // TODO: implement filters
+        return this.dbModel.find().populate("category"); // TODO: implement filters
     }
 }

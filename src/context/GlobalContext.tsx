@@ -7,21 +7,19 @@ import { ClientAuthService } from "../services/client-side/client-auth-service";
 import { PrivateRestService } from "../services/client-side/api-services/private-rest-service";
 import { useSubscriptionContext } from "./SubscriptionContext";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
-import { CategoryModel, KeywordModel } from "../models/entities";
+import { CategoryModel } from "../models/entities";
 import { PublicRestService } from "../services/client-side/api-services/public-rest-service";
 
 export interface GlobalContextType {
     isLoading: boolean,
     setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>,
-    keywords: KeywordModel[],
     categories: CategoryModel[]
 }
 
-const GlobalContext = createContext<GlobalContextType>({ isLoading: false, keywords: [], categories: [] });
+const GlobalContext = createContext<GlobalContextType>({ isLoading: false, categories: [] });
 
 export const GlobalContextProvider: React.FC<any> = ({ children }) => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [keywords, setKeywords] = useState<KeywordModel[]>([]);
     const [categories, setCategories] = useState<CategoryModel[]>([]);
 
     const authUser = useKindeBrowserClient();
@@ -61,9 +59,8 @@ export const GlobalContextProvider: React.FC<any> = ({ children }) => {
     const fetchPublicData = async () => {
         try {
             const publicService = new PublicRestService()
-            const allSystemParams = await publicService.getSystemParams();
-            setKeywords(allSystemParams.keywords);
-            setCategories(allSystemParams.categories);
+            const allCategories = await publicService.getCategories();
+            setCategories(allCategories);
         } catch (err) {
             console.log("Error while retrieving system params", err)
         }
@@ -96,7 +93,6 @@ export const GlobalContextProvider: React.FC<any> = ({ children }) => {
         <GlobalContext.Provider value={{
             isLoading,
             setIsLoading,
-            keywords,
             categories
         }}>
             {children}

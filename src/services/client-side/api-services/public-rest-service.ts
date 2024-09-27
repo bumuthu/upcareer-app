@@ -1,5 +1,5 @@
 import { egress } from "../../../models/egress";
-import { BaseInterviewModel, SystemParameterModel, UserModel } from "../../../models/entities";
+import { BaseInterviewModel, CategoryModel, SystemParameterModel, UserModel } from "../../../models/entities";
 import { RestClient } from "./rest-client";
 
 
@@ -19,12 +19,15 @@ export class PublicRestService {
     async queryBaseInterviews(queryInput: egress.BaseInterviewQueryInput): Promise<BaseInterviewModel[]> {
         return this.restClient.get<BaseInterviewModel[]>("public/base-interviews", queryInput);
     }
-    async queryBaseInterviewById(queryInput: egress.BaseInterviewSingleQueryInput): Promise<BaseInterviewModel> {
+    async getBaseInterviewById(queryInput: egress.BaseInterviewSingleQueryInput): Promise<BaseInterviewModel> {
         return this.restClient.get<BaseInterviewModel>(`public/base-interviews/${queryInput.baseInterviewId}`);
     }
 
-    // System Parameter related
-    async getSystemParams() {
+    // System level
+    async getSystemParams(): Promise<SystemParameterModel> {
         return this.restClient.get<SystemParameterModel>("public/system-parameter")
+    }
+    async getCategories(): Promise<CategoryModel[]> {
+        return this.restClient.get<CategoryModel[]>("public/categories")
     }
 }

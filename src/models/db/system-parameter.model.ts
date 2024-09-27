@@ -4,18 +4,6 @@ import { SystemParameterModel } from '../../models/entities';
 export interface SystemParameterDocument extends Document, Omit<SystemParameterModel, '_id'> { }
 
 const systemParameterSchema = new Schema({
-    categories: [{
-        type: new Schema({
-            name: String
-        }),
-        required: true
-    }],
-    keywords: [{
-        type: new Schema({
-            name: String
-        }),
-        required: true
-    }],
     superAdminEmails: [{ type: String }]
 });
 

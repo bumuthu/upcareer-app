@@ -7,7 +7,7 @@ export const GET = async (req: Request) => {
         const baseInterviewId = splits[splits.length - 1];
 
         const baseInterviewService = new BaseInterviewService();
-        const baseInterview = await baseInterviewService.get(baseInterviewId);
+        const baseInterview = await baseInterviewService.get(baseInterviewId, "category");
         return handleNextSuccess(baseInterview);
     } catch (error) {
         console.log("Error in GET:/public/base-interviews/:id", error);

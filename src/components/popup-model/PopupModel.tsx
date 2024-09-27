@@ -10,7 +10,7 @@ import { ChatBubbleOvalLeftIcon, StarIcon } from "@heroicons/react/24/outline";
 import { MicrophoneIcon } from "@heroicons/react/24/outline";
 import { Button, Card, Col, Modal, Row, Tag } from "antd";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 interface popupProps {
     baseInterview: BaseInterviewModel;
     isOpened: boolean;
@@ -18,17 +18,20 @@ interface popupProps {
 }
 const PopupModel = (props: popupProps) => {
     const jobTags = ["UI", "UX", "Photoshop", "UX", "Photoshop"];
-    const authContext = useAuthContext();
+    const[isLoading, setIsloading] = useState<boolean>()
     const router = useRouter();
     const startClick = async () => {
         try {
+            setIsloading(true)
             const privateRestService = new PrivateRestService();
             const createUserInterview = await privateRestService.createUserInterview({
                 baseInterviewId: props.baseInterview._id,
             });
             router.push(`/interview/${createUserInterview._id}`);
+            setIsloading(false)
         } catch (err) {
             console.log("Error, in start onclick");
+            setIsloading(false)
         }
     };
     useEffect(() => {
@@ -57,9 +60,9 @@ const PopupModel = (props: popupProps) => {
                     <Row justify="space-between" align="middle">
                         <Col>
                             <h1>{props.baseInterview?.title!}</h1>
-                            <p style={{ color: "blue", margin: "0 0 20px 0" }}>Web Design</p>
+                            <p style={{ color: "blue", margin: "0 0 20px 0" }}>{props.baseInterview?.category}</p>
                             <div>
-                                {jobTags.map((tag, index) => (
+                                {props.baseInterview?.keywords.map((tag, index) => (
                                     <Tag key={index} style={{ marginBottom: "8px" }}>
                                         {tag}
                                     </Tag>
@@ -68,6 +71,7 @@ const PopupModel = (props: popupProps) => {
                         </Col>
                         <Col style={{ marginBottom: "60px" }}>
                             <Button
+                            loading = {isLoading}
                                 onClick={() => startClick()}
                                 type="primary"
                                 size="large"
@@ -100,9 +104,7 @@ const PopupModel = (props: popupProps) => {
                         <Col span={24}>
                             <h3>About Interview</h3>
                             <p>
-                                Lorem Ipsum is simply dummy text of the printing and typesetting
-                                industry. Lorem Ipsum has been the industry standard dummy text
-                                ever since the 1500s...
+                               {props.baseInterview?.aboutInterview}
                             </p>
                         </Col>
                     </Row>

@@ -8,6 +8,7 @@ import TextArea from 'antd/es/input/TextArea'
 import Paragraph from 'antd/es/typography/Paragraph'
 import Title from 'antd/es/typography/Title'
 import React, { useEffect, useState } from 'react'
+import { ClipLoader } from 'react-spinners'
 interface UserInterviewProps {
     userInterview: UserInterviewModel
 }
@@ -42,74 +43,74 @@ const UserInterviewContainer = (props: UserInterviewProps) => {
         }
 
     }
-    
+
     return (
         < >
-            {/* Title Section */}
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div>
-                    <Title level={2} style={{ margin: 0 }}>{baseInterview?.title}</Title>
-                    <Paragraph style={{ color: "blue" }}>{baseInterview?.category}</Paragraph>
+            {props.userInterview ? <>{/* Title Section */}
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <div>
+                        <Title level={2} style={{ margin: 0 }}>{baseInterview?.title}</Title>
+                        <Paragraph style={{ color: "blue" }}>{baseInterview?.category}</Paragraph>
+                    </div>
+
+                    <Button type="primary" size="large" style={{
+                        paddingLeft: "40px",
+                        paddingRight: "40px",
+                    }}>
+                        Start
+                    </Button>
                 </div>
 
-                <Button type="primary" size="large" style={{
-                    paddingLeft: "40px",
-                    paddingRight: "40px",
-                }}>
-                    Start
-                </Button>
-            </div>
+                <Divider />
 
-            <Divider />
+                {/* Job Description Section */}
+                <div style={{ display: "flex", justifyContent: "space-between", gap: "10px" }}>
+                    <div>
+                        <Title level={4}>Job Description</Title>
+                        <Paragraph style={{ maxWidth: '500px', textAlign: "justify" }}>
+                            {baseInterview?.jobDescription}
+                        </Paragraph>
+                    </div>
 
-            {/* Job Description Section */}
-            <div style={{ display: "flex", justifyContent: "space-between", gap: "10px" }}>
-                <div>
-                    <Title level={4}>Job Description</Title>
-                    <Paragraph style={{ maxWidth: '500px', textAlign: "justify" }}>
-                        {baseInterview?.jobDescription}
-                    </Paragraph>
-                </div>
+                    {/* Customization Section */}
+                    <div>
+                        <Space direction="vertical" size="large" style={{ marginTop: '20px' }}>
+                            <Checkbox
+                                checked={isChecked}
+                                onChange={(e) => setIsChecked(e.target.checked)}
+                            >
+                                I want to customize the existing job description by adding the following text.
+                            </Checkbox>
 
-                {/* Customization Section */}
-                <div>
-                    <Space direction="vertical" size="large" style={{ marginTop: '20px' }}>
-                        <Checkbox
-                            checked={isChecked}
-                            onChange={(e) => setIsChecked(e.target.checked)}
-                        >
-                            I want to customize the existing job description by adding the following text.
-                        </Checkbox>
+                            <TextArea
+                                rows={6}
+                                value={customJobDescription}
+                                onChange={(e) => setCustomJobDescription(e.target.value)}
+                                placeholder="Enter job description to append or overwrite the default one."
+                                disabled={!isChecked}
+                            />
 
-                        <TextArea
-                            rows={6}
-                            value={customJobDescription}
-                            onChange={(e)=> setCustomJobDescription(e.target.value)}
-                            placeholder="Enter job description to append or overwrite the default one."
-                            disabled={!isChecked}
-                        />
-
-                        {/* Buttons */}
-                        <Space >
-                            <Button disabled={!isChecked} onClick={() => setCustomJobDescription('')}>
-                                Clear
-                            </Button>
-                            <Button type="primary" disabled={!isChecked} onClick={() => onClickApply()} loading = {loading}>
-                                Apply
-                            </Button>
+                            {/* Buttons */}
+                            <Space >
+                                <Button disabled={!isChecked} onClick={() => setCustomJobDescription('')}>
+                                    Clear
+                                </Button>
+                                <Button type="primary" disabled={!isChecked} onClick={() => onClickApply()} loading={loading}>
+                                    Apply
+                                </Button>
+                            </Space>
                         </Space>
-                    </Space>
+                    </div>
                 </div>
-            </div>
 
-            <Divider />
+                <Divider />
 
-            {/* CV Upload Section */}
-            <Title level={4}>My CV</Title>
-            <Upload >
-                <Button style={{ marginTop: "20px" }} icon={<UploadOutlined />}>Upload CV</Button>
-            </Upload>
-        </>
+                {/* CV Upload Section */}
+                <Title level={4}>My CV</Title>
+                <Upload >
+                    <Button style={{ marginTop: "20px" }} icon={<UploadOutlined />}>Upload CV</Button>
+                </Upload>
+            </> : <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "600px" }}><ClipLoader /></div>}</>
     );
 };
 

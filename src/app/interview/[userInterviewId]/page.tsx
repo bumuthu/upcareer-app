@@ -30,7 +30,7 @@ const UserInterviewPage = () => {
     }
     return (
         <WithTopNavBar>
-            <div style={{ maxWidth: '1200px', width: '75%', margin: '50px auto' }}>
+            <div style={{ maxWidth: '1200px', width: '75%', margin: '100px auto' }}>
                 <UserInterviewContainer userInterview={userInterview!} />
             </div>
         </WithTopNavBar>

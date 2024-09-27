@@ -10,9 +10,9 @@ const userInterviewSchema = new Schema({
     overideJobDescription: { type: Boolean, required: false },
     resumeMatchingScores: { type: Object, required: false }, // TODO: Add type
     interviewScores: { type: Object, required: false }, // TODO: Add type
-    status:{ type: String, required: true, enum: ["ONGOING", "COMPLETED", "CANCELLED"] },
-    startedAt: { type: Number, required: true },
-    duration: { type: Number, required: true }
+    status:{ type: String, required: true, enum: ["INITIALIZED","ONGOING", "COMPLETED", "CANCELLED"] },
+    startedAt: { type: Number, required: false },
+    duration: { type: Number, required: false }
 });
 
 const UserInterviewDBModel = (mongoose.models || {})['UserInterview'] || mongoose.model<UserInterviewDocument>('UserInterview', userInterviewSchema);

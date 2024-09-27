@@ -32,6 +32,19 @@ export namespace egress {
         baseInterviewId: string,
     }
 
+    export interface UserInterviewQueryInput extends Request {
+        userInterviewId?: string
+    }
+
+    export interface UserInterviewCreateInput extends Request {
+        baseInterviewId: string,
+    }
+
+    export interface UserInterviewUpdateInput extends Request {
+        userInterviewId: string,
+        jobDescription?: string
+    }
+
     // Subscription
     export interface SubscriptionCreateInput extends Request {
         userId: string,

@@ -10,5 +10,7 @@ export const config = {
   matcher: [
     '/api/user',
     '/api/interview/prompt',
+    '/api/interview/:path*',
+    '/api/interview'
   ]
 };

@@ -2,7 +2,7 @@
 import { BaseInterviewModel, UserInterviewModel } from '@/models/entities'
 import { PrivateRestService } from '@/services/client-side/api-services/private-rest-service'
 import { PublicRestService } from '@/services/client-side/api-services/public-rest-service'
-import { UploadOutlined } from '@ant-design/icons'
+import { ClearOutlined, UploadOutlined } from '@ant-design/icons'
 import { Button, Checkbox, Col, Divider, Flex, Row, Space, Typography, Upload } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 import Paragraph from 'antd/es/typography/Paragraph'
@@ -91,8 +91,8 @@ const UserInterviewContainer = (props: UserInterviewProps) => {
                             />
 
                             {/* Buttons */}
-                            <Space >
-                                <Button disabled={!isChecked} onClick={() => setCustomJobDescription('')}>
+                            <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
+                                <Button icon=  {<ClearOutlined/>} disabled={!isChecked} onClick={() => setCustomJobDescription('')}>
                                     Clear
                                 </Button>
                                 <Button type="primary" disabled={!isChecked} onClick={() => onClickApply()} loading={loading}>

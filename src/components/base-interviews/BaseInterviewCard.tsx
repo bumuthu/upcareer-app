@@ -28,7 +28,7 @@ const BaseInterviewCard: React.FC<BaseInterviewCardProp> = (
   const onClickCard = async (id: string) => {
     try {
       console.log("Clicked card");
-      const baseInterviewRes = await publicService.queryBaseInterviewById({
+      const baseInterviewRes = await publicService.getBaseInterviewById({
         baseInterviewId: id,
       });
       router.push(`?opened=${id}`);

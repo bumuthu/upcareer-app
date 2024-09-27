@@ -50,17 +50,25 @@ const PopupModel = (props: popupProps) => {
                     router.push('/');
                     props.setIsOpened!(false)
                 }}
-                style={{ backdropFilter: "blur(10px)", top: "5vh" }}
                 footer={[]}
                 closeIcon={false}
-                bodyStyle={{ overflowY: "auto", maxHeight: "85vh" }}
+                style={{ backdropFilter: "blur(10px)", top: "5vh" }}
+                styles={{
+                    body: {
+                        overflowY: "auto",
+                        maxHeight: "85vh",
+                    },
+                }}
             >
                 <div style={{ padding: "20px", paddingTop: "10px", maxWidth: "1200px" }}>
                     {/* Job Description Section */}
                     <Row justify="space-between" align="middle">
                         <Col>
-                            <h1>{props.baseInterview?.title!}</h1>
-                            <p style={{ color: "blue", margin: "0 0 20px 0" }}>{(props.baseInterview?.category as CategoryModel).name}</p>
+                            <h1 style={{ marginBottom: "0" }}>{props.baseInterview?.title!}</h1>
+                            {
+                                props.baseInterview?.category &&
+                                <p style={{ color: "blue", marginBottom: "30px", marginTop: "0" }}>{(props.baseInterview?.category as CategoryModel).name}</p>
+                            }
                             <div>
                                 {props.baseInterview?.keywords.map((tag, index) => (
                                     <Tag key={index} style={{ marginBottom: "8px" }}>

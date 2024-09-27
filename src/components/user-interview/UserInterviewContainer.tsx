@@ -25,7 +25,7 @@ const UserInterviewContainer = (props: UserInterviewProps) => {
     const getBaseInterview = async () => {
         const publicRestService = new PublicRestService()
         console.log("userInterview in containr: ", props.userInterview)
-        const baseInterviewdata = await publicRestService.queryBaseInterviewById({ baseInterviewId: props.userInterview.baseInterview as string })
+        const baseInterviewdata = await publicRestService.queryBaseInterviewById({ baseInterviewId: props.userInterview?.baseInterview as string })
         setBaseInterview!(baseInterviewdata)
     }
     const onClickApply = async () => {

@@ -48,7 +48,7 @@ const BaseInterviewCard: React.FC<BaseInterviewCardProp> = (
 				}}
 				onClick={() => onClickCard(props.baseInterview._id)}
 			>
-				<Title level={4} style={{ marginBottom: 10, textAlign: "center" }}>
+				<Title level={4} style={{ marginBottom: 3, textAlign: "center" }}>
 					{props.baseInterview.title}
 				</Title>
 				<Paragraph
@@ -57,7 +57,7 @@ const BaseInterviewCard: React.FC<BaseInterviewCardProp> = (
 					{(props.baseInterview.category as CategoryModel).name}
 				</Paragraph>
 
-				<div style={{ marginBottom: 20, textAlign: "center" }}>
+				<div style={{ marginBottom: 40, textAlign: "center" }}>
 					{props.baseInterview?.keywords.slice(0, 2).map((tag, index) => (
 						<Tag
 							key={index}

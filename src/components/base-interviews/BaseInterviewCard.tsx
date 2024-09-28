@@ -1,71 +1,107 @@
-import React, { useState } from "react";
-import {
-  EditOutlined,
-  EllipsisOutlined,
-  SettingOutlined,
-} from "@ant-design/icons";
-import { Avatar, Card } from "antd";
-import { BaseInterviewModel } from "../../models/entities";
+"use client";
+import React from "react";
+import { Button, Card, Divider, Tag } from "antd";
+import { BaseInterviewModel, CategoryModel } from "../../models/entities";
 import { getTrimmedText } from "../../utils/utils";
 import { useRouter } from "next/navigation";
 import { PublicRestService } from "@/services/client-side/api-services/public-rest-service";
-
-const { Meta } = Card;
+import Paragraph from "antd/es/typography/Paragraph";
+import Title from "antd/es/typography/Title";
 
 interface BaseInterviewCardProp {
-  baseInterview: BaseInterviewModel;
-  setOpenedBaseInterview: React.Dispatch<
-    React.SetStateAction<BaseInterviewModel | undefined>
-  >;
-  setPopUpIsOpened: React.Dispatch<React.SetStateAction<boolean | undefined>>;
+	baseInterview: BaseInterviewModel;
+	setOpenedBaseInterview: React.Dispatch<
+		React.SetStateAction<BaseInterviewModel | undefined>
+	>;
+	setPopUpIsOpened: React.Dispatch<React.SetStateAction<boolean | undefined>>;
 }
 
 const BaseInterviewCard: React.FC<BaseInterviewCardProp> = (
-  props: BaseInterviewCardProp
+	props: BaseInterviewCardProp
 ) => {
-  const publicService = new PublicRestService();
-  const router = useRouter();
-  const onClickCard = async (id: string) => {
-    try {
-      console.log("Clicked card");
-      const baseInterviewRes = await publicService.getBaseInterviewById({
-        baseInterviewId: id,
-      });
-      router.push(`?opened=${id}`);
-      props.setPopUpIsOpened!(true);
-      props.setOpenedBaseInterview!(baseInterviewRes);
-    } catch (err) {
-      console.log("Clicked card error: ", err);
-    }
-  };
-  return (
-    <>
-      <Card
-        style={{ width: 300, cursor: "pointer" }}
-        onClick={() => onClickCard(props.baseInterview._id)}
-        cover={
-          <img
-            alt="example"
-            src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-          />
-        }
-        actions={[
-          <SettingOutlined key="setting" />,
-          <EditOutlined key="edit" />,
-          <EllipsisOutlined key="ellipsis" />,
-        ]}
-      >
-        <Meta
-          style={{ textAlign: "justify" }}
-          avatar={
-            <Avatar src="https://api.dicebear.com/7.x/miniavs/svg?seed=8" />
-          }
-          title={props.baseInterview.title}
-          description={getTrimmedText(props.baseInterview.jobDescription, 50)}
-        />
-      </Card>
-    </>
-  );
+	const publicService = new PublicRestService();
+	const router = useRouter();
+	const onClickCard = async (id: string) => {
+		try {
+			console.log("Clicked card");
+			const baseInterviewRes = await publicService.getBaseInterviewById({
+				baseInterviewId: id,
+			});
+			router.push(`?opened=${id}`);
+			props.setPopUpIsOpened!(true);
+			props.setOpenedBaseInterview!(baseInterviewRes);
+		} catch (err) {
+			console.log("Clicked card error: ", err);
+		}
+	};
+	return (
+		<>
+			<Card
+				style={{
+					border: "0.2px solid #D1D1D1",
+					width: 400,
+					margin: "8px 10px",
+					borderRadius: "15px",
+					padding: "20px",
+					boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+					cursor: "pointer"
+				}}
+				onClick={() => onClickCard(props.baseInterview._id)}
+			>
+				<Title level={4} style={{ marginBottom: 10, textAlign: "center" }}>
+					{props.baseInterview.title}
+				</Title>
+				<Paragraph
+					style={{ color: "#1890ff", marginBottom: 20, textAlign: "center" }}
+				>
+					{(props.baseInterview.category as CategoryModel).name}
+				</Paragraph>
+
+				<div style={{ marginBottom: 20, textAlign: "center" }}>
+					{props.baseInterview?.keywords.slice(0, 2).map((tag, index) => (
+						<Tag
+							key={index}
+							style={{
+								padding: "0 15px",
+								borderRadius: "15px",
+								background: "white",
+								border: "1px solid #B4B4B4",
+							}}
+						>
+							{tag}
+						</Tag>
+					))}
+
+					<Tag
+						bordered={false}
+						style={{
+							padding: "0 7px",
+							borderRadius: "15px",
+							background: "#1890ff",
+							color: "white",
+						}}
+					>
+						+{props.baseInterview?.keywords.length - 2}
+					</Tag>
+				</div>
+
+				<Paragraph style={{ marginBottom: 20, textAlign: "center" }}>
+					{getTrimmedText(props.baseInterview.jobDescription, 50)}
+				</Paragraph>
+
+				{/* <hr style={{ border: 'none', borderTop: '1px solid #e8e8e8', margin: '10px 0' }} /> */}
+				<Divider style={{ borderTop: "1px solid #e8e8e8" }} />
+
+				<Button
+					type="text"
+					style={{ width: "100%" }}
+					onClick={() => onClickCard(props.baseInterview._id)}
+				>
+					<span style={{fontWeight: 'bold'}}>READ MORE</span>
+				</Button>
+			</Card>
+		</>
+	);
 };
 
 export default BaseInterviewCard;

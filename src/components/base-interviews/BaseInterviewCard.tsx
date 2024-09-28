@@ -89,7 +89,6 @@ const BaseInterviewCard: React.FC<BaseInterviewCardProp> = (
 					{getTrimmedText(props.baseInterview.jobDescription, 50)}
 				</Paragraph>
 
-				{/* <hr style={{ border: 'none', borderTop: '1px solid #e8e8e8', margin: '10px 0' }} /> */}
 				<Divider style={{ borderTop: "1px solid #e8e8e8" }} />
 
 				<Button

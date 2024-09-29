@@ -53,7 +53,7 @@ const BaseInterviewGrid: React.FC<BaseInterviewGridProp> = (
           gutter: 16,
           column: 3,
           xl: 3,
-          lg: 3,
+          lg: 2,
           md: 2,
           sm: 1,
           xs: 1,

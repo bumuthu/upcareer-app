@@ -13,14 +13,14 @@ const Home: React.FC = () => {
   useEffect(() => {
     const queryBaseInterviews = async () => {
       const baseInterviewRes = await publicService.queryBaseInterviews({})
-      setBaseInterviews(baseInterviewRes)
+      setBaseInterviews([...baseInterviewRes, ...baseInterviewRes, ...baseInterviewRes]) // TODO, remove this replicating. Just for testing
     }
     queryBaseInterviews()
   }, [])
   return (
     <main >
       <WithTopNavBar>
-        <div style={{ maxWidth: '1200px', width: '75%', margin: '100px auto' }}>
+        <div style={{ maxWidth: '1200px', margin: '50px auto' }}>
           <Suspense>
           <BaseInterviewGrid baseInterviews={baseInterviews}/>
           </Suspense>

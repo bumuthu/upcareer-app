@@ -38,17 +38,17 @@ const BaseInterviewCard: React.FC<BaseInterviewCardProp> = (
 		<>
 			<Card
 				style={{
-					border: "0.2px solid #D1D1D1",
+					// border: "0.1px solid #D1D1D1",
 					width: 400,
-					margin: "8px 10px",
-					borderRadius: "15px",
-					padding: "20px",
-					boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+					margin: "5px",
+					borderRadius: "5px",
+					padding: "0px 10px",
+					boxShadow: "0px 5px 10px rgba(0,0,0,0.05)",
 					cursor: "pointer"
 				}}
 				onClick={() => onClickCard(props.baseInterview._id)}
 			>
-				<Title level={4} style={{ marginBottom: 3, textAlign: "center" }}>
+				<Title level={4} style={{ marginTop:"10px", marginBottom: "2px", textAlign: "center" }}>
 					{props.baseInterview.title}
 				</Title>
 				<Paragraph
@@ -57,7 +57,7 @@ const BaseInterviewCard: React.FC<BaseInterviewCardProp> = (
 					{(props.baseInterview.category as CategoryModel).name}
 				</Paragraph>
 
-				<div style={{ marginBottom: 40, textAlign: "center" }}>
+				<div style={{ marginBottom: 20, textAlign: "center" }}>
 					{props.baseInterview?.keywords.slice(0, 2).map((tag, index) => (
 						<Tag
 							key={index}
@@ -85,18 +85,18 @@ const BaseInterviewCard: React.FC<BaseInterviewCardProp> = (
 					</Tag>
 				</div>
 
-				<Paragraph style={{ marginBottom: 20, textAlign: "center" }}>
-					{getTrimmedText(props.baseInterview.jobDescription, 50)}
+				<Paragraph style={{ marginBottom: 20, textAlign: "center", fontSize: 12 }}>
+					{getTrimmedText(props.baseInterview.jobDescription, 100)}
 				</Paragraph>
 
-				<Divider style={{ borderTop: "1px solid #e8e8e8" }} />
+				<Divider style={{ borderTop: "1px solid #e8e8e8", margin: "5px 0px" }} />
 
 				<Button
 					type="text"
-					style={{ width: "100%" }}
+					style={{ width: "100%", margin: 0, padding: 0 }}
 					onClick={() => onClickCard(props.baseInterview._id)}
 				>
-					<span style={{fontWeight: 'bold'}}>READ MORE</span>
+					<span style={{fontWeight: 'bold',  fontSize: 12}}>READ MORE</span>
 				</Button>
 			</Card>
 		</>

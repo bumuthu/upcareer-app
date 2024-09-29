@@ -51,7 +51,7 @@ const BaseInterviewGrid: React.FC<BaseInterviewGridProp> = (
       <List
         grid={{
           gutter: 16,
-          column: 4,
+          column: 3,
           xl: 3,
           lg: 3,
           md: 2,

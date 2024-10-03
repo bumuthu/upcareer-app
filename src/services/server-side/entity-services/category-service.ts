@@ -9,6 +9,7 @@ export class CategoryService extends EntityService<CategoryModel, CategoryDocume
     }
 
     async getAll() {
+        await this.before();
         return this.dbModel.find();
     }
 }

@@ -10,6 +10,7 @@ export class BaseInterviewService extends EntityService<BaseInterviewModel, Base
     }
 
     async getBaseInterviews(queryInput: egress.BaseInterviewQueryInput): Promise<BaseInterviewModel[]> {
+        await this.before();
         return this.dbModel.find().populate("category"); // TODO: implement filters
     }
 }

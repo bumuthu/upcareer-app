@@ -9,6 +9,7 @@ export class SystemParameterService extends EntityService<SystemParameterModel, 
     }
 
     async getPublicParams() {
+        await this.before();
         const res = await this.dbModel.find({}, "categories keywords");
         return res[0];
     }

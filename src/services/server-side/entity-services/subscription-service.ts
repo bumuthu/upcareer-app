@@ -16,14 +16,17 @@ export class SubscriptionService extends EntityService<SubscriptionModel, Subscr
     }
 
     async getAll() {
+        await this.before();
         return await this.dbModel.find();
     }
 
     async getSubscriptionByKey(key: SubscriptionTierKey) {
+        await this.before();
         return await this.dbModel.findOne({ key })
     }
 
     async subscribe(req: egress.SubscriptionCreateInput, email: string) {
+        await this.before();
         const subscription: SubscriptionModel | null = await this.dbModel.findOne({ key: req.subscriptionKey });
         if (!subscription) {
             throw new ValidationError("Invalid subscription key")
@@ -32,6 +35,7 @@ export class SubscriptionService extends EntityService<SubscriptionModel, Subscr
     }
 
     async createCheckout(req: egress.SubscriptionCreateInput, email: string) {
+        await this.before();
         const subscription: SubscriptionModel | null = await this.dbModel.findOne({ key: req.subscriptionKey });
         if (!subscription) {
             throw new ValidationError("Invalid subscription key")

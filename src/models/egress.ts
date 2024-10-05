@@ -22,6 +22,11 @@ export namespace egress {
     export interface InterviewPrompt extends Request {
         promptId: string
     }
+    export interface DialogueCreateInput extends Request {
+        userInterviewId: string,
+        text: string
+        parentDialogueId?: string
+    }
 
     // intervew related
     export interface BaseInterviewQueryInput extends Request {

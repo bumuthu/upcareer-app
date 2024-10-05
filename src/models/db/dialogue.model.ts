@@ -4,7 +4,7 @@ import { DialogueModel } from '../entities';
 export interface DialogueDocument extends Document, Omit<DialogueModel, '_id'> { }
 
 const dialogueSchema = new Schema({
-    text: { type: String, required: true },
+    text: { type: String, required: false },
     userInterview: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'UserInterview' },
     parentDialogue: { type: mongoose.Schema.Types.ObjectId, required: false, ref: 'Dialogue' },
     askedBy: { type: mongoose.Schema.Types.ObjectId, required: false, ref: 'User' },

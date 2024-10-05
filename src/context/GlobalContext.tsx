@@ -7,7 +7,7 @@ import { ClientAuthService } from "../services/client-side/client-auth-service";
 import { PrivateRestService } from "../services/client-side/api-services/private-rest-service";
 import { useSubscriptionContext } from "./SubscriptionContext";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
-import { CategoryModel } from "../models/entities";
+import { CategoryModel, SubscriptionModel } from "../models/entities";
 import { PublicRestService } from "../services/client-side/api-services/public-rest-service";
 
 export interface GlobalContextType {
@@ -45,7 +45,7 @@ export const GlobalContextProvider: React.FC<any> = ({ children }) => {
             authContext.setIsAuthenticated!(true)
             authContext.setCurrentUser!(activeUser)
 
-            const allSubs = await privateService.getAllSubscriptions();
+            const allSubs: SubscriptionModel[] = [] // TODO: await privateService.getAllSubscriptions();
             subscriptionContext.setAllSubscriptions!(allSubs);
 
             const activeSubscription = allSubs.find(s => s._id == activeUser.subscription);

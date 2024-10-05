@@ -1,5 +1,5 @@
 import { RestClient } from "./rest-client";
-import { SubscriptionModel, UserInterviewModel, UserModel } from "../../../models/entities";
+import { DialogueModel, SubscriptionModel, UserInterviewModel, UserModel } from "../../../models/entities";
 import { egress } from "../../../models/egress";
 import { ingress } from "../../../models/ingress";
 
@@ -41,5 +41,15 @@ export class PrivateRestService {
             method: 'POST',
             body: JSON.stringify(promptData)
         })
+    }
+    
+    // Dialogue related
+    async createUserDialogue(dialogueData: egress.DialogueCreateInput) {
+        return this.restClient.post<DialogueModel>('interview/dialogue', dialogueData)
+    }
+
+    // Speech API
+    async getSpeechToken(): Promise<ingress.SpeechTokenResponse> {
+        return this.restClient.get<ingress.SpeechTokenResponse>(`speech-token`)
     }
 }

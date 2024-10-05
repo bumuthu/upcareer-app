@@ -9,8 +9,7 @@ export class CoreService {
     }
     async handleSpeechPrompt(promptId: string): Promise<string> {
         // Pull audio from S3 here and call AI service
-        const speechData = null;
-        const answerText = await this.aiService.convertSpeechToText(speechData)
+        const answerText = await this.aiService.convertSpeechToText(promptId)
         const replyText = await this.aiService.textCompletion(answerText)
         const replyAudio = await this.aiService.convertTextToSpeech(replyText)
         return replyAudio;

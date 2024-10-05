@@ -4,6 +4,7 @@ import { GlobalContextProvider } from '../context/GlobalContext'
 import AppThemeProvider from '../common/AppThemeProvider'
 import { SubscriptionContextProvider } from '../context/SubscriptionContext'
 import { AuthContextProvider } from '../context/AuthContext'
+import { InterviewContextProvider } from '../context/InterviewContext'
 
 export const metadata: Metadata = {
   title: 'UpCareer Labs - Unleash your potential career',
@@ -18,9 +19,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <AuthContextProvider>
           <SubscriptionContextProvider>
             <GlobalContextProvider>
-              <AppThemeProvider>
-                {children}
-              </AppThemeProvider>
+              <InterviewContextProvider>
+                <AppThemeProvider>
+                  {children}
+                </AppThemeProvider>
+              </InterviewContextProvider>
             </GlobalContextProvider>
           </SubscriptionContextProvider>
         </AuthContextProvider>

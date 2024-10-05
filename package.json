@@ -23,6 +23,7 @@
     "jwks-rsa": "^3.1.0",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
+    "microsoft-cognitiveservices-speech-sdk": "^1.40.0",
     "mongoose": "^8.6.2",
     "next": "14.1.4",
     "openai": "^4.38.3",

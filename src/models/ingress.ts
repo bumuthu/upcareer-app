@@ -8,4 +8,10 @@ export namespace ingress {
         cardEndingNumbers?: string,
         cardBrand?: string
     }
+
+    // Azure AI related
+    export interface SpeechTokenResponse {
+        token: string
+        region: string
+    }
 }

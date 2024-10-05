@@ -31,6 +31,9 @@ module.exports = {
         KINDE_CLIENT_SECRET: process.env.KINDE_CLIENT_SECRET || "<client secret>",
         KINDE_ISSUER_URL: process.env.KINDE_ISSUER_URL || "https://<app name>.us.kinde.com",
         KINDE_SITE_URL: process.env.KINDE_SITE_URL || "http://localhost:3000",
-        MONGO_PATH: process.env.MONGO_PATH || "mongodb+srv://<username>:<password>@<cluster>.mongodb.net/?retryWrites=true&w=majority"
+        MONGO_PATH: process.env.MONGO_PATH || "mongodb+srv://<username>:<password>@<cluster>.mongodb.net/?retryWrites=true&w=majority",
+        S3_ACCESS_KEY: process.env.S3_ACCESS_KEY || "<access key>",
+        S3_SECRET_KEY: process.env.S3_SECRET_KEY || "<secret key>",
+        S3_REGION: process.env.S3_REGION || "us-east-2",
     }
 };

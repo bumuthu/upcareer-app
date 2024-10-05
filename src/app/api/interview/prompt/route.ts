@@ -7,11 +7,10 @@ export const POST = async (req: Request) => {
     try {
         const requestBody = await req.json();
         validateRequiredFields(requestBody, ["promptId"]);
-        const propmptRequest = await enrichRequest(requestBody) as egress.InterviewPrompt;
+        // const propmptRequest = await enrichRequest(requestBody) as egress.InterviewPrompt;
 
         const coreService: CoreService = new CoreService();
-        const res = await coreService.handleSpeechPrompt(propmptRequest.promptId)
-        return handleNextSuccess(res)
+        return await coreService.handleSpeechPrompt(requestBody.promptId)
     } catch (error) {
         console.log("Error in POST:interview/prompt", error)
         return handleNextError(error);

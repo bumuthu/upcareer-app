@@ -7,6 +7,7 @@ import { Button, Checkbox, Col, Divider, Flex, Row, Space, Typography, Upload } 
 import TextArea from 'antd/es/input/TextArea'
 import Paragraph from 'antd/es/typography/Paragraph'
 import Title from 'antd/es/typography/Title'
+import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { ClipLoader } from 'react-spinners'
 interface UserInterviewProps {
@@ -15,9 +16,11 @@ interface UserInterviewProps {
 const UserInterviewContainer = (props: UserInterviewProps) => {
     const [baseInterview, setBaseInterview] = useState<BaseInterviewModel>()
     const [customJobDescription, setCustomJobDescription] = useState<string>('')
-    const [loading, setIsloading] = useState<boolean>()
+    const [loading, setIsloading] = useState<boolean>(false)
+    const [startLoading, setStartLoading] = useState<boolean>(false)
     const [isChecked, setIsChecked] = useState<boolean>()
-    
+    const router = useRouter()
+
     useEffect(() => {
         if (props.userInterview) {
             getBaseInterview()
@@ -44,7 +47,11 @@ const UserInterviewContainer = (props: UserInterviewProps) => {
             console.log("Apply click error: ", error)
             setIsloading(false)
         }
+    }
 
+    const onClickStart = () => {
+        setStartLoading(true)
+        router.push(`/interview/${props.userInterview._id}/ongoing`)
     }
 
     return (
@@ -59,11 +66,17 @@ const UserInterviewContainer = (props: UserInterviewProps) => {
                         }
                     </div>
 
-                    <Button type="primary" size="large" style={{
-                        paddingLeft: "40px",
-                        paddingRight: "40px",
-                    }}>
-                        Start
+                    <Button
+                        type="primary"
+                        size="large"
+                        style={{
+                            paddingLeft: "40px",
+                            paddingRight: "40px",
+                        }}
+                        onClick={onClickStart}
+                        loading={startLoading}
+                    >
+                        Start now
                     </Button>
                 </div>
 

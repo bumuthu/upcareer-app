@@ -7,27 +7,35 @@ import { MicrophoneIcon } from "@heroicons/react/24/outline";
 import { Button, Card, Col, Modal, Row, Tag } from "antd";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { useAuthContext } from "../../context/AuthContext";
+import { LoginLink } from "@kinde-oss/kinde-auth-nextjs";
+import { useInterviewContext } from "../../context/InterviewContext";
+
+const baseUrl = process.env.NEXT_PUBLIC_APP_BASE_URL;
+
 interface popupProps {
     baseInterview: BaseInterviewModel;
     isOpened: boolean;
     setIsOpened: React.Dispatch<React.SetStateAction<boolean | undefined>>;
 }
 const PopupModel = (props: popupProps) => {
-    const jobTags = ["UI", "UX", "Photoshop", "UX", "Photoshop"];
     const [isLoading, setIsloading] = useState<boolean>()
     const router = useRouter();
+    const authContext = useAuthContext();
+    const interviewContext = useInterviewContext();
+
     const startClick = async () => {
         try {
             setIsloading(true)
             const privateRestService = new PrivateRestService();
-            const createUserInterview = await privateRestService.createUserInterview({
+            const userInterview = await privateRestService.createUserInterview({
                 baseInterviewId: props.baseInterview._id,
             });
-            router.push(`/interview/${createUserInterview._id}`);
+            interviewContext.setActiveUserInterview!(userInterview);
             setIsloading(false)
+            router.push(`/interview/${userInterview._id}`);
         } catch (err) {
             console.log("Error, in start onclick");
-            setIsloading(false)
         }
     };
     useEffect(() => {
@@ -41,6 +49,13 @@ const PopupModel = (props: popupProps) => {
             document.body.style.overflow = "auto";
         };
     }, [props.isOpened]);
+
+    const getRedirectUrl = () => {
+        if (props.baseInterview) {
+            return `${baseUrl}/?opened=${props.baseInterview._id}`
+        }
+        return baseUrl;
+    }
     return (
         <div>
             <Modal
@@ -78,19 +93,36 @@ const PopupModel = (props: popupProps) => {
                             </div>
                         </Col>
                         <Col style={{ marginBottom: "60px" }}>
-                            <Button
-                                loading={isLoading}
-                                onClick={() => startClick()}
-                                type="primary"
-                                size="large"
-                                style={{
-                                    marginRight: "15px",
-                                    paddingLeft: "40px",
-                                    paddingRight: "40px",
-                                }}
-                            >
-                                Start
-                            </Button>
+                            {
+                                authContext.isAuthenticated ?
+                                    <Button
+                                        loading={isLoading}
+                                        onClick={() => startClick()}
+                                        type="primary"
+                                        size="large"
+                                        style={{
+                                            marginRight: "15px",
+                                            paddingLeft: "40px",
+                                            paddingRight: "40px",
+                                        }}
+                                    >
+                                        Start
+                                    </Button> :
+                                    <Button
+                                        loading={isLoading}
+                                        onClick={() => setIsloading(true)}
+                                        type="primary"
+                                        size="large"
+                                        style={{
+                                            marginRight: "15px",
+                                            paddingLeft: "40px",
+                                            paddingRight: "40px",
+                                        }}>
+                                        <LoginLink postLoginRedirectURL={getRedirectUrl()}>
+                                            Log in
+                                        </LoginLink>
+                                    </Button>
+                            }
                             <Button
                                 icon={<ShareAltOutlined />}
                                 style={{ marginRight: "15px" }}

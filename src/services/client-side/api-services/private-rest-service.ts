@@ -47,6 +47,9 @@ export class PrivateRestService {
     async createUserDialogue(dialogueData: egress.DialogueCreateInput) {
         return this.restClient.post<DialogueModel>('interview/dialogue', dialogueData)
     }
+    async updateUserDialogue(dialogueData: egress.DialogueUpdateInput) {
+        return this.restClient.post<DialogueModel>('interview/dialogue', dialogueData)
+    }
 
     // Speech API
     async getSpeechToken(): Promise<ingress.SpeechTokenResponse> {

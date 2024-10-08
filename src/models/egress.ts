@@ -1,4 +1,4 @@
-import { SubscriptionTierKey } from "./enum"
+import { SubscriptionTierKey, UserInterviewStatus } from "./enum"
 
 export namespace egress {
 
@@ -27,6 +27,10 @@ export namespace egress {
         text: string
         parentDialogueId?: string
     }
+    export interface DialogueUpdateInput extends Request {
+        dialogueId: string,
+        text: string
+    }
 
     // intervew related
     export interface BaseInterviewQueryInput extends Request {
@@ -47,7 +51,9 @@ export namespace egress {
 
     export interface UserInterviewUpdateInput extends Request {
         userInterviewId: string,
-        jobDescription?: string
+        jobDescription?: string,
+        startedAt?: number,
+        status?: UserInterviewStatus,
     }
 
     export interface UserInterviewPromptInput extends Request {

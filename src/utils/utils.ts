@@ -47,3 +47,12 @@ export const validateUserToken = (token: string | null) => {
         throw new Error("Invalid token found")
     }
 }
+
+export const getLastSentence = (text: string): string => {
+    if (!text) return ''
+    const sentences = text.split('.');
+    if (sentences.length > 0) {
+        return sentences[sentences.length - 1];
+    }
+    return text;
+}

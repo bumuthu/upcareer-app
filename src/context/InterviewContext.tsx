@@ -39,6 +39,7 @@ export const InterviewContextProvider: React.FC<any> = ({ children }) => {
     useEffect(() => {
         if (ongoingDialog) {
             console.log("Ongoing dialog updated.", ongoingDialog)
+            privateService.updateUserDialogue({ dialogueId: ongoingDialog._id, text: ongoingDialog.text})
         }
     }, [ongoingDialog])
 

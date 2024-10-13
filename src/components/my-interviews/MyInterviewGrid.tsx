@@ -11,44 +11,41 @@ interface props {
     userInterviews: UserInterviewModel[];
 }
 
-interface categorizedInterviewsIf {
-    categoryName: string;
-    interviewsInThatCategory: UserInterviewModel[];
-}
 const MyInterviewGrid = (props: props) => {
     const globalContext = useGlobalContext();
-    const [categorizedInterviews, setCategorizedInterviews] = useState<categorizedInterviewsIf[]>([]);
+    const [categorizedInterviews, setCategorizedInterviews] = useState<{ [id: string]: UserInterviewModel[] }>({});
     useEffect(() => {
-        const categorized = categorizeUserInterviews(
+        const categorized = getCategorizeUserInterviews(
             props.userInterviews,
             globalContext.categories
         );
         setCategorizedInterviews(categorized);
     }, [props.userInterviews, globalContext.categories]);
-    
-    const categorizeUserInterviews = (
+
+    const getCategorizeUserInterviews = (
         userInterviews: UserInterviewModel[],
         categories: CategoryModel[]
-    ): categorizedInterviewsIf[] => {
-        return categories.map((category) => {
-            const interviewsInThatCategory = userInterviews.filter((interview) => {
-                const baseInterview = interview.baseInterview as BaseInterviewModel;
-                const interviewCategory = baseInterview?.category as CategoryModel;
-                return interviewCategory?.lookupKey === category.lookupKey;
-            });
-
-            return {
-                categoryName: category.name,
-                interviewsInThatCategory: interviewsInThatCategory,
-            };
-        });
+    ): { [id: string]: UserInterviewModel[] } => {
+        const groupedByCategory: { [id: string]: UserInterviewModel[] } = {};
+        userInterviews.forEach(ui => {
+            const baseInterview = ui.baseInterview as BaseInterviewModel;
+            const category = categories.find(c => c._id == baseInterview.category);
+            if (!groupedByCategory[category?._id]) groupedByCategory[category?._id] = [];
+            groupedByCategory[category?._id].push(ui);
+        })
+        return groupedByCategory;
     };
+
+    const getCategoryNameById = (id: string): string => {
+        const category = globalContext.categories.find(c => c._id == id);
+        return category?.name || "Uncategorized";
+    }
 
     return (
         <div>
-            {categorizedInterviews.map((categoryItem) =>(
+            {Object.keys(categorizedInterviews).map((categoryId) => (
                 <div>
-                    <Typography.Paragraph>{categoryItem.categoryName}</Typography.Paragraph>
+                    <Typography.Paragraph>{getCategoryNameById(categoryId)}</Typography.Paragraph>
                     <Divider />
                     <List
                         grid={{
@@ -60,7 +57,7 @@ const MyInterviewGrid = (props: props) => {
                             sm: 1,
                             xs: 1,
                         }}
-                        dataSource={categoryItem.interviewsInThatCategory}
+                        dataSource={categorizedInterviews[categoryId]}
                         renderItem={(ui) => (
                             <List.Item style={{ display: "flex", justifyContent: "center" }}>
                                 <MyInterviewCard userInterview={ui} />

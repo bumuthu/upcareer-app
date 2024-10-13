@@ -26,4 +26,9 @@ export class UserInterviewService extends EntityService<UserInterviewModel, User
         await this.before();
         return await this.dbModel.findOne({ id: queryInput.userInterviewId });
     }
+
+    async getUserInterviews(queryInput: egress.UserInterviewsQueryInput): Promise<UserInterviewModel[] | null>{
+        await this.before();
+        return await this.dbModel.find({user: queryInput.userId}).populate('baseInterview') as any
+    }
 }

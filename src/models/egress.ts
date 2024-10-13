@@ -45,6 +45,10 @@ export namespace egress {
         userInterviewId?: string
     }
 
+    export interface UserInterviewsQueryInput extends Request {
+        userId: string
+    }
+
     export interface UserInterviewCreateInput extends Request {
         baseInterviewId: string,
     }

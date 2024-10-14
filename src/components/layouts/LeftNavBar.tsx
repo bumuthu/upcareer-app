@@ -1,8 +1,11 @@
+import { useAuthContext } from '@/context/AuthContext'
+import { useGlobalContext } from '@/context/GlobalContext'
 import { AppstoreOutlined, FileTextOutlined, LineChartOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons'
 import { Avatar, Layout, Menu, Typography } from 'antd'
 import { Content, Footer, Header } from 'antd/es/layout/layout'
 import Sider from 'antd/es/layout/Sider'
-import React from 'react'
+import { useRouter } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
 
 const LeftNavBar = ({ children }: { children: React.ReactNode }) => {
     const siderStyle: React.CSSProperties = {
@@ -13,30 +16,44 @@ const LeftNavBar = ({ children }: { children: React.ReactNode }) => {
         scrollbarWidth: 'thin',
         scrollbarColor: 'unset',
       };
-    return (
+      const [selectedKey, setSelectedKey] = useState('1');
+      const authContext =useAuthContext();
+      const router = useRouter();
+      useEffect(()=>{
+
+      },[selectedKey])
+
+      const handleMenuClick = (key :any, route:any) => {
+        setSelectedKey(key);
+        if (route) {
+          router.push(route);
+        }
+      };
+    return (<>
+      {  authContext.isAuthenticated &&
         <Layout hasSider>
             <Sider style={siderStyle}>
             <div style={{ padding: '20px', textAlign: 'center' }}>
           {/* Profile Section */}
           <Avatar size={64} icon={<UserOutlined />} />
           <Typography.Title level={5} style={{ margin: '10px 0 0', color:"white" }}>
-            Bumuthu Dilshan
+            {authContext.currentUser?.name}
           </Typography.Title>
-          <Typography.Text style={{color:"white"}}>bumuthudilshan@gmail.com</Typography.Text>
+          <Typography.Text style={{color:"white"}}>{authContext.currentUser?.email}</Typography.Text>
         </div>
 
         {/* Menu Items */}
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} style={{ paddingTop: '10px' }}>
-          <Menu.Item key="1" icon={<AppstoreOutlined />}>
+        <Menu selectedKeys={[selectedKey]} theme="dark" mode="inline" defaultSelectedKeys={['1']} style={{ paddingTop: '10px' }}>
+          <Menu.Item key="1" onClick={() => handleMenuClick('1', '/')} icon={<AppstoreOutlined />}>
             Explore Interviews
           </Menu.Item>
-          <Menu.Item key="2" icon={<FileTextOutlined />}>
+          <Menu.Item key="2" onClick={() => handleMenuClick('2', '/my-interviews')} icon={<FileTextOutlined />}>
             My Interviews
           </Menu.Item>
-          <Menu.Item key="3" icon={<LineChartOutlined />}>
+          <Menu.Item key="3" onClick={() => handleMenuClick('3', '/my-progress')} icon={<LineChartOutlined />}>
             My Progress
           </Menu.Item>
-          <Menu.Item key="4" icon={<SettingOutlined />}>
+          <Menu.Item key="4" onClick={() => handleMenuClick('4', '/my-account')} icon={<SettingOutlined />}>
             My Account
           </Menu.Item>
         </Menu>
@@ -47,6 +64,7 @@ const LeftNavBar = ({ children }: { children: React.ReactNode }) => {
                 </Content>
             </Layout>
         </Layout>
+      }</>
     )
 }
 

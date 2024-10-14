@@ -20,13 +20,19 @@ const LeftNavBar = ({ children }: { children: React.ReactNode }) => {
     const authContext = useAuthContext();
     const router = useRouter();
     const [collapsed, setCollapsed] = useState(false);
-   
+
     const handleMenuClick = (key: any, route: any) => {
         setSelectedKey(key);
         if (route) {
             router.push(route);
         }
     };
+
+    const adjustMargin = () => {
+        if (collapsed)
+            return 90
+        return 200
+    }
     return (<>
         {authContext.isAuthenticated &&
             <Layout hasSider>
@@ -43,24 +49,24 @@ const LeftNavBar = ({ children }: { children: React.ReactNode }) => {
                     </div>}
 
                     {/* Menu Items */}
-                    
-                        <Menu selectedKeys={[selectedKey]} theme="dark" mode="inline" defaultSelectedKeys={['1']} style={{ paddingTop: '10px' }}>
-                            <Menu.Item key="1" onClick={() => handleMenuClick('1', '/')} icon={<AppstoreOutlined />}>
-                                Explore Interviews
-                            </Menu.Item>
-                            <Menu.Item key="2" onClick={() => handleMenuClick('2', '/my-interviews')} icon={<FileTextOutlined />}>
-                                My Interviews
-                            </Menu.Item>
-                            <Menu.Item key="3" onClick={() => handleMenuClick('3', '/my-progress')} icon={<LineChartOutlined />}>
-                                My Progress
-                            </Menu.Item>
-                            <Menu.Item key="4" onClick={() => handleMenuClick('4', '/my-account')} icon={<SettingOutlined />}>
-                                My Account
-                            </Menu.Item>
-                        </Menu>
-                    
+
+                    <Menu selectedKeys={[selectedKey]} theme="dark" mode="inline" defaultSelectedKeys={['1']} style={{ paddingTop: '10px' }}>
+                        <Menu.Item key="1" onClick={() => handleMenuClick('1', '/')} icon={<AppstoreOutlined />}>
+                            Explore Interviews
+                        </Menu.Item>
+                        <Menu.Item key="2" onClick={() => handleMenuClick('2', '/my-interviews')} icon={<FileTextOutlined />}>
+                            My Interviews
+                        </Menu.Item>
+                        <Menu.Item key="3" onClick={() => handleMenuClick('3', '/my-progress')} icon={<LineChartOutlined />}>
+                            My Progress
+                        </Menu.Item>
+                        <Menu.Item key="4" onClick={() => handleMenuClick('4', '/my-account')} icon={<SettingOutlined />}>
+                            My Account
+                        </Menu.Item>
+                    </Menu>
+
                 </Sider>
-                <Layout style={{  marginLeft: 200 }}>
+                <Layout style={{ marginLeft: adjustMargin() }}>
                     <Content>
                         {children}
                     </Content>

@@ -6,6 +6,7 @@ import BaseInterviewGrid from '../components/base-interviews/BaseInterviewGrid';
 import { PublicRestService } from '../services/client-side/api-services/public-rest-service';
 
 import { BaseInterviewModel } from '../models/entities';
+import LeftNavBar from '@/components/layouts/LeftNavBar';
 const Home: React.FC = () => {
   const [baseInterviews, setBaseInterviews] = useState<BaseInterviewModel[]>([])
   const publicService = new PublicRestService();
@@ -20,11 +21,13 @@ const Home: React.FC = () => {
   return (
     <main >
       <WithTopNavBar>
-        <div style={{ maxWidth: '1200px', margin: '50px auto' }}>
+        <LeftNavBar>
+        <div style={{ maxWidth: '1200px', margin: '100px auto' }}>
           <Suspense>
           <BaseInterviewGrid baseInterviews={baseInterviews}/>
           </Suspense>
         </div>
+        </LeftNavBar>
       </WithTopNavBar>
     </main>
   )

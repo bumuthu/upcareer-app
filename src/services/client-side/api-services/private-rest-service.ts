@@ -30,7 +30,10 @@ export class PrivateRestService {
     async createUserInterview(interviewData: egress.UserInterviewCreateInput) {
         return this.restClient.post<UserInterviewModel>('interview', interviewData)
     }
-    async getUserInterviewById(interviewData: egress.UserInterviewQueryInput): Promise<UserInterviewModel> {
+    async getUserInterviews() {
+        return this.restClient.get<UserInterviewModel[]>('user-interviews')
+    }
+    async getUserInterviewById(interviewData: egress.UserInterviewQueryInput): Promise<UserInterviewModel>{
         return this.restClient.get<UserInterviewModel>(`interview/${interviewData.userInterviewId}`)
     }
     async updateUserInterview(interviewData: egress.UserInterviewUpdateInput): Promise<UserInterviewModel> {

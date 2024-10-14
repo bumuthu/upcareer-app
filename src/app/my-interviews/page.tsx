@@ -8,19 +8,22 @@ import React, { useEffect, useState } from 'react'
 
 const MyInterviewPage = () => {
     const [userInterviews, setUserInterviews] = useState<UserInterviewModel[]>([])
-const privateRestService = new PrivateRestService()
+    const privateRestService = new PrivateRestService()
     useEffect(() => {
         const queryUserInterviews = async () => {
             const userInterviewRes = await privateRestService.getUserInterviews()
-            setUserInterviews(userInterviewRes) 
+            setUserInterviews(userInterviewRes)
         }
         queryUserInterviews()
     }, [])
     return (
         <WithTopNavBar>
             <LeftNavBar>
-                <MyInterviewGrid userInterviews={userInterviews} />
+                <div style={{ maxWidth: '1200px', margin: '50px auto' }}>
+                    <MyInterviewGrid userInterviews={userInterviews} />
+                </div>
             </LeftNavBar>
+
         </WithTopNavBar>
     )
 }

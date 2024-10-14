@@ -19,7 +19,7 @@ const MyInterviewPage = () => {
     return (
         <WithTopNavBar>
             <LeftNavBar>
-                <div style={{ maxWidth: '1200px', margin: '50px auto' }}>
+                <div style={{ maxWidth: '1200px', margin: '100px auto' }}>
                     <MyInterviewGrid userInterviews={userInterviews} />
                 </div>
             </LeftNavBar>

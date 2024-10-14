@@ -14,7 +14,7 @@ const MyInterviewCard = (props: MyInterviewProps) => {
     return date?.toISOString().split('T')[0];
   }
   return (
-    <Card style={{ width: 400, borderRadius: 10, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+    <Card style={{ width: 400, borderRadius: 5, boxShadow: "0px 5px 10px rgba(0,0,0,0.05)", cursor: "pointer"  }}>
     <Space direction="horizontal" align="center" style={{justifyContent: 'space-between', width: '100%' }}>
       {/* Left Content */}
       <Space direction="vertical">

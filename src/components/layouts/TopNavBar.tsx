@@ -15,9 +15,15 @@ const TopNavBar = () => {
     return (
         <div
             style={{
-                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
+                position: "fixed",
+                top: 0, 
+                left:0 ,        
+                width: "100%",   
+                zIndex: 1000,   
+                backgroundColor: "white", 
+                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)", 
                 paddingBottom: 5,
-                paddingTop: 5,
+                paddingTop: 10,
             }}
         >
             <Row justify="space-around">

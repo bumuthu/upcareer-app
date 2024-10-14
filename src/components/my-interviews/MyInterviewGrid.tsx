@@ -44,9 +44,10 @@ const MyInterviewGrid = (props: props) => {
     return (
         <div>
             {Object.keys(categorizedInterviews).map((categoryId) => (
-                <div>
-                    <Typography.Paragraph>{getCategoryNameById(categoryId)}</Typography.Paragraph>
-                    <Divider />
+                <div style={{ marginTop: "50px" }}>
+                    <Divider style={{ marginBottom: "25px" }} orientation="left" plain>
+                        {getCategoryNameById(categoryId)}
+                    </Divider>
                     <List
                         grid={{
                             gutter: 16,

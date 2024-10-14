@@ -39,7 +39,7 @@ const LeftNavBar = ({ children }: { children: React.ReactNode }) => {
                 <Sider style={siderStyle} collapsible collapsed={collapsed}
                     onCollapse={(collapsed) => setCollapsed(collapsed)}
                     breakpoint="lg">
-                    {!collapsed && <div style={{ padding: '20px', textAlign: 'center' }}>
+                    {!collapsed && <div style={{ padding: '20px', textAlign: 'center', marginTop: "75px" }}>
                         {/* Profile Section */}
                         <Avatar size={64} icon={<UserOutlined />} />
                         <Typography.Title level={5} style={{ margin: '10px 0 0', color: "white" }}>
@@ -67,7 +67,7 @@ const LeftNavBar = ({ children }: { children: React.ReactNode }) => {
 
                 </Sider>
                 <Layout style={{ marginLeft: adjustMargin() }}>
-                    <Content>
+                    <Content style={{ height: 'calc(100vh - 10px)', overflow: 'auto' }}>
                         {children}
                     </Content>
                 </Layout>

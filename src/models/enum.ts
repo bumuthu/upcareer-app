@@ -44,3 +44,11 @@ export enum SubscriptionEventTitle {
     SUBSCRIPTION_PAUSED = "Subscription paused due to payment failure",
     SUBSCRIPTION_UPGRADED = "Subscription upgraded",
 }
+
+export enum SelectableSection {
+    EXPLORE_INTERVIEWS = "EXPLORE_INTERVIEWS",
+    MY_INTERVIEWS = "MY_INTERVIEWS",
+    MY_PROGRESS = "MY_PROGRESS",
+    MY_ACCOUNT = "MY_ACCOUNT"
+
+}

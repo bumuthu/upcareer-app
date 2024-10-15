@@ -14,17 +14,19 @@ import { UserInterviewStatus } from '../../models/enum'
 import { Modal } from 'antd'
 import { useRouter } from 'next/navigation'
 import { getTimingInMinSec } from '../../utils/utils'
+import OngoingAudioPlayer from './OngoingAudioPlayer'
 
 interface OngoingUserInterviewProps {
-
 }
 
 const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
     const [micOn, setMicOn] = useState<boolean>(false);
+    const [speakerOn, setSpeakerOn] = useState<boolean>(false);
     const [countDown, setCountDown] = useState<number>(10);
     const [ongoingTimer, setOngoingTimer] = useState<string>();
     const [exitOpen, setExitOpen] = useState<boolean>(false);
     const [exitLoading, setExitLoading] = useState<boolean>(false);
+    const [tempLastText, setTempLastTest] = useState<string>("")
     const privateRestService = new PrivateRestService()
     const speechService = new AzureAIClientService();
     const interviewContext = useInterviewContext();
@@ -64,6 +66,7 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
             createUserPrompt()
             speechService.startSpeechToText()
         } else {
+            setTempLastTest(interviewContext.ongoingDialog?.text! + " " + interviewContext.ongoingText!)
             if (interviewContext.ongoingText) {
                 interviewContext.setOngoingDialog!((d => {
                     if (d) return { ...d!, text: d.text + " " + interviewContext.ongoingText! }
@@ -72,6 +75,7 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
             }
             speechService.stopSpeechToText()
             interviewContext.setOngoingDialog!(undefined);
+            setSpeakerOn(true)
         }
         setMicOn(value);
     }
@@ -226,6 +230,7 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
                                 </Modal>
                             </div>
                         </div>
+                        <OngoingAudioPlayer text={tempLastText} start={speakerOn} onComplete={() => { setSpeakerOn(false)}}/>
                     </div>
                 </>
                 : <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}><ClipLoader /></div>}

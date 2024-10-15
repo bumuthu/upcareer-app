@@ -1,4 +1,4 @@
-import { AudioConfig, Recognizer, SpeechConfig, SpeechRecognitionEventArgs, SpeechRecognizer } from "microsoft-cognitiveservices-speech-sdk";
+import { AudioConfig, Recognizer, ResultReason, SpeechConfig, SpeechRecognitionEventArgs, SpeechRecognizer, SpeechSynthesizer } from "microsoft-cognitiveservices-speech-sdk";
 import { ingress } from "../../models/ingress";
 import { PrivateRestService } from "./api-services/private-rest-service";
 import { useInterviewContext } from "../../context/InterviewContext";
@@ -6,16 +6,17 @@ import { useInterviewContext } from "../../context/InterviewContext";
 export class AzureAIClientService {
     private static session: ingress.SpeechTokenResponse | undefined;
     private static recognizer: SpeechRecognizer | undefined;
+    private static synthesizer: SpeechSynthesizer | undefined;
     private interviewContext = useInterviewContext();
 
     async init() {
         const sessionRes = await this.getSpeechSession();
-
         const speechConfig = SpeechConfig.fromAuthorizationToken(sessionRes.token, sessionRes.region);
         speechConfig.speechRecognitionLanguage = 'en-US';
-        const audioConfig = AudioConfig.fromDefaultMicrophoneInput(); // TODO: try with device id 
-
-        AzureAIClientService.recognizer = new SpeechRecognizer(speechConfig, audioConfig);
+        
+        // STT
+        const recognizerAudioConfig = AudioConfig.fromDefaultMicrophoneInput(); // TODO: try with device id 
+        AzureAIClientService.recognizer = new SpeechRecognizer(speechConfig, recognizerAudioConfig);
         AzureAIClientService.recognizer.recognizing = (sender: Recognizer, event: SpeechRecognitionEventArgs) => {
             console.log('Recgonizing:', event.result.text);
             if (event.result.text) {
@@ -33,6 +34,10 @@ export class AzureAIClientService {
             }
             this.interviewContext.setOngoingText!("");
         }
+
+        // TTS
+        const synthesizerAudioConfig = AudioConfig.fromDefaultSpeakerOutput(); // TODO: try with device id 
+        AzureAIClientService.synthesizer = new SpeechSynthesizer(speechConfig, synthesizerAudioConfig);
     }
 
     async getSpeechSession(): Promise<ingress.SpeechTokenResponse> {
@@ -63,4 +68,28 @@ export class AzureAIClientService {
             AzureAIClientService.recognizer!.stopContinuousRecognitionAsync();
         }
     }
+
+    async startTextToSpeech(text: string, onCompleted: (url: string) => void) {
+        if (!AzureAIClientService.synthesizer) {
+            await this.init();
+        }
+
+        const audioChunks: any[] = [];
+        AzureAIClientService.synthesizer!.speakTextAsync(text,
+            (result) => {
+                if (result.reason === ResultReason.SynthesizingAudioCompleted) {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    const url = URL.createObjectURL(audioBlob);
+                    onCompleted(url);
+                    console.log("synthesis finished.");
+                } else {
+                    console.error("Speech synthesis canceled, " + result.errorDetails);
+                }
+            },
+            (error) => {
+                console.error("Error while TTS", error);
+            }
+        );
+    }
+
 }

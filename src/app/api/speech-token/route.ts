@@ -5,8 +5,7 @@ import { AzureAIServerService } from "../../../services/server-side/azure-ai-ser
 export const GET = async (req: Request) => {
     try {
         await ServerAuthService.getUser();
-        const azureService = new AzureAIServerService();
-        const session = await azureService.getAuthSession();
+        const session = await AzureAIServerService.getAuthSession();
         return handleNextSuccess(session)
     } catch (error) {
         console.log("Error in GET:/speech-token", error)

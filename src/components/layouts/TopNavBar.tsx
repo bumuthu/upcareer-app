@@ -1,27 +1,50 @@
+"use client"
 import React from "react";
-import { Col, Row, Button, Avatar } from "antd";
+import { Col, Row, Button, Avatar, Dropdown, Space, MenuProps, message } from "antd";
 import { LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { useAuthContext } from "../../context/AuthContext";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { useRouter } from "next/navigation";
 import Typography from "antd/es/typography/Typography";
-import { UserOutlined } from "@ant-design/icons";
+import { DownOutlined, HomeOutlined, LogoutOutlined, SettingOutlined, UserOutlined } from "@ant-design/icons";
 
 const TopNavBar = () => {
     const authContext = useAuthContext();
     const authUser = useKindeBrowserClient();
     const router = useRouter();
 
+    const onClick: MenuProps['onClick'] = ({ key }) => {
+        message.info(`Click on item ${key}`);
+      };
+      
+      const items: MenuProps['items'] = [
+        {
+          label: 'Home',
+          key: 'home',
+          icon: <HomeOutlined/>
+        },
+        {
+          label: 'My Account',
+          key: 'my_account',
+          icon:<SettingOutlined/>
+        },
+        {
+          label: 'Logout',
+          key: 'logout',
+          icon: <LogoutOutlined/>
+        },
+      ];
+
     return (
         <div
             style={{
                 position: "fixed",
-                top: 0, 
-                left:0 ,        
-                width: "100%",   
-                zIndex: 1000,   
-                backgroundColor: "white", 
-                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)", 
+                top: 0,
+                left: 0,
+                width: "100%",
+                zIndex: 1000,
+                backgroundColor: "white",
+                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
                 paddingBottom: 5,
                 paddingTop: 10,
             }}
@@ -64,19 +87,19 @@ const TopNavBar = () => {
                                 <LoginLink>Log in</LoginLink>
                             </Button>
                         ) : (
-                            <div style={{ display: "flex", marginLeft: "20px" }}>
-                                <Avatar size={30} icon={<UserOutlined />} />
-                                <Typography
-                                    style={{
-                                        display: "flex",
-                                        textAlign: "center",
-                                        alignItems: "center",
-                                        marginLeft: "10px",
-                                    }}
-                                >
-                                    {authContext.currentUser?.name}
-                                </Typography>
-                            </div>
+
+
+                            <Dropdown menu={{ items, onClick }}>
+                                <span onClick={(e) => e.preventDefault()}>
+
+                                    <Space>
+                                        <Avatar size={30} icon={<UserOutlined />} />
+                                        <DownOutlined />
+                                    </Space>
+
+                                </span>
+                            </Dropdown>
+
                         )}
                     </Row>
                 </Col>

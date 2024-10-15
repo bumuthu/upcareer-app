@@ -2,18 +2,21 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useAuthContext } from "./AuthContext";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ClientAuthService } from "../services/client-side/client-auth-service";
 import { PrivateRestService } from "../services/client-side/api-services/private-rest-service";
 import { useSubscriptionContext } from "./SubscriptionContext";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { CategoryModel, SubscriptionModel } from "../models/entities";
 import { PublicRestService } from "../services/client-side/api-services/public-rest-service";
+import { SelectableSection } from "@/models/enum";
 
 export interface GlobalContextType {
     isLoading: boolean,
     setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>,
-    categories: CategoryModel[]
+    categories: CategoryModel[],
+    selectedSection?: SelectableSection,
+    setSelectedSection?: React.Dispatch<React.SetStateAction<SelectableSection>>,
 }
 
 const GlobalContext = createContext<GlobalContextType>({ isLoading: false, categories: [] });
@@ -21,11 +24,13 @@ const GlobalContext = createContext<GlobalContextType>({ isLoading: false, categ
 export const GlobalContextProvider: React.FC<any> = ({ children }) => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [categories, setCategories] = useState<CategoryModel[]>([]);
+    const [selectedSection, setSelectedSection] = useState<SelectableSection>(SelectableSection.EXPLORE_INTERVIEWS)
 
     const authUser = useKindeBrowserClient();
     const authContext = useAuthContext();
     const subscriptionContext = useSubscriptionContext();
     const router = useRouter();
+    const pathName = usePathname()
 
     const unauthorizedCallback = () => {
         ClientAuthService.unauthorizedCallback(router)
@@ -66,6 +71,20 @@ export const GlobalContextProvider: React.FC<any> = ({ children }) => {
         }
     }
 
+    const setNavBarSelection = () => {
+        if (pathName == '/') {
+            setSelectedSection(SelectableSection.EXPLORE_INTERVIEWS)
+        }
+        else if (pathName == '/my-interviews') {
+            setSelectedSection(SelectableSection.MY_INTERVIEWS)
+        }
+        else if (pathName == '/my-progress') {
+            setSelectedSection(SelectableSection.MY_PROGRESS)
+        } else {
+            setSelectedSection(SelectableSection.MY_ACCOUNT)
+        }
+    }
+
     useEffect(() => {
         const loadData = async () => {
             setIsLoading(true);
@@ -89,11 +108,17 @@ export const GlobalContextProvider: React.FC<any> = ({ children }) => {
         }
     }, [authUser.isLoading])
 
+    useEffect(() => {
+        setNavBarSelection()
+    }, [pathName])
+
     return (
         <GlobalContext.Provider value={{
             isLoading,
             setIsLoading,
-            categories
+            categories,
+            selectedSection,
+            setSelectedSection,
         }}>
             {children}
         </GlobalContext.Provider>

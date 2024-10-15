@@ -1,5 +1,6 @@
 import { useAuthContext } from '@/context/AuthContext'
 import { useGlobalContext } from '@/context/GlobalContext'
+import { SelectableSection } from '@/models/enum'
 import { AppstoreOutlined, FileTextOutlined, LineChartOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons'
 import { Avatar, Drawer, Layout, Menu, Typography } from 'antd'
 import { Content, Footer, Header } from 'antd/es/layout/layout'
@@ -18,15 +19,10 @@ const LeftNavBar = ({ children }: { children: React.ReactNode }) => {
     };
     const [selectedKey, setSelectedKey] = useState('1');
     const authContext = useAuthContext();
+    const globalContext = useGlobalContext();
     const router = useRouter();
     const [collapsed, setCollapsed] = useState(false);
 
-    const handleMenuClick = (key: any, route: any) => {
-        setSelectedKey(key);
-        if (route) {
-            router.push(route);
-        }
-    };
 
     const adjustMargin = () => {
         if (collapsed)
@@ -50,17 +46,17 @@ const LeftNavBar = ({ children }: { children: React.ReactNode }) => {
 
                     {/* Menu Items */}
 
-                    <Menu selectedKeys={[selectedKey]} theme="dark" mode="inline" defaultSelectedKeys={['1']} style={{ paddingTop: '10px' }}>
-                        <Menu.Item key="1" onClick={() => handleMenuClick('1', '/')} icon={<AppstoreOutlined />}>
+                    <Menu selectedKeys={[globalContext.selectedSection!]} theme="dark" mode="inline" defaultSelectedKeys={['1']} style={{ paddingTop: '10px' }}>
+                        <Menu.Item key={SelectableSection.EXPLORE_INTERVIEWS} onClick={() => { globalContext.setSelectedSection!(SelectableSection.EXPLORE_INTERVIEWS); router.push('/') }} icon={<AppstoreOutlined />}>
                             Explore Interviews
                         </Menu.Item>
-                        <Menu.Item key="2" onClick={() => handleMenuClick('2', '/my-interviews')} icon={<FileTextOutlined />}>
+                        <Menu.Item key={SelectableSection.MY_INTERVIEWS} onClick={() => { globalContext.setSelectedSection!(SelectableSection.MY_INTERVIEWS); router.push('/my-interviews') }} icon={<FileTextOutlined />}>
                             My Interviews
                         </Menu.Item>
-                        <Menu.Item key="3" onClick={() => handleMenuClick('3', '/my-progress')} icon={<LineChartOutlined />}>
+                        <Menu.Item key={SelectableSection.MY_PROGRESS} onClick={() => { globalContext.setSelectedSection!(SelectableSection.MY_PROGRESS); router.push('/my-progress') }} icon={<LineChartOutlined />}>
                             My Progress
                         </Menu.Item>
-                        <Menu.Item key="4" onClick={() => handleMenuClick('4', '/my-account')} icon={<SettingOutlined />}>
+                        <Menu.Item key={SelectableSection.MY_ACCOUNT} onClick={() => { globalContext.setSelectedSection!(SelectableSection.MY_ACCOUNT); router.push('/my-account') }} icon={<SettingOutlined />}>
                             My Account
                         </Menu.Item>
                     </Menu>

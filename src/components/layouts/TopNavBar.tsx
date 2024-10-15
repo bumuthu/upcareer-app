@@ -5,8 +5,7 @@ import { LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { useAuthContext } from "../../context/AuthContext";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { useRouter } from "next/navigation";
-import Typography from "antd/es/typography/Typography";
-import { DownOutlined, HomeOutlined, LogoutOutlined, SettingOutlined, UserOutlined } from "@ant-design/icons";
+import { HomeOutlined, LogoutOutlined, SettingOutlined, UserOutlined } from "@ant-design/icons";
 
 const TopNavBar = () => {
     const authContext = useAuthContext();
@@ -15,25 +14,25 @@ const TopNavBar = () => {
 
     const onClick: MenuProps['onClick'] = ({ key }) => {
         message.info(`Click on item ${key}`);
-      };
-      
-      const items: MenuProps['items'] = [
+    };
+
+    const items: MenuProps['items'] = [
         {
-          label: 'Home',
-          key: 'home',
-          icon: <HomeOutlined/>
+            label: 'Home',
+            key: 'home',
+            icon: <HomeOutlined />
         },
         {
-          label: 'My Account',
-          key: 'my_account',
-          icon:<SettingOutlined/>
+            label: 'My Account',
+            key: 'my_account',
+            icon: <SettingOutlined />
         },
         {
-          label: 'Logout',
-          key: 'logout',
-          icon: <LogoutOutlined/>
+            label: 'Logout',
+            key: 'logout',
+            icon: <LogoutOutlined />
         },
-      ];
+    ];
 
     return (
         <div
@@ -77,30 +76,26 @@ const TopNavBar = () => {
                         >
                             Tutorial
                         </Button>
-                        {!authContext.isAuthenticated ? (
-                            <Button
-                                loading={authUser.isLoading!}
-                                type="primary"
-                                size="middle"
-                                style={{ fontWeight: 600, marginLeft: 50 }}
-                            >
-                                <LoginLink>Log in</LoginLink>
-                            </Button>
-                        ) : (
-
-
-                            <Dropdown menu={{ items, onClick }}>
-                                <span onClick={(e) => e.preventDefault()}>
-
-                                    <Space>
-                                        <Avatar size={30} icon={<UserOutlined />} />
-                                        <DownOutlined />
-                                    </Space>
-
-                                </span>
-                            </Dropdown>
-
-                        )}
+                        <div style={{ marginLeft: 50 }}>
+                            {!authContext.isAuthenticated ? (
+                                <Button
+                                    loading={authUser.isLoading!}
+                                    type="primary"
+                                    size="middle"
+                                    style={{ fontWeight: 600 }}
+                                >
+                                    <LoginLink>Log in</LoginLink>
+                                </Button>
+                            ) : (
+                                <Dropdown menu={{ items, onClick }}>
+                                    <span onClick={(e) => e.preventDefault()}>
+                                        <Space>
+                                            <Avatar size={30} icon={<UserOutlined />} />
+                                        </Space>
+                                    </span>
+                                </Dropdown>
+                            )}
+                        </div>
                     </Row>
                 </Col>
             </Row>

@@ -2,11 +2,11 @@ import { useAuthContext } from '@/context/AuthContext'
 import { useGlobalContext } from '@/context/GlobalContext'
 import { SelectableSection } from '@/models/enum'
 import { AppstoreOutlined, FileTextOutlined, LineChartOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons'
-import { Avatar, Drawer, Layout, Menu, Typography } from 'antd'
-import { Content, Footer, Header } from 'antd/es/layout/layout'
+import { Avatar, Layout, Menu, Typography } from 'antd'
+import { Content } from 'antd/es/layout/layout'
 import Sider from 'antd/es/layout/Sider'
 import { useRouter } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 const LeftNavBar = ({ children }: { children: React.ReactNode }) => {
     const siderStyle: React.CSSProperties = {
@@ -16,6 +16,7 @@ const LeftNavBar = ({ children }: { children: React.ReactNode }) => {
         insetInlineStart: 0,
         scrollbarWidth: 'thin',
         scrollbarColor: 'unset',
+        paddingTop: "75px" 
     };
     const [selectedKey, setSelectedKey] = useState('1');
     const authContext = useAuthContext();
@@ -35,7 +36,7 @@ const LeftNavBar = ({ children }: { children: React.ReactNode }) => {
                 <Sider style={siderStyle} collapsible collapsed={collapsed}
                     onCollapse={(collapsed) => setCollapsed(collapsed)}
                     breakpoint="lg">
-                    {!collapsed && <div style={{ padding: '20px', textAlign: 'center', marginTop: "75px" }}>
+                    {!collapsed && <div style={{ padding: '20px', textAlign: 'center' }}>
                         {/* Profile Section */}
                         <Avatar size={64} icon={<UserOutlined />} />
                         <Typography.Title level={5} style={{ margin: '10px 0 0', color: "white" }}>

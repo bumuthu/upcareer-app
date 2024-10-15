@@ -11,6 +11,10 @@ export class ClientAuthService {
         router.push("/api/auth/login")
     }
 
+    static handleLogout(router: AppRouterInstance) {
+        router.push("/api/auth/logout")
+    }
+
     static handleRegister(router: AppRouterInstance) {
         router.push("/api/auth/register")
     }

@@ -6,6 +6,7 @@ import { useAuthContext } from "../../context/AuthContext";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { useRouter } from "next/navigation";
 import { HomeOutlined, LogoutOutlined, SettingOutlined, UserOutlined } from "@ant-design/icons";
+import { ClientAuthService } from "../../services/client-side/client-auth-service";
 
 const TopNavBar = () => {
     const authContext = useAuthContext();
@@ -13,7 +14,17 @@ const TopNavBar = () => {
     const router = useRouter();
 
     const onClick: MenuProps['onClick'] = ({ key }) => {
-        message.info(`Click on item ${key}`);
+        switch (key) {
+            case 'logout':
+                ClientAuthService.handleLogout(router);
+                break;
+            case 'my_account':
+                router.push("/my-account");
+                break;
+            case 'home':
+                router.push("/");
+                break;
+        }
     };
 
     const items: MenuProps['items'] = [

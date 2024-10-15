@@ -16,9 +16,8 @@ const LeftNavBar = ({ children }: { children: React.ReactNode }) => {
         insetInlineStart: 0,
         scrollbarWidth: 'thin',
         scrollbarColor: 'unset',
-        paddingTop: "75px" 
+        paddingTop: "75px"
     };
-    const [selectedKey, setSelectedKey] = useState('1');
     const authContext = useAuthContext();
     const globalContext = useGlobalContext();
     const router = useRouter();
@@ -31,7 +30,7 @@ const LeftNavBar = ({ children }: { children: React.ReactNode }) => {
         return 200
     }
     return (<>
-        {authContext.isAuthenticated &&
+        {authContext.isAuthenticated ?
             <Layout hasSider>
                 <Sider style={siderStyle} collapsible collapsed={collapsed}
                     onCollapse={(collapsed) => setCollapsed(collapsed)}
@@ -68,7 +67,8 @@ const LeftNavBar = ({ children }: { children: React.ReactNode }) => {
                         {children}
                     </Content>
                 </Layout>
-            </Layout>
+            </Layout> :
+            <>{children}</>
         }</>
     )
 }

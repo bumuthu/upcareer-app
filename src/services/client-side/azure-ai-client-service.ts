@@ -1,8 +1,7 @@
-import { AudioConfig, KeywordRecognitionModel, Recognizer, ResultReason, SpeechConfig, SpeechRecognitionEventArgs, SpeechRecognizer } from "microsoft-cognitiveservices-speech-sdk";
+import { AudioConfig, Recognizer, SpeechConfig, SpeechRecognitionEventArgs, SpeechRecognizer } from "microsoft-cognitiveservices-speech-sdk";
 import { ingress } from "../../models/ingress";
 import { PrivateRestService } from "./api-services/private-rest-service";
 import { useInterviewContext } from "../../context/InterviewContext";
-import { DialogueModel } from "../../models/entities";
 
 export class AzureAIClientService {
     private static session: ingress.SpeechTokenResponse | undefined;
@@ -28,16 +27,8 @@ export class AzureAIClientService {
             console.log(`Recognized:`, event.result.text);
             if (event.result.text) {
                 this.interviewContext.setOngoingDialog!((d => {
-                    if (d) {
-                        return {
-                            ...d!,
-                            text: d!.text + " " + event.result.text
-                        }
-                    }
-                    return {
-                        ...d!,
-                        text: event.result.text
-                    }
+                    if (d) return { ...d!, text: d!.text + " " + event.result.text }
+                    return { ...d!, text: event.result.text }
                 }))
             }
             this.interviewContext.setOngoingText!("");

@@ -92,7 +92,7 @@ export interface UserInterviewModel extends Entity {
     interviewScores?: UserInterviewScoreModel, // if status is COMPLETED, required
     status: UserInterviewStatus,
     startedAt?: number,
-    duration?: number // in minutes
+    endedAt?: number
 }
 
 

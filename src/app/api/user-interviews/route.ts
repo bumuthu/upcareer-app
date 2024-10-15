@@ -5,8 +5,7 @@ import { enrichRequest, validateRequiredFields } from "@/utils/validations";
 
 export const GET = async (req: Request) => {
     try {
-      
-      const enrichedReqBody = await enrichRequest(req as any) as egress.UserInterviewsQueryInput;
+      const enrichedReqBody = await enrichRequest() as egress.UserInterviewsQueryInput;
       validateRequiredFields(enrichedReqBody,['userId'])
       const userInterviewService = new UserInterviewService();
       const userInterviews = await userInterviewService.getUserInterviews({userId: enrichedReqBody.userId});

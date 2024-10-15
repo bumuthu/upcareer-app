@@ -11,7 +11,9 @@ import Paragraph from 'antd/es/typography/Paragraph'
 import Title from 'antd/es/typography/Title'
 import { ClipLoader } from 'react-spinners'
 import { UserInterviewStatus } from '../../models/enum'
-
+import { Modal } from 'antd'
+import { useRouter } from 'next/navigation'
+import { getTimingInMinSec } from '../../utils/utils'
 
 interface OngoingUserInterviewProps {
 
@@ -19,35 +21,15 @@ interface OngoingUserInterviewProps {
 
 const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
     const [micOn, setMicOn] = useState<boolean>(false);
-    const [countDown, setCountDown] = useState<number>(0);
+    const [countDown, setCountDown] = useState<number>(10);
     const [ongoingTimer, setOngoingTimer] = useState<string>();
+    const [exitOpen, setExitOpen] = useState<boolean>(false);
+    const [exitLoading, setExitLoading] = useState<boolean>(false);
     const privateRestService = new PrivateRestService()
     const speechService = new AzureAIClientService();
     const interviewContext = useInterviewContext();
+    const router = useRouter();
     let countDownTimer: any;
-
-    useEffect(() => {
-        if (micOn) {
-            interviewContext.setOngoingDialog!({
-                text: "", userInterview: interviewContext.activeUserInterview?._id, createdAt: Date.now()
-            });
-            createUserPrompt().then(res => {
-                interviewContext.setOngoingDialog!(res);
-            })
-            speechService.startSpeechToText()
-        } else {
-            speechService.stopSpeechToText()
-            setTimeout(() => {
-                interviewContext.setOngoingDialog!(undefined);
-            }, 500)
-        }
-    }, [micOn])
-
-    useEffect(() => {
-        if (!interviewContext.activeUserInterview?.startedAt) {
-            setCountDown(10);
-        }
-    }, [])
 
     useEffect(() => {
         if (interviewContext.activeUserInterview?.status == UserInterviewStatus.INITIALIZED) {
@@ -59,8 +41,10 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
             }
         } else if (interviewContext.activeUserInterview?.status == UserInterviewStatus.ONGOING) {
             setInterval(() => {
-                setOngoingTimer(getTiming())
+                setOngoingTimer(getTimingInMinSec(interviewContext.activeUserInterview?.startedAt!))
             }, 1000);
+        } else {
+            // TODO: implement a notice that interview is not valid
         }
     }, [interviewContext.activeUserInterview, countDown]);
 
@@ -74,11 +58,30 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
         })
     }
 
+    const handleMicEvent = (value: boolean) => {
+        if (value) {
+            interviewContext.setOngoingDialog!({ text: "", userInterview: interviewContext.activeUserInterview?._id, createdAt: Date.now() });
+            createUserPrompt()
+            speechService.startSpeechToText()
+        } else {
+            if (interviewContext.ongoingText) {
+                interviewContext.setOngoingDialog!((d => {
+                    if (d) return { ...d!, text: d.text + " " + interviewContext.ongoingText! }
+                    return undefined
+                }));
+            }
+            speechService.stopSpeechToText()
+            interviewContext.setOngoingDialog!(undefined);
+        }
+        setMicOn(value);
+    }
+
     const createUserPrompt = async () => {
         try {
             const userPromptResponse = await privateRestService.createUserDialogue({
                 text: "", userInterviewId: interviewContext.activeUserInterview?._id,
             });
+            interviewContext.setOngoingDialog!(userPromptResponse)
             console.log("UserPrompt:  ", userPromptResponse)
             return userPromptResponse;
         } catch (error) {
@@ -86,11 +89,16 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
         }
     }
 
-    const getTiming = (): string => {
-        const ms = Date.now() - interviewContext.activeUserInterview?.startedAt!
-        const minutes = Math.floor(ms / 60000);
-        const seconds = Math.floor((ms % 60000) / 1000);
-        return `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    const handleExit = async () => {
+        setExitLoading(true);
+        await privateRestService.updateUserInterview({
+            userInterviewId: interviewContext.activeUserInterview?._id,
+            endedAt: Date.now(),
+            status: UserInterviewStatus.CANCELLED
+        });
+        setExitLoading(false);
+        router.push('/my-interviews');
+        setExitOpen(false);
     }
 
     return (
@@ -194,7 +202,7 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
                                 borderRadius: '5px',
                                 cursor: 'pointer',
                             }}>
-                                <div className="hover-box" onClick={() => setMicOn(!micOn)}>
+                                <div className="hover-box" onClick={() => handleMicEvent(!micOn)}>
                                     {
                                         micOn ?
                                             <StopIcon /> :
@@ -210,9 +218,12 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
                                 borderRadius: '5px',
                                 cursor: 'pointer',
                             }}>
-                                <div className="hover-box">
+                                <div className="hover-box" onClick={() => setExitOpen(true)}>
                                     <ExitIcon />
                                 </div>
+                                <Modal title="Are you sure you want to exit the interview?" open={exitOpen} okText="Exit" onOk={handleExit} okButtonProps={{ danger: true, loading: exitLoading }} onCancel={() => setExitOpen(false)} closable={false}>
+                                    <p>When you exit the interview, your interview can nolonger be continued. Are you sure that you want to close the interview?</p>
+                                </Modal>
                             </div>
                         </div>
                     </div>

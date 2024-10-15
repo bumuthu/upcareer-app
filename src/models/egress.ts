@@ -57,6 +57,7 @@ export namespace egress {
         userInterviewId: string,
         jobDescription?: string,
         startedAt?: number,
+        endedAt?: number,
         status?: UserInterviewStatus,
     }
 

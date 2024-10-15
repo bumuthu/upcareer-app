@@ -18,3 +18,19 @@ export const POST = async (req: Request) => {
     }
 }
 
+
+export const PUT = async (req: Request) => {
+    try {
+        const requestBody = await req.json();
+        validateRequiredFields(requestBody, ["dialogueId"]);
+        const dialogueRequest = await enrichRequest(requestBody) as egress.DialogueUpdateInput;
+
+        const dialogueService = new DialogueService();
+        const res = await dialogueService.update(dialogueRequest.dialogueId, { text: dialogueRequest.text })
+        return handleNextSuccess(res)
+    } catch (error) {
+        console.log("Error in PUT:interview/dialogue", error)
+        return handleNextError(error);
+    }
+}
+

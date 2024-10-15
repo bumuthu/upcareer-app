@@ -56,3 +56,21 @@ export const getLastSentence = (text: string): string => {
     }
     return text;
 }
+
+export const getMinuteDifference = (timestamp: number): number => {
+    if (!timestamp) {
+        return 0;
+    }
+    const timeDifference =  Date.now() - timestamp;
+    return Math.floor(timeDifference / 60000);
+}
+
+export const getTimingInMinSec = (timestamp: number): string => {
+    if (!timestamp) {
+        return '00:00';
+    }
+    const ms = Date.now() - timestamp!
+    const minutes = Math.floor(ms / 60000);
+    const seconds = Math.floor((ms % 60000) / 1000);
+    return `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+}

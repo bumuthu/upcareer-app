@@ -39,11 +39,13 @@ export class PrivateRestService {
     async updateUserInterview(interviewData: egress.UserInterviewUpdateInput): Promise<UserInterviewModel> {
         return this.restClient.put<UserInterviewModel>(`interview/${interviewData.userInterviewId}`, interviewData)
     }
-    async createUserPrompt(promptData: egress.UserInterviewPromptInput) {
-        return await fetch('/api/interview/prompt', {
-            method: 'POST',
-            body: JSON.stringify(promptData)
-        })
+
+    // AI related
+    async promptInterviewAnswer(promptData: egress.InterviewAnswerPrompt) {
+        return this.restClient.post<ingress.InterviewAnswerPrompt>('interview/ai/answer', promptData)
+    }
+    async organizeInterviewPrompts(promptData: egress.InterviewOrganizePrompt) {
+        return this.restClient.post<ingress.InterviewOrganizePrompt>('interview/ai/organize', promptData)
     }
     
     // Dialogue related

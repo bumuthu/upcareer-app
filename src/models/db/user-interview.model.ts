@@ -12,7 +12,8 @@ const userInterviewSchema = new Schema({
     interviewScores: { type: Object, required: false }, // TODO: Add type
     status:{ type: String, required: true, enum: ["INITIALIZED","ONGOING", "COMPLETED", "CANCELLED"] },
     startedAt: { type: Number, required: false },
-    endedAt: { type: Number, required: false }
+    endedAt: { type: Number, required: false },
+    nodes: { type: Object, required: false },
 });
 
 const UserInterviewDBModel = (mongoose.models || {})['UserInterview'] || mongoose.model<UserInterviewDocument>('UserInterview', userInterviewSchema);

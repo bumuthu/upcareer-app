@@ -9,7 +9,7 @@ const azureOpenAIKey = process.env.AZURE_OPENAI_KEY;
 const azureOpenAIEndpoint = process.env.AZURE_OPENAI_ENDPOINT;
 const azureOpenAIVersion = process.env.AZURE_OPENAI_VERSION;
 
-export class AzureAIServerService {
+export class AzureAIAssistantService {
     private openai: AzureOpenAI;
     private assistant?: Assistant;
 
@@ -47,21 +47,11 @@ export class AzureAIServerService {
         return thread;
     }
 
-    async queryInAssistantTread(threadId: string, dialogue: DialogueModel, baseModel: BaseInterviewModel) {
-        const threadMessage = await this.openai.beta.threads.messages.create(threadId,
-            {
-                role: "user",
-                content: dialogue.text
-            }
-        );
-        const runResponse = await this.openai.beta.threads.runs.create(threadId,
-            {
-                assistant_id: baseModel.openAIAssistantId,
-            }
-        );
+    async queryInAssistantTread(threadId: string, query: string, assistantId: string): Promise<string> {
+        await this.openai.beta.threads.messages.create(threadId, { role: "user", content: query });
+        const runResponse = await this.openai.beta.threads.runs.create(threadId, { assistant_id: assistantId });
 
         let runStatus = runResponse.status;
-        
         while (runStatus === 'queued' || runStatus === 'in_progress') {
             await new Promise(resolve => setTimeout(resolve, 200));
             const runStatusResponse = await this.openai.beta.threads.runs.retrieve(
@@ -76,10 +66,14 @@ export class AzureAIServerService {
             const messagesResponse = await this.openai.beta.threads.messages.list(
                 threadId
             );
-            console.log(`Messages in the thread: ${JSON.stringify(messagesResponse)}`);
-            return messagesResponse    
+            const content = messagesResponse.data[0].content[0];
+            if (content.type === 'text') {
+                return content.text.value;
+            }
+            throw new Error("Error while fetching messages");
         } else {
-            console.log(`Run status is ${runStatus}, unable to fetch messages.`);
+            console.error(`Run status is ${runStatus}, unable to fetch messages.`);
+            throw new Error("Error while fetching messages");
         }
     }
 }

@@ -1,3 +1,4 @@
+import { InterviewQuestionNode } from "../services/client-side/interview-question-service";
 import { SubscriptionEventType, SubscriptionStatus, SubscriptionTierKey, UserInterviewStatus, UserStatus } from "./enum";
 
 
@@ -92,7 +93,8 @@ export interface UserInterviewModel extends Entity {
     interviewScores?: UserInterviewScoreModel, // if status is COMPLETED, required
     status: UserInterviewStatus,
     startedAt?: number,
-    endedAt?: number
+    endedAt?: number,
+    nodes?: { [id: string]: InterviewQuestionNode }
 }
 
 

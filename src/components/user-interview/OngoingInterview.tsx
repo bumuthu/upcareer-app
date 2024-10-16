@@ -31,7 +31,7 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
     const speechService = new AzureAIClientService();
     const interviewContext = useInterviewContext();
     const router = useRouter();
-    let countDownTimer: any;
+    let countDownTimer: NodeJS.Timeout;
 
     useEffect(() => {
         if (interviewContext.activeUserInterview?.status == UserInterviewStatus.INITIALIZED) {
@@ -51,13 +51,12 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
     }, [interviewContext.activeUserInterview, countDown]);
 
     const startInterview = async () => {
-        privateRestService.updateUserInterview({
+        const activeUserInterview = await privateRestService.updateUserInterview({
             userInterviewId: interviewContext.activeUserInterview?._id,
             startedAt: Date.now(),
             status: UserInterviewStatus.ONGOING
-        }).then((res) => {
-            interviewContext.setActiveUserInterview!(res);
-        })
+        });
+        interviewContext.setActiveUserInterview!(activeUserInterview);
     }
 
     const handleMicEvent = (value: boolean) => {

@@ -14,4 +14,12 @@ export namespace ingress {
         token: string
         region: string
     }
+
+    // Prompt related
+    export interface InterviewAnswerPrompt {
+        question: string
+    }
+    export interface InterviewOrganizePrompt {
+        questions: string[]
+    }
 }

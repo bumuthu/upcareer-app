@@ -1,3 +1,4 @@
+import { InterviewQuestionNode } from "../services/client-side/interview-question-service"
 import { SubscriptionTierKey, UserInterviewStatus } from "./enum"
 
 export namespace egress {
@@ -19,8 +20,13 @@ export namespace egress {
     }
 
     // Prompt related
-    export interface InterviewPrompt extends Request {
-        promptId: string
+    export interface InterviewAnswerPrompt extends Request {
+        questionDialogueId: string
+        answerDialogueId: string,
+        userInterviewId: string
+    }
+    export interface InterviewOrganizePrompt extends Request {
+        userInterviewId: string
     }
     export interface DialogueCreateInput extends Request {
         userInterviewId: string,
@@ -32,7 +38,7 @@ export namespace egress {
         text: string
     }
 
-    // intervew related
+    // Intervew related
     export interface BaseInterviewQueryInput extends Request {
         searchText?: string,
         categoryId?: string
@@ -42,7 +48,7 @@ export namespace egress {
     }
 
     export interface UserInterviewQueryInput extends Request {
-        userInterviewId?: string
+        userInterviewId: string
     }
 
     export interface UserInterviewsQueryInput extends Request {
@@ -59,10 +65,7 @@ export namespace egress {
         startedAt?: number,
         endedAt?: number,
         status?: UserInterviewStatus,
-    }
-
-    export interface UserInterviewPromptInput extends Request {
-        promptId: string
+        nodes?: { [id: string]: InterviewQuestionNode };
     }
 
 

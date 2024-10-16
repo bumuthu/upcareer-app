@@ -1,13 +1,18 @@
 import axios from "axios";
 import { AzureOpenAI } from "openai";
-import { BaseInterviewModel, DialogueModel, UserModel } from "../../models/entities";
 import { Assistant, Thread } from "openai/resources/beta/index.mjs";
+import { ingress } from "../../models/ingress";
 
 const azureSpeechKey = process.env.AZURE_SPEECH_SUBSCRIPTION_KEY;
 const azureSpeechRegion = process.env.AZURE_SPEECH_REGION;
 const azureOpenAIKey = process.env.AZURE_OPENAI_KEY;
 const azureOpenAIEndpoint = process.env.AZURE_OPENAI_ENDPOINT;
 const azureOpenAIVersion = process.env.AZURE_OPENAI_VERSION;
+
+export enum PromptType {
+    ANSWER_PROMPT,
+    ORGANIZE_PROMPT
+}
 
 export class AzureAIAssistantService {
     private openai: AzureOpenAI;
@@ -47,9 +52,19 @@ export class AzureAIAssistantService {
         return thread;
     }
 
-    async queryInAssistantTread(threadId: string, query: string, assistantId: string): Promise<string> {
-        await this.openai.beta.threads.messages.create(threadId, { role: "user", content: query });
-        const runResponse = await this.openai.beta.threads.runs.create(threadId, { assistant_id: assistantId });
+    async queryInAssistantTread(type: PromptType, threadId: string, query: string, assistantId: string): Promise<ingress.InterviewPromptResponse | ingress.InterviewPromptResponse[]> {
+        await this.openai.beta.threads.messages.create(threadId,
+            {
+                role: "user",
+                content: query.trim()
+            }
+        );
+        const runResponse = await this.openai.beta.threads.runs.create(threadId,
+            {
+                assistant_id: assistantId,
+                response_format: { type: "json_object" }
+            }
+        );
 
         let runStatus = runResponse.status;
         while (runStatus === 'queued' || runStatus === 'in_progress') {
@@ -63,12 +78,10 @@ export class AzureAIAssistantService {
         }
 
         if (runStatus === 'completed') {
-            const messagesResponse = await this.openai.beta.threads.messages.list(
-                threadId
-            );
+            const messagesResponse = await this.openai.beta.threads.messages.list(threadId);
             const content = messagesResponse.data[0].content[0];
             if (content.type === 'text') {
-                return content.text.value;
+                return JSON.parse(content.text.value).response;
             }
             throw new Error("Error while fetching messages");
         } else {

@@ -16,10 +16,8 @@ export namespace ingress {
     }
 
     // Prompt related
-    export interface InterviewAnswerPrompt {
-        question: string
-    }
-    export interface InterviewOrganizePrompt {
-        questions: string[]
+    export interface InterviewPromptResponse {
+        question: string,
+        answer: string
     }
 }

@@ -42,10 +42,10 @@ export class PrivateRestService {
 
     // AI related
     async promptInterviewAnswer(promptData: egress.InterviewAnswerPrompt) {
-        return this.restClient.post<ingress.InterviewAnswerPrompt>('interview/ai/answer', promptData)
+        return this.restClient.post<ingress.InterviewPromptResponse>('interview/ai/answer', promptData)
     }
     async organizeInterviewPrompts(promptData: egress.InterviewOrganizePrompt) {
-        return this.restClient.post<ingress.InterviewOrganizePrompt>('interview/ai/organize', promptData)
+        return this.restClient.post<ingress.InterviewPromptResponse[]>('interview/ai/organize', promptData)
     }
     
     // Dialogue related

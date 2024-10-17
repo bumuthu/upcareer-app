@@ -3,6 +3,7 @@ import { useGlobalContext } from '@/context/GlobalContext'
 import { UserModel } from '@/models/entities'
 import { PrivateRestService } from '@/services/client-side/api-services/private-rest-service'
 import { Button, message, Typography } from 'antd'
+import Paragraph from 'antd/es/typography/Paragraph'
 import React, { useEffect, useState } from 'react'
 
 const UserSettings: React.FC = () => {
@@ -46,15 +47,15 @@ const UserSettings: React.FC = () => {
 	return (
 		<div>
 			<div style={{marginLeft:"100px"}}>
-			<Typography.Title level={4} style={{ marginTop: "100px" }}>Name</Typography.Title>
-			<Typography.Title editable={{
+			<Typography.Title level={5} style={{ marginTop: "100px" }}>Name</Typography.Title>
+			<Paragraph  editable={{
 				tooltip: "click to edit your name", onChange: handleChange
-			}} level={5} style={{ margin: 0 }}>
+			}}  style={{ margin: 0, fontSize:"15px"}}>
 				{editableName}
-			</Typography.Title>
+			</Paragraph>
 
-			<Typography.Title level={4} style={{ marginTop: "60px" }}>Email</Typography.Title>
-			<Typography.Title level={5} style={{ margin: 0 }}>{authContext.currentUser?.email}</Typography.Title>
+			<Typography.Title level={5} style={{ marginTop: "60px" }}>Email</Typography.Title>
+			<Paragraph  style={{ margin: 0 ,fontSize:"15px"}}>{authContext.currentUser?.email}</Paragraph>
 			</div>
 			{!isbtnDisable && <div style={{ display: "flex", justifyContent: "right", marginRight: "100px", marginTop: "100px" }}>
 				<Button type='default' style={{ marginRight: "30px", padding: "0 2rem" }} onClick={() => cancelClick()}>cancel</Button>

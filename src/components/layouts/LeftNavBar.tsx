@@ -1,6 +1,6 @@
 import { useAuthContext } from '@/context/AuthContext'
 import { useGlobalContext } from '@/context/GlobalContext'
-import { SelectableSection } from '@/models/enum'
+import { SelectableSection, SettingsTabsKey } from '@/models/enum'
 import { AppstoreOutlined, FileTextOutlined, LineChartOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons'
 import { Avatar, Layout, Menu, Typography } from 'antd'
 import { Content } from 'antd/es/layout/layout'
@@ -56,7 +56,7 @@ const LeftNavBar = ({ children }: { children: React.ReactNode }) => {
                         <Menu.Item key={SelectableSection.MY_PROGRESS} onClick={() => { globalContext.setSelectedSection!(SelectableSection.MY_PROGRESS); router.push('/my-progress') }} icon={<LineChartOutlined />}>
                             My Progress
                         </Menu.Item>
-                        <Menu.Item key={SelectableSection.MY_ACCOUNT} onClick={() => { globalContext.setSelectedSection!(SelectableSection.MY_ACCOUNT); router.push('/my-account') }} icon={<SettingOutlined />}>
+                        <Menu.Item key={SelectableSection.MY_ACCOUNT} onClick={() => { globalContext.setSelectedSection!(SelectableSection.MY_ACCOUNT); router.push(`/my-account?tab=${SettingsTabsKey.USER_SETTINGS}`) }} icon={<SettingOutlined />}>
                             My Account
                         </Menu.Item>
                     </Menu>

@@ -58,7 +58,7 @@ const UserSettings: React.FC = () => {
 			</div>
 			{!isbtnDisable && <div style={{ display: "flex", justifyContent: "right", marginRight: "100px", marginTop: "100px" }}>
 				<Button type='default' style={{ marginRight: "30px", padding: "0 2rem" }} onClick={() => cancelClick()}>cancel</Button>
-				<Button type='primary' style={{ padding: "0 2.5rem" }} loading={isLoading} onClick={() => updateUserInDB()}>Update</Button>
+				<Button type='primary' style={{ padding: "0 2.5rem", backgroundColor:"#0D99FF" }} loading={isLoading} onClick={() => updateUserInDB()}>Update</Button>
 			</div>
 			}
 		</div>

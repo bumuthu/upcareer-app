@@ -45,7 +45,7 @@ const ContactUs: React.FC = () => {
                     <Button onClick={handleCopyClick} type="default" style={{ padding: "0 2rem" }}>
                         Copy Email Address
                     </Button>
-                    <Button onClick={handleEmailClick} type="primary" style={{ padding: "0 2.5rem", backgroundColor: '#primary' }}>
+                    <Button onClick={handleEmailClick} type="primary" style={{ padding: "0 2.5rem", backgroundColor:"#0D99FF" }}>
                         Open Email App
                     </Button>
                 </div>

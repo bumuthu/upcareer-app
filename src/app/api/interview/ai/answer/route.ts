@@ -9,14 +9,14 @@ import { enrichRequest, validateRequiredFields } from "../../../../../utils/vali
 export const POST = async (req: Request) => {
     try {
         const requestBody = await req.json();
-        validateRequiredFields(requestBody, ["questionDialogueId", "answerDialogueId", "userInterviewId"]);
+        validateRequiredFields(requestBody, ["dialogueId", "userInterviewId"]);
         const promptRequest = await enrichRequest(requestBody) as egress.InterviewAnswerPrompt;
 
         const userInterviewService = new UserInterviewService();
         const userInterview = await userInterviewService.get(promptRequest.userInterviewId, "baseInterview");
 
         const interviewEngine: InterviewEngine = new InterviewEngine((userInterview?.baseInterview as BaseInterviewModel).openAIAssistantId);
-        const userPromptRes = await interviewEngine.handleAnswerPrompt(promptRequest.questionDialogueId, promptRequest.answerDialogueId);
+        const userPromptRes = await interviewEngine.handleAnswerPrompt(promptRequest.dialogueId);
         return handleNextSuccess(userPromptRes)
     } catch (error) {
         console.log("Error in POST:interview/ai/answer", error)

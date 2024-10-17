@@ -21,8 +21,7 @@ export namespace egress {
 
     // Prompt related
     export interface InterviewAnswerPrompt extends Request {
-        questionDialogueId: string
-        answerDialogueId: string,
+        dialogueId: string
         userInterviewId: string
     }
     export interface InterviewOrganizePrompt extends Request {
@@ -30,12 +29,14 @@ export namespace egress {
     }
     export interface DialogueCreateInput extends Request {
         userInterviewId: string,
-        text: string
+        userAnswer?: string
+        systemQuestion?: string,
         parentDialogueId?: string
     }
     export interface DialogueUpdateInput extends Request {
         dialogueId: string,
-        text: string
+        userAnswer?: string,
+        systemQuestion?: string
     }
 
     // Intervew related

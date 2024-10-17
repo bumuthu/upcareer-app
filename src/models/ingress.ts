@@ -18,6 +18,7 @@ export namespace ingress {
     // Prompt related
     export interface InterviewPromptResponse {
         question: string,
-        answer: string
+        answer: string,
+        feedback?: string
     }
 }

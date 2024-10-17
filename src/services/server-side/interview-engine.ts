@@ -13,15 +13,14 @@ export class InterviewEngine {
         this.aiService = new AzureAIAssistantService(assistantId);
     }
 
-    async handleAnswerPrompt(questionDialogueId: string, answerDialogueId: string, threadId?: string): Promise<ingress.InterviewPromptResponse> {
+    async handleAnswerPrompt(dialogueId: string, threadId?: string): Promise<ingress.InterviewPromptResponse> {
         if (!threadId) {
             const assistantThread = await this.aiService.createAssistantTread();
             threadId = assistantThread.id
         }
-        const questionDialogue = await this.dialogueService.get(questionDialogueId);
-        const answerDialogue = await this.dialogueService.get(answerDialogueId);
+        const dialogue = await this.dialogueService.get(dialogueId);
 
-        const generatedPrompt = this.generateQuestionPromt(questionDialogue.text, answerDialogue.text)
+        const generatedPrompt = this.generateQuestionPromt(dialogue.systemQuestion!, dialogue.userAnswer!)
         const generatedResponse = await this.aiService.queryInAssistantTread(PromptType.ANSWER_PROMPT, threadId, generatedPrompt, this.assistantId) as ingress.InterviewPromptResponse;
 
         console.log("Generated Response (handleAnswerPrompt): ", generatedResponse)
@@ -44,10 +43,10 @@ export class InterviewEngine {
             Question: ${question}
             Answer: ${answer}
 
-            Generate the next question base on the previous question and answer. 
+             Generate the next question base on the previous question and answer. Give a short feedback of the given answer to the given question in feedback field of the response.
             
             Use Json format to give the response with object of question and answer fields as follows.
-            { "response": { "question": "question 1", "answer": "answer 1" } }
+            { "response": { "question": "question 1", "answer": "answer 1", "feedback": "feedback 1" } }
         `
     }
 

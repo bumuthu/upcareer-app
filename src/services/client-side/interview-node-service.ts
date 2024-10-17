@@ -9,8 +9,7 @@ export interface InterviewNode {
     question: string;
     expectedAnswer: string;
     userAnswer?: string;
-    questionDialogueId?: string;
-    userAnswerDialogueId?: string;
+    dialogueId?: string;
     parentNodeId?: string; // null for parent node
     previousNodeId?: string; // null for the first node
     nextNodeId?: string; // null for the last node
@@ -68,9 +67,24 @@ export class InterviewNodeService {
         return this.nodes;
     }
 
+    updateCurrentNode(update: InterviewNode) {
+        this.nodes[this.currentNodeId!] = { ...this.nodes[this.currentNodeId!], ...update };
+        this.debouncedUpdatUserInterview();
+    }
+
     updateNode(id: string, update: InterviewNode) {
         this.nodes[id] = { ...this.nodes[id], ...update };
         this.debouncedUpdatUserInterview();
+    }
+
+    activateNextNode() {
+        const nextNodeId = this.nodes[this.currentNodeId!].nextNodeId
+        if (nextNodeId) {
+            this.currentNodeId = nextNodeId;
+            this.debouncedUpdatUserInterview();
+            return this.nodes[this.currentNodeId!]
+        }
+        return null;
     }
 
     private debouncedUpdatUserInterview = debounce(this.updateUserInterview.bind(this), 1000)

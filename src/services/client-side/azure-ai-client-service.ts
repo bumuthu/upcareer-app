@@ -27,9 +27,9 @@ export class AzureAIClientService {
         AzureAIClientService.recognizer.recognized = (sender: Recognizer, event: SpeechRecognitionEventArgs) => {
             console.log(`Recognized:`, event.result.text);
             if (event.result.text) {
-                this.interviewContext.setOngoingUserDialogue!((d => {
-                    if (d) return { ...d!, text: d!.text + " " + event.result.text }
-                    return { ...d!, text: event.result.text }
+                this.interviewContext.setOngoingDialogue!((d => {
+                    if (d) return { ...d!, userAnswer: d!.userAnswer ?? "" + " " + event.result.text }
+                    return { ...d!, userAnswer: event.result.text }
                 }))
             }
             this.interviewContext.setOngoingText!("");

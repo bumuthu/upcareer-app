@@ -9,20 +9,19 @@ import { UserInterviewStatus } from '../models/enum';
 export interface InterviewContextType {
     activeUserInterview?: UserInterviewModel,
     setActiveUserInterview?: React.Dispatch<React.SetStateAction<UserInterviewModel | undefined>>,
-    ongoingUserDialogue?: DialogueModel,
-    setOngoingUserDialogue?: React.Dispatch<React.SetStateAction<DialogueModel | undefined>>,
-    ongoingSystemDialogue?: DialogueModel,
-    setOngoingSystemDialogue?: React.Dispatch<React.SetStateAction<DialogueModel | undefined>>,
+    ongoingDialogue?: DialogueModel,
+    setOngoingDialogue?: React.Dispatch<React.SetStateAction<DialogueModel | undefined>>,
     ongoingText?: string,
     setOngoingText?: React.Dispatch<React.SetStateAction<string | undefined>>,
-    interviewNodeService?: InterviewNodeService
+    interviewNodeService?: InterviewNodeService,
+    handleUserAnswer?: () => Promise<void>
+    handleQuestionRequest?: () => Promise<void>
 }
 
 const InterviewContext = createContext<InterviewContextType>({});
 
 export const InterviewContextProvider: React.FC<any> = ({ children }) => {
-    const [ongoingUserDialogue, setOngoingUserDialogue] = useState<DialogueModel>();
-    const [ongoingSystemDialogue, setOngoingSystemDialogue] = useState<DialogueModel>();
+    const [ongoingDialogue, setOngoingDialogue] = useState<DialogueModel>();
     const [ongoingText, setOngoingText] = useState<string | undefined>("");
     const [activeUserInterview, setActiveUserInterview] = useState<UserInterviewModel>();
     const [interviewNodeService, setInterviewNodeService] = useState<InterviewNodeService>();
@@ -81,28 +80,68 @@ export const InterviewContextProvider: React.FC<any> = ({ children }) => {
 
     useEffect(() => {
         const syncDialogue = async () => {
-            if (ongoingUserDialogue && ongoingUserDialogue?._id == undefined) {
-                const dialogueRes = await privateService.createDialogue({ text: "", userInterviewId: activeUserInterview?._id, parentDialogueId: ongoingUserDialogue.parentDialogue as string })
-                setOngoingUserDialogue(dialogueRes);
+            if (ongoingDialogue && ongoingDialogue?._id == undefined) {
+                const dialogueRes = await privateService.createDialogue({ userAnswer: "", userInterviewId: activeUserInterview?._id, parentDialogueId: ongoingDialogue.parentDialogue as string })
+                setOngoingDialogue(dialogueRes);
             }
-            if (ongoingUserDialogue?._id && ongoingUserDialogue?.text) {
-                privateService.updateDialogue({ dialogueId: ongoingUserDialogue._id, text: ongoingUserDialogue.text })
+            if (ongoingDialogue?._id && ongoingDialogue?.userAnswer) {
+                privateService.updateDialogue({ dialogueId: ongoingDialogue._id, userAnswer: ongoingDialogue.userAnswer })
             }
         }
         syncDialogue();
-    }, [ongoingUserDialogue])
+    }, [ongoingDialogue]);
+
+    const handleUserAnswer = async () => {
+        if (ongoingText) {
+            setOngoingDialogue!((d => {
+                if (d) return { ...d!, userAnswer: d.userAnswer + " " + ongoingText! }
+                return undefined
+            }));
+        }
+        
+        interviewNodeService?.updateCurrentNode({
+            ...interviewNodeService?.getCurrentNode(),
+            userAnswer: ongoingDialogue?.userAnswer,
+            dialogueId: ongoingDialogue?._id
+        });
+
+        const promptRes = await privateService.promptInterviewAnswer({
+            dialogueId: ongoingDialogue?._id,
+            userInterviewId: activeUserInterview?._id
+        });
+        console.log("promptInterviewAnswer:", promptRes)
+
+        interviewNodeService?.addNode(interviewNodeService.getCurrentNode()?.id, {
+          id: interviewNodeService.generateNodeId(),
+          isParentNode: false,
+          question: promptRes.feedback ?? "" + promptRes.question,
+          expectedAnswer: promptRes.answer,
+          parentNodeId: interviewNodeService.getCurrentNode()?.parentNodeId
+        })
+        interviewNodeService?.activateNextNode();
+
+        setOngoingDialogue!(undefined);
+    }
+
+    const handleQuestionRequest = async () => {
+        setOngoingDialogue!({
+            userAnswer: "",
+            userInterview: activeUserInterview?._id,
+            systemQuestion: interviewNodeService?.getCurrentNode()?.question
+        });
+    }
 
     return (
         <InterviewContext.Provider value={{
-            ongoingUserDialogue,
-            setOngoingUserDialogue,
-            ongoingSystemDialogue,
-            setOngoingSystemDialogue,
+            ongoingDialogue,
+            setOngoingDialogue,
             activeUserInterview,
             setActiveUserInterview,
             ongoingText,
             setOngoingText,
-            interviewNodeService
+            interviewNodeService,
+            handleQuestionRequest,
+            handleUserAnswer,
         }}>
             {children}
         </InterviewContext.Provider>

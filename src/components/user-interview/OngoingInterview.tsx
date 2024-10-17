@@ -48,7 +48,7 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
             setCountDown(20);
         }
 
-        const onOngoinStatus = () => {
+        const onOngoingStatus = () => {
             setInterval(() => {
                 setOngoingTimer(getTimingInMinSec(interviewContext.activeUserInterview?.startedAt!))
             }, 1000);
@@ -61,7 +61,7 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
                 onOrganizingStatus();
                 break;
             case UserInterviewStatus.ONGOING:
-                onOngoinStatus();
+                onOngoingStatus();
                 break;
             default:
                 break;
@@ -78,19 +78,15 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
     }
 
     const handleMicEvent = (value: boolean) => {
-        if (value) {
-            interviewContext.setOngoingUserDialogue!({ text: "", userInterview: interviewContext.activeUserInterview?._id, createdAt: Date.now() });
-            speechService.startSpeechToText()
-        } else {
-            if (interviewContext.ongoingText) {
-                interviewContext.setOngoingUserDialogue!((d => {
-                    if (d) return { ...d!, text: d.text + " " + interviewContext.ongoingText! }
-                    return undefined
-                }));
-            }
+        if (value) { // Mic ON
+            speechService.startSpeechToText();
+            interviewContext.handleQuestionRequest!();
+        } else { // Mic OFF
             speechService.stopSpeechToText()
-            interviewContext.setOngoingUserDialogue!(undefined);
-            setSpeakerOn(true)
+            interviewContext.handleUserAnswer!().then(res => {
+                setTextToSpeech(interviewContext.interviewNodeService?.getCurrentNode()?.question!)
+                setSpeakerOn(true)
+            })
         }
         setMicOn(value);
     }
@@ -170,7 +166,7 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
                             justifyContent: 'center',
                         }}>
                             {
-                                ((interviewContext.ongoingUserDialogue && interviewContext.ongoingUserDialogue?.text) || interviewContext.ongoingText) &&
+                                ((interviewContext.ongoingDialogue && interviewContext.ongoingDialogue?.userAnswer) || interviewContext.ongoingText) &&
                                 <Paragraph style={{
                                     backgroundColor: 'black',
                                     color: 'white',
@@ -179,7 +175,7 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
                                     textAlign: 'center',
                                     fontSize: '18px',
                                 }}>
-                                    {interviewContext.ongoingUserDialogue ? interviewContext.ongoingUserDialogue?.text + interviewContext.ongoingText : interviewContext.ongoingText}
+                                    {interviewContext.ongoingDialogue ? interviewContext.ongoingDialogue?.userAnswer ?? "" + interviewContext.ongoingText : interviewContext.ongoingText}
                                 </Paragraph>
                             }
                         </div>

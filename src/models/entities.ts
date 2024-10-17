@@ -106,13 +106,12 @@ export interface DialogueFeedback {
     feedback: string
 }
 export interface DialogueModel extends Entity {
-    text: string,
     userInterview: string | UserInterviewModel,
+    userAnswer?: string,
+    systemQuestion?: string,
     parentDialogue?: string | DialogueModel,
-    askedBy?: string | UserModel, // if not AI, userId
-    askedByAI?: boolean, // If AI, set to true
     feedback?: DialogueFeedback
-    createdAt: number
+    createdAt?: number
 }
 
 

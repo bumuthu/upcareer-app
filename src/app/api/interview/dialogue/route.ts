@@ -6,11 +6,11 @@ import { enrichRequest, validateRequiredFields } from "../../../../utils/validat
 export const POST = async (req: Request) => {
     try {
         const requestBody = await req.json();
-        validateRequiredFields(requestBody, ["text", "userInterviewId"]);
+        validateRequiredFields(requestBody, ["userInterviewId"]);
         const dialogueRequest = await enrichRequest(requestBody) as egress.DialogueCreateInput;
 
         const dialogueService = new DialogueService();
-        const res = await dialogueService.create({ text: dialogueRequest.text, userInterview: dialogueRequest.userInterviewId, createdAt: Date.now() })
+        const res = await dialogueService.create({ text: dialogueRequest.userAnswer, userInterview: dialogueRequest.userInterviewId, createdAt: Date.now() })
         return handleNextSuccess(res)
     } catch (error) {
         console.log("Error in POST:interview/dialogue", error)
@@ -26,7 +26,7 @@ export const PUT = async (req: Request) => {
         const dialogueRequest = await enrichRequest(requestBody) as egress.DialogueUpdateInput;
 
         const dialogueService = new DialogueService();
-        const res = await dialogueService.update(dialogueRequest.dialogueId, { text: dialogueRequest.text })
+        const res = await dialogueService.update(dialogueRequest.dialogueId, { text: dialogueRequest.userAnswer })
         return handleNextSuccess(res)
     } catch (error) {
         console.log("Error in PUT:interview/dialogue", error)

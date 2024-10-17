@@ -22,11 +22,11 @@ interface OngoingUserInterviewProps {
 const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
     const [micOn, setMicOn] = useState<boolean>(false);
     const [speakerOn, setSpeakerOn] = useState<boolean>(false);
-    const [countDown, setCountDown] = useState<number>(10);
+    const [countDown, setCountDown] = useState<number | null>(null);
     const [ongoingTimer, setOngoingTimer] = useState<string>();
     const [exitOpen, setExitOpen] = useState<boolean>(false);
     const [exitLoading, setExitLoading] = useState<boolean>(false);
-    const [tempLastText, setTempLastTest] = useState<string>("")
+    const [textToSpeech, setTextToSpeech] = useState<string>("")
     const privateRestService = new PrivateRestService()
     const speechService = new AzureAIClientService();
     const interviewContext = useInterviewContext();
@@ -34,21 +34,39 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
     let countDownTimer: NodeJS.Timeout;
 
     useEffect(() => {
-        if (interviewContext.activeUserInterview?.status == UserInterviewStatus.INITIALIZED) {
-            if (countDown > 0) {
-                countDownTimer = setTimeout(() => setCountDown(countDown - 1), 1000);
-                return () => clearTimeout(countDownTimer);
-            } else {
-                startInterview()
-            }
-        } else if (interviewContext.activeUserInterview?.status == UserInterviewStatus.ONGOING) {
+        if (countDown == null) return;
+        if (countDown > 0) {
+            countDownTimer = setTimeout(() => setCountDown(countDown - 1), 1000);
+            return () => clearTimeout(countDownTimer);
+        } else {
+            startInterview()
+        }
+    }, [countDown]);
+
+    useEffect(() => {
+        const onOrganizingStatus = () => {
+            setCountDown(20);
+        }
+
+        const onOngoinStatus = () => {
             setInterval(() => {
                 setOngoingTimer(getTimingInMinSec(interviewContext.activeUserInterview?.startedAt!))
             }, 1000);
-        } else {
-            // TODO: implement a notice that interview is not valid
+            setTextToSpeech(interviewContext.interviewNodeService?.getCurrentNode()?.question!)
+            setSpeakerOn(true)
         }
-    }, [interviewContext.activeUserInterview, countDown]);
+
+        switch (interviewContext.activeUserInterview?.status) {
+            case UserInterviewStatus.ORGANIZING:
+                onOrganizingStatus();
+                break;
+            case UserInterviewStatus.ONGOING:
+                onOngoinStatus();
+                break;
+            default:
+                break;
+        }
+    }, [interviewContext.activeUserInterview?.status])
 
     const startInterview = async () => {
         const activeUserInterview = await privateRestService.updateUserInterview({
@@ -61,35 +79,20 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
 
     const handleMicEvent = (value: boolean) => {
         if (value) {
-            interviewContext.setOngoingDialog!({ text: "", userInterview: interviewContext.activeUserInterview?._id, createdAt: Date.now() });
-            createUserPrompt()
+            interviewContext.setOngoingUserDialogue!({ text: "", userInterview: interviewContext.activeUserInterview?._id, createdAt: Date.now() });
             speechService.startSpeechToText()
         } else {
-            setTempLastTest(interviewContext.ongoingDialog?.text! + " " + interviewContext.ongoingText!)
             if (interviewContext.ongoingText) {
-                interviewContext.setOngoingDialog!((d => {
+                interviewContext.setOngoingUserDialogue!((d => {
                     if (d) return { ...d!, text: d.text + " " + interviewContext.ongoingText! }
                     return undefined
                 }));
             }
             speechService.stopSpeechToText()
-            interviewContext.setOngoingDialog!(undefined);
+            interviewContext.setOngoingUserDialogue!(undefined);
             setSpeakerOn(true)
         }
         setMicOn(value);
-    }
-
-    const createUserPrompt = async () => {
-        try {
-            const userPromptResponse = await privateRestService.createUserDialogue({
-                text: "", userInterviewId: interviewContext.activeUserInterview?._id,
-            });
-            interviewContext.setOngoingDialog!(userPromptResponse)
-            console.log("UserPrompt:  ", userPromptResponse)
-            return userPromptResponse;
-        } catch (error) {
-            console.log("Error fetching userInterview: ", error)
-        }
     }
 
     const handleExit = async () => {
@@ -167,7 +170,7 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
                             justifyContent: 'center',
                         }}>
                             {
-                                ((interviewContext.ongoingDialog && interviewContext.ongoingDialog?.text) || interviewContext.ongoingText) &&
+                                ((interviewContext.ongoingUserDialogue && interviewContext.ongoingUserDialogue?.text) || interviewContext.ongoingText) &&
                                 <Paragraph style={{
                                     backgroundColor: 'black',
                                     color: 'white',
@@ -176,7 +179,7 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
                                     textAlign: 'center',
                                     fontSize: '18px',
                                 }}>
-                                    {interviewContext.ongoingDialog ? interviewContext.ongoingDialog?.text + interviewContext.ongoingText : interviewContext.ongoingText}
+                                    {interviewContext.ongoingUserDialogue ? interviewContext.ongoingUserDialogue?.text + interviewContext.ongoingText : interviewContext.ongoingText}
                                 </Paragraph>
                             }
                         </div>
@@ -229,7 +232,7 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
                                 </Modal>
                             </div>
                         </div>
-                        <OngoingAudioPlayer text={tempLastText} start={speakerOn} onComplete={() => { setSpeakerOn(false)}}/>
+                        <OngoingAudioPlayer text={textToSpeech} start={speakerOn} onComplete={() => { setSpeakerOn(false) }} />
                     </div>
                 </>
                 : <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}><ClipLoader /></div>}

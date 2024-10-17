@@ -14,6 +14,7 @@ const userInterviewSchema = new Schema({
     startedAt: { type: Number, required: false },
     endedAt: { type: Number, required: false },
     nodes: { type: Object, required: false },
+    currentNodeId: { type: String, required: false },
 });
 
 const UserInterviewDBModel = (mongoose.models || {})['UserInterview'] || mongoose.model<UserInterviewDocument>('UserInterview', userInterviewSchema);

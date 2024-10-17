@@ -1,4 +1,4 @@
-import { InterviewQuestionNode } from "../services/client-side/interview-question-service";
+import { InterviewNode } from "../services/client-side/interview-node-service";
 import { SubscriptionEventType, SubscriptionStatus, SubscriptionTierKey, UserInterviewStatus, UserStatus } from "./enum";
 
 
@@ -94,7 +94,8 @@ export interface UserInterviewModel extends Entity {
     status: UserInterviewStatus,
     startedAt?: number,
     endedAt?: number,
-    nodes?: { [id: string]: InterviewQuestionNode }
+    nodes?: { [id: string]: InterviewNode }
+    currentNodeId?: string
 }
 
 

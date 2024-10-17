@@ -1,4 +1,4 @@
-import { InterviewQuestionNode } from "../services/client-side/interview-question-service"
+import { InterviewNode } from "../services/client-side/interview-node-service"
 import { SubscriptionTierKey, UserInterviewStatus } from "./enum"
 
 export namespace egress {
@@ -65,7 +65,8 @@ export namespace egress {
         startedAt?: number,
         endedAt?: number,
         status?: UserInterviewStatus,
-        nodes?: { [id: string]: InterviewQuestionNode };
+        nodes?: { [id: string]: InterviewNode };
+        currentNodeId?: string
     }
 
 

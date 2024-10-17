@@ -49,10 +49,10 @@ export class PrivateRestService {
     }
     
     // Dialogue related
-    async createUserDialogue(dialogueData: egress.DialogueCreateInput) {
+    async createDialogue(dialogueData: egress.DialogueCreateInput) {
         return this.restClient.post<DialogueModel>('interview/dialogue', dialogueData)
     }
-    async updateUserDialogue(dialogueData: egress.DialogueUpdateInput) {
+    async updateDialogue(dialogueData: egress.DialogueUpdateInput) {
         return this.restClient.put<DialogueModel>('interview/dialogue', dialogueData)
     }
 

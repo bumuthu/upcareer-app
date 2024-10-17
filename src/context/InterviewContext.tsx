@@ -3,33 +3,34 @@
 import { useState, useContext, createContext, useEffect } from 'react';
 import { DialogueModel, UserInterviewModel } from '../models/entities';
 import { PrivateRestService } from '../services/client-side/api-services/private-rest-service';
-import { InterviewQuestionService } from '../services/client-side/interview-question-service';
+import { InterviewNodeService } from '../services/client-side/interview-node-service';
 import { UserInterviewStatus } from '../models/enum';
-import { AzureAIClientService } from '../services/client-side/azure-ai-client-service';
 
 export interface InterviewContextType {
     activeUserInterview?: UserInterviewModel,
     setActiveUserInterview?: React.Dispatch<React.SetStateAction<UserInterviewModel | undefined>>,
-    ongoingDialog?: DialogueModel,
-    setOngoingDialog?: React.Dispatch<React.SetStateAction<DialogueModel | undefined>>,
+    ongoingUserDialogue?: DialogueModel,
+    setOngoingUserDialogue?: React.Dispatch<React.SetStateAction<DialogueModel | undefined>>,
+    ongoingSystemDialogue?: DialogueModel,
+    setOngoingSystemDialogue?: React.Dispatch<React.SetStateAction<DialogueModel | undefined>>,
     ongoingText?: string,
     setOngoingText?: React.Dispatch<React.SetStateAction<string | undefined>>,
-    interviewQuestionService?: InterviewQuestionService
+    interviewNodeService?: InterviewNodeService
 }
 
 const InterviewContext = createContext<InterviewContextType>({});
 
 export const InterviewContextProvider: React.FC<any> = ({ children }) => {
-    const [ongoingDialog, setOngoingDialog] = useState<DialogueModel>();
+    const [ongoingUserDialogue, setOngoingUserDialogue] = useState<DialogueModel>();
+    const [ongoingSystemDialogue, setOngoingSystemDialogue] = useState<DialogueModel>();
     const [ongoingText, setOngoingText] = useState<string | undefined>("");
     const [activeUserInterview, setActiveUserInterview] = useState<UserInterviewModel>();
-    const [interviewQuestionService, setInterviewQuestionService] = useState<InterviewQuestionService>();
+    const [interviewNodeService, setInterviewNodeService] = useState<InterviewNodeService>();
 
     const privateService = new PrivateRestService();
-    const azureAIService = new AzureAIClientService();
 
     useEffect(() => {
-        const currentPath = window.location.href
+        const currentPath = window?.location?.href;
         if (currentPath.includes('/interview/')) {
             const splits = currentPath.split('/');
             const userInterviewId = splits[splits.indexOf('interview') + 1];
@@ -37,41 +38,71 @@ export const InterviewContextProvider: React.FC<any> = ({ children }) => {
                 console.log("Setting active user interview as:", userInterviewId)
                 privateService.getUserInterviewById({ userInterviewId }).then((userInterview) => {
                     setActiveUserInterview(userInterview)
-                    const service = new InterviewQuestionService(userInterview);
-                    setInterviewQuestionService(service)
                 })
             }
         }
     }, [])
 
     useEffect(() => {
-        const onInitializedStatus = async (activeUserInterview: UserInterviewModel) => {
-            const organizedRes = await privateService.organizeInterviewPrompts({ userInterviewId: activeUserInterview._id })
-            console.log("Organized response: ", organizedRes)
+        if (!interviewNodeService && activeUserInterview) {
+            const service = new InterviewNodeService(activeUserInterview);
+            setInterviewNodeService(service)
         }
-        switch (activeUserInterview?.status) {
-            case UserInterviewStatus.INITIALIZED:
-                onInitializedStatus(activeUserInterview);
-                break;
-        }
-    }, [activeUserInterview?.status])
+    }, [activeUserInterview])
 
     useEffect(() => {
-        if (ongoingDialog?._id && ongoingDialog?.text) {
-            privateService.updateUserDialogue({ dialogueId: ongoingDialog._id, text: ongoingDialog.text })
-            console.log("Ongoing dialog updated.", ongoingDialog)
+        const onOrganizingStatus = async () => {
+            const organizedRes = await privateService.organizeInterviewPrompts({ userInterviewId: activeUserInterview?._id })
+            let lastNodeId: string | null = null;
+            let firstNodeId: string | null = null;
+            for (let node of organizedRes) {
+                const currentNodeId = interviewNodeService?.generateNodeId()
+                if (!firstNodeId) {
+                    firstNodeId = currentNodeId!;
+                }
+                interviewNodeService?.addNode(lastNodeId, {
+                    id: currentNodeId!,
+                    isParentNode: true,
+                    question: node.question,
+                    expectedAnswer: node.answer
+                });
+                lastNodeId = currentNodeId!
+            }
+            interviewNodeService?.setCurrentNodeId(firstNodeId!)
+            console.log("All nodes:", interviewNodeService?.getAllNodes());
         }
-    }, [ongoingDialog])
+
+        switch (activeUserInterview?.status) {
+            case UserInterviewStatus.ORGANIZING:
+                onOrganizingStatus();
+                break;
+        }
+    }, [interviewNodeService, activeUserInterview?.status])
+
+    useEffect(() => {
+        const syncDialogue = async () => {
+            if (ongoingUserDialogue && ongoingUserDialogue?._id == undefined) {
+                const dialogueRes = await privateService.createDialogue({ text: "", userInterviewId: activeUserInterview?._id, parentDialogueId: ongoingUserDialogue.parentDialogue as string })
+                setOngoingUserDialogue(dialogueRes);
+            }
+            if (ongoingUserDialogue?._id && ongoingUserDialogue?.text) {
+                privateService.updateDialogue({ dialogueId: ongoingUserDialogue._id, text: ongoingUserDialogue.text })
+            }
+        }
+        syncDialogue();
+    }, [ongoingUserDialogue])
 
     return (
         <InterviewContext.Provider value={{
-            ongoingDialog,
-            setOngoingDialog,
+            ongoingUserDialogue,
+            setOngoingUserDialogue,
+            ongoingSystemDialogue,
+            setOngoingSystemDialogue,
             activeUserInterview,
             setActiveUserInterview,
             ongoingText,
             setOngoingText,
-            interviewQuestionService
+            interviewNodeService
         }}>
             {children}
         </InterviewContext.Provider>

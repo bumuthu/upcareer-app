@@ -10,6 +10,8 @@ import Title from 'antd/es/typography/Title'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { ClipLoader } from 'react-spinners'
+import { UserInterviewStatus } from '../../models/enum'
+import { useInterviewContext } from '../../context/InterviewContext'
 interface UserInterviewProps {
     userInterview: UserInterviewModel
 }
@@ -20,6 +22,8 @@ const UserInterviewContainer = (props: UserInterviewProps) => {
     const [startLoading, setStartLoading] = useState<boolean>(false)
     const [isChecked, setIsChecked] = useState<boolean>()
     const router = useRouter()
+    const interviewContext = useInterviewContext();
+    const privateService = new PrivateRestService()
 
     useEffect(() => {
         if (props.userInterview) {
@@ -49,8 +53,13 @@ const UserInterviewContainer = (props: UserInterviewProps) => {
         }
     }
 
-    const onClickStart = () => {
+    const onClickStart = async () => {
         setStartLoading(true)
+        const activeUserInterview = await privateService.updateUserInterview({
+            userInterviewId: props.userInterview._id,
+            status: UserInterviewStatus.ORGANIZING
+        });
+        interviewContext.setActiveUserInterview!(activeUserInterview);
         router.push(`/interview/${props.userInterview._id}/ongoing`)
     }
 

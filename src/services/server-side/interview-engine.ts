@@ -44,14 +44,18 @@ export class InterviewEngine {
             Question: ${question}
             Answer: ${answer}
 
-            Generate the next question base on the previous question and answer. Use Json format to give the response with object of question and answer fields as follows.
+            Generate the next question base on the previous question and answer. 
+            
+            Use Json format to give the response with object of question and answer fields as follows.
             { "response": { "question": "question 1", "answer": "answer 1" } }
         `
     }
 
     generateOrganizePromt(defaultJobDescription: string, customJobDescription: string): string {
         return `
-            Generate 10 interview questions base on the job description. Use Json format to give the response with array of objects of question and answer fields as follows.
+            Generate 10 interview questions base on the job description. First question should be to explain the past experience of the candidate related to the job and there is no answer for that. From second onwards, start technical questions and answers.
+            
+            Use Json format to give the response with array of objects of question and answer fields as follows.
             { "response": [{ "question": "question 1", "answer": "answer 1" }] }
         `
     }

@@ -15,7 +15,7 @@ const UserSettings: React.FC = () => {
 	}, [])
 	const [editableName, setEditableName] = useState<string>(authContext.currentUser?.name!)
 	const [isLoading, setIsLoading] = useState<boolean>()
-	const [isbtnDisable, setIsBtnDisable] = useState<boolean>()
+	const [isbtnDisable, setIsBtnDisable] = useState<boolean>(true)
 
 	const updateUserInDB = async () => {
 		try {

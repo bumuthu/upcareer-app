@@ -1,5 +1,6 @@
+import { SubscriptionModel, UserSubscritipnEvent, UserSubscriptionUsage } from "./entities"
+import { SubscriptionStatus, SubscriptionTierKey, UserInterviewStatus, UserStatus } from "./enum"
 import { InterviewNode } from "../services/client-side/interview-node-service"
-import { SubscriptionTierKey, UserInterviewStatus } from "./enum"
 
 export namespace egress {
 
@@ -17,6 +18,12 @@ export namespace egress {
         providerUserId: string,
         email: string,
         name: string
+    }
+
+    //User related
+
+    export interface UserUpdateInput extends Request {
+    name?: string,
     }
 
     // Prompt related

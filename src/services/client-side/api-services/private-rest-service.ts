@@ -14,6 +14,9 @@ export class PrivateRestService {
     async getUser(): Promise<UserModel> {
         return this.restClient.get<UserModel>("user", undefined);
     }
+    async updateUser(userData: egress.UserUpdateInput): Promise<UserModel>{
+        return this.restClient.put<UserModel>(`user/${userData.userId}`, userData);
+    }
 
     // Subscription related
     async getAllSubscriptions(): Promise<SubscriptionModel[]> {

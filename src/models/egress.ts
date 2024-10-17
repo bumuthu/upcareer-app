@@ -1,5 +1,6 @@
+import { SubscriptionModel, UserSubscritipnEvent, UserSubscriptionUsage } from "./entities"
+import { SubscriptionStatus, SubscriptionTierKey, UserInterviewStatus, UserStatus } from "./enum"
 import { InterviewNode } from "../services/client-side/interview-node-service"
-import { SubscriptionTierKey, UserInterviewStatus } from "./enum"
 
 export namespace egress {
 
@@ -17,6 +18,23 @@ export namespace egress {
         providerUserId: string,
         email: string,
         name: string
+    }
+
+    //User related
+
+    export interface UserUpdateInput extends Request {
+    name?: string,
+    email?: string,
+    status?: UserStatus,
+    providerUserId?: string,
+    notifications?: Notification[],
+    resumeUrl?: string,
+    stripeSubscriptionId?: string,
+    subscription?: string | SubscriptionModel, // defaulting to Free tier
+    subscriptionStatus?: SubscriptionStatus,
+    subscriptionEvents?: UserSubscritipnEvent[],
+    subscriptionUsages?: UserSubscriptionUsage[], // past usages
+    subscriptionCurrentUsage?: UserSubscriptionUsage // current usage
     }
 
     // Prompt related

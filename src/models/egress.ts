@@ -24,17 +24,6 @@ export namespace egress {
 
     export interface UserUpdateInput extends Request {
     name?: string,
-    email?: string,
-    status?: UserStatus,
-    providerUserId?: string,
-    notifications?: Notification[],
-    resumeUrl?: string,
-    stripeSubscriptionId?: string,
-    subscription?: string | SubscriptionModel, // defaulting to Free tier
-    subscriptionStatus?: SubscriptionStatus,
-    subscriptionEvents?: UserSubscritipnEvent[],
-    subscriptionUsages?: UserSubscriptionUsage[], // past usages
-    subscriptionCurrentUsage?: UserSubscriptionUsage // current usage
     }
 
     // Prompt related

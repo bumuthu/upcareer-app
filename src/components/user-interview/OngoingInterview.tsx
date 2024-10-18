@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { PrivateRestService } from '../../services/client-side/api-services/private-rest-service'
 import { AzureAIClientService } from '../../services/client-side/azure-ai-client-service'
 import { useInterviewContext } from '../../context/InterviewContext'
@@ -54,26 +54,26 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
             setInterval(() => {
                 setOngoingTimer(getTimingInMinSec(interviewContext.activeUserInterview?.startedAt!))
             }, 1000);
-            setTextToSpeech(interviewContext.interviewNodeService?.getCurrentNode()?.question!)
-            setSpeakerOn(true)
+            if (interviewContext.interviewNodeService) {
+                setTextToSpeech(interviewContext.interviewNodeService?.getCurrentNode()?.question!)
+                setSpeakerOn(true)
+            }
         }
-
+        
         switch (interviewContext.activeUserInterview?.status) {
             case UserInterviewStatus.ORGANIZING:
                 onOrganizingStatus();
                 break;
-            case UserInterviewStatus.ONGOING:
+                case UserInterviewStatus.ONGOING:
                 onOngoingStatus();
                 break;
             default:
                 break;
         }
-    }, [interviewContext.activeUserInterview?.status])
-
+    }, [interviewContext.activeUserInterview?.status, interviewContext.interviewNodeService])
 
     const awaitForInitialNodes = async () => {
         while (Object.keys(interviewContext.interviewNodeService?.getAllNodes() ?? {}).length == 0) {
-            console.log("Node loading status:", loadingNodes)
             await new Promise(resolve => setTimeout(resolve, 500));
         }
     }
@@ -136,23 +136,25 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
                                     marginTop: '20px',
                                     marginRight: '50px',
                                 }}>
-                                    <div style={{
-                                        backgroundColor: 'black',
-                                        height: '20px',
-                                        padding: '5px 10px',
-                                        borderRadius: '5px',
-                                        color: 'white',
-                                    }}>
-                                        <div style={{
-                                            borderRadius: "5px",
-                                            backgroundColor: 'red',
-                                            height: '10px',
-                                            width: '10px',
-                                            display: 'inline-block',
-                                            marginRight: "5px"
-                                        }} />
-                                        {ongoingTimer}
-                                    </div>
+                                    {
+                                        ongoingTimer && <div style={{
+                                            backgroundColor: 'black',
+                                            height: '20px',
+                                            padding: '5px 10px',
+                                            borderRadius: '5px',
+                                            color: 'white',
+                                        }}>
+                                            <div style={{
+                                                borderRadius: "5px",
+                                                backgroundColor: 'red',
+                                                height: '10px',
+                                                width: '10px',
+                                                display: 'inline-block',
+                                                marginRight: "5px"
+                                            }} />
+                                            {ongoingTimer}
+                                        </div>
+                                    }
                                 </div> :
                                 <div style={{
                                     width: '100%',
@@ -162,11 +164,12 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
                                 }}>
                                     {
                                         loadingNodes ?
-                                            <ClipLoader
-                                                loading={true}
-                                                style={{ marginTop: '20px' }}
-                                                size={50}
-                                            /> :
+                                            <div>
+                                                <ClipLoader
+                                                    loading={true}
+                                                    size={50}
+                                                />
+                                            </div> :
                                             <div style={{
                                                 display: 'flex',
                                                 justifyContent: 'center',

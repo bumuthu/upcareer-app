@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { PrivateRestService } from '../../services/client-side/api-services/private-rest-service'
 import { AzureAIClientService } from '../../services/client-side/azure-ai-client-service'
 import { useInterviewContext } from '../../context/InterviewContext'
@@ -8,13 +8,14 @@ import { ExitIcon } from '../../icons/ExitIcon'
 import { StopIcon } from '../../icons/StopIcon'
 import { MicIcon } from '../../icons/MicIcon'
 import Paragraph from 'antd/es/typography/Paragraph'
-import Title from 'antd/es/typography/Title'
 import { ClipLoader } from 'react-spinners'
 import { UserInterviewStatus } from '../../models/enum'
-import { Modal } from 'antd'
+import { Modal, Typography } from 'antd'
 import { useRouter } from 'next/navigation'
 import { getTimingInMinSec } from '../../utils/utils'
 import OngoingAudioPlayer from './OngoingAudioPlayer'
+
+const countDownLimit: number = 10;
 
 interface OngoingUserInterviewProps {
 }
@@ -27,6 +28,7 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
     const [exitOpen, setExitOpen] = useState<boolean>(false);
     const [exitLoading, setExitLoading] = useState<boolean>(false);
     const [textToSpeech, setTextToSpeech] = useState<string>("")
+    const [loadingNodes, setLoadingNodes] = useMemo(() => useState<boolean>(false), []);
     const privateRestService = new PrivateRestService()
     const speechService = new AzureAIClientService();
     const interviewContext = useInterviewContext();
@@ -45,7 +47,7 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
 
     useEffect(() => {
         const onOrganizingStatus = () => {
-            setCountDown(20);
+            setCountDown(countDownLimit);
         }
 
         const onOngoingStatus = () => {
@@ -68,12 +70,23 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
         }
     }, [interviewContext.activeUserInterview?.status])
 
+
+    const awaitForInitialNodes = async () => {
+        while (Object.keys(interviewContext.interviewNodeService?.getAllNodes() ?? {}).length == 0) {
+            await new Promise(resolve => setTimeout(resolve, 500));
+        }
+    }
+
     const startInterview = async () => {
+        setLoadingNodes(true);
+        await awaitForInitialNodes();
+
         const activeUserInterview = await privateRestService.updateUserInterview({
             userInterviewId: interviewContext.activeUserInterview?._id,
             startedAt: Date.now(),
             status: UserInterviewStatus.ONGOING
         });
+        setLoadingNodes(false);
         interviewContext.setActiveUserInterview!(activeUserInterview);
     }
 
@@ -144,11 +157,29 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
                                     width: '100%',
                                     display: 'flex',
                                     justifyContent: 'center',
-                                    marginTop: '100px',
+                                    marginTop: '35vh',
                                 }}>
-                                    <Title level={1}>
-                                        {countDown}
-                                    </Title>
+                                    {
+                                        loadingNodes ?
+                                            <ClipLoader
+                                                loading={loadingNodes}
+                                                style={{ marginTop: '20px' }}
+                                                size={50}
+                                            /> :
+                                            <div style={{
+                                                display: 'flex',
+                                                justifyContent: 'center',
+                                                flexDirection: 'column',
+                                            }}>
+                                                <Typography style={{ fontSize: '16px', width: '100%', textAlign: 'center' }}>
+                                                    This interview starts in
+                                                </Typography>
+                                                <Typography style={{ fontSize: '100px', fontWeight: 'bold', width: '100%', textAlign: 'center' }}>
+                                                    {countDown}
+                                                </Typography>
+                                            </div>
+
+                                    }
                                 </div>
                         }
                     </div>
@@ -175,7 +206,9 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
                                     textAlign: 'center',
                                     fontSize: '18px',
                                 }}>
-                                    {interviewContext.ongoingDialogue ? interviewContext.ongoingDialogue?.userAnswer ?? "" + interviewContext.ongoingText : interviewContext.ongoingText}
+                                    {interviewContext.ongoingDialogue ?
+                                        interviewContext.ongoingDialogue?.userAnswer ?? "" + interviewContext.ongoingText :
+                                        interviewContext.ongoingText}
                                 </Paragraph>
                             }
                         </div>

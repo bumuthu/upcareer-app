@@ -6,6 +6,8 @@ import { PrivateRestService } from '../services/client-side/api-services/private
 import { InterviewNodeService } from '../services/client-side/interview-node-service';
 import { UserInterviewStatus } from '../models/enum';
 
+const mainNodeCount: number = Number(process.env.NEXT_PUBLIC_MAIN_NODES_COUNT || 10);
+
 export interface InterviewContextType {
     activeUserInterview?: UserInterviewModel,
     setActiveUserInterview?: React.Dispatch<React.SetStateAction<UserInterviewModel | undefined>>,
@@ -51,6 +53,9 @@ export const InterviewContextProvider: React.FC<any> = ({ children }) => {
 
     useEffect(() => {
         const onOrganizingStatus = async () => {
+            if (Object.keys(interviewNodeService?.getAllNodes() ?? {}).length >= mainNodeCount) {
+                return;
+            }
             const organizedRes = await privateService.organizeInterviewPrompts({ userInterviewId: activeUserInterview?._id })
             let lastNodeId: string | null = null;
             let firstNodeId: string | null = null;
@@ -94,7 +99,7 @@ export const InterviewContextProvider: React.FC<any> = ({ children }) => {
     const handleUserAnswer = async () => {
         if (ongoingText) {
             setOngoingDialogue!((d => {
-                if (d) return { ...d!, userAnswer: d.userAnswer + " " + ongoingText! }
+                if (d) return { ...d!, userAnswer: (d.userAnswer ?? "") + " " + ongoingText! }
                 return undefined
             }));
         }

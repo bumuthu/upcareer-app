@@ -26,7 +26,7 @@ export const PUT = async (req: Request) => {
         const dialogueRequest = await enrichRequest(requestBody) as egress.DialogueUpdateInput;
 
         const dialogueService = new DialogueService();
-        const res = await dialogueService.update(dialogueRequest.dialogueId, { text: dialogueRequest.userAnswer })
+        const res = await dialogueService.update(dialogueRequest.dialogueId, { userAnswer: dialogueRequest.userAnswer, systemQuestion: dialogueRequest.systemQuestion })
         return handleNextSuccess(res)
     } catch (error) {
         console.log("Error in PUT:interview/dialogue", error)

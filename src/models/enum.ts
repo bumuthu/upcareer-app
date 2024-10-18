@@ -53,3 +53,9 @@ export enum SelectableSection {
     MY_ACCOUNT = "MY_ACCOUNT"
 
 }
+
+export enum SettingsTabsKey {
+    USER_SETTINGS = "user_settings",
+    SUBSCRIPTION = "subscription",
+    CONTACT_US = "contact_us"
+}

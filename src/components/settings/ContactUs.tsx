@@ -1,3 +1,4 @@
+"use client"
 import { Button, message, Typography } from 'antd'
 import React from 'react'
 
@@ -22,7 +23,7 @@ const ContactUs: React.FC = () => {
     return (
         <div style={{ display: "flex", gap: 10, width: "100%" }}>
             <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", width: "100%" }}>
-                <div style={{ marginBottom: "2.5rem", marginLeft: "2.5rem" }}>
+                <div style={{ marginBottom: "2.5rem"}}>
                     <Typography.Title level={2}>Contact Us</Typography.Title>
                     <div style={{ width: "90%", marginTop: "2.5rem", textAlign: "justify" }}>
                         <Typography.Text>
@@ -41,7 +42,7 @@ const ContactUs: React.FC = () => {
                     </div>
                 </div>
                 {contextHolder}
-                <div style={{ display: "flex", gap: "1.25rem", paddingLeft: "40%", marginTop: "2.5rem" }}>
+                <div style={{ display: "flex", gap: "1.25rem", marginTop: "2.5rem" }}>
                     <Button onClick={handleCopyClick} type="default" style={{ padding: "0 2rem" }}>
                         Copy Email Address
                     </Button>

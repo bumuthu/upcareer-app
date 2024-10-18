@@ -28,7 +28,7 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
     const [exitOpen, setExitOpen] = useState<boolean>(false);
     const [exitLoading, setExitLoading] = useState<boolean>(false);
     const [textToSpeech, setTextToSpeech] = useState<string>("")
-    const [loadingNodes, setLoadingNodes] = useMemo(() => useState<boolean>(false), []);
+    const [loadingNodes, setLoadingNodes] = useState<boolean>(false);
     const privateRestService = new PrivateRestService()
     const speechService = new AzureAIClientService();
     const interviewContext = useInterviewContext();
@@ -73,6 +73,7 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
 
     const awaitForInitialNodes = async () => {
         while (Object.keys(interviewContext.interviewNodeService?.getAllNodes() ?? {}).length == 0) {
+            console.log("Node loading status:", loadingNodes)
             await new Promise(resolve => setTimeout(resolve, 500));
         }
     }
@@ -162,7 +163,7 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
                                     {
                                         loadingNodes ?
                                             <ClipLoader
-                                                loading={loadingNodes}
+                                                loading={true}
                                                 style={{ marginTop: '20px' }}
                                                 size={50}
                                             /> :

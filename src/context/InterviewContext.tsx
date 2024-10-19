@@ -103,27 +103,29 @@ export const InterviewContextProvider: React.FC<any> = ({ children }) => {
                 return undefined
             }));
         }
-        
+
         interviewNodeService?.updateCurrentNode({
             ...interviewNodeService?.getCurrentNode(),
             userAnswer: ongoingDialogue?.userAnswer,
             dialogueId: ongoingDialogue?._id
         });
+        console.log("Previous node:", interviewNodeService?.getCurrentNode());
 
         const promptRes = await privateService.promptInterviewAnswer({
             dialogueId: ongoingDialogue?._id,
             userInterviewId: activeUserInterview?._id
         });
-        console.log("promptInterviewAnswer:", promptRes)
 
         interviewNodeService?.addNode(interviewNodeService.getCurrentNode()?.id, {
-          id: interviewNodeService.generateNodeId(),
-          isParentNode: false,
-          question: promptRes.feedback ?? "" + promptRes.question,
-          expectedAnswer: promptRes.answer,
-          parentNodeId: interviewNodeService.getCurrentNode()?.parentNodeId
+            id: interviewNodeService.generateNodeId(),
+            isParentNode: false,
+            question: promptRes.question,
+            previousAnswerFeedback: promptRes.feedback,
+            expectedAnswer: promptRes.answer,
+            parentNodeId: interviewNodeService.getCurrentNode()?.parentNodeId
         })
         interviewNodeService?.activateNextNode();
+        console.log("Next node:", interviewNodeService?.getCurrentNode())
 
         setOngoingDialogue!(undefined);
     }

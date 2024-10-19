@@ -75,6 +75,7 @@ export class AzureAIClientService {
         }
 
         const audioChunks: any[] = [];
+        console.log("Speaking text:", text)
         AzureAIClientService.synthesizer!.speakTextAsync(text,
             (result) => {
                 if (result.reason === ResultReason.SynthesizingAudioCompleted) {

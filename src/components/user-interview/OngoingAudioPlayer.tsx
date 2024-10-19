@@ -20,7 +20,6 @@ const OngoingAudioPlayer = (props: OngoingAudioPlayerProps) => {
             props.onComplete()
         }
         if (props.start) {
-            console.log("Speaking text:", props.text)
             speechService.startTextToSpeech(props.text, onComplete)
         }
     }, [props.start])

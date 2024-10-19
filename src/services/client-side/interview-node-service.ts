@@ -8,6 +8,7 @@ export interface InterviewNode {
     isParentNode: boolean;
     question: string;
     expectedAnswer: string;
+    previousAnswerFeedback?: string,
     userAnswer?: string;
     dialogueId?: string;
     parentNodeId?: string; // null for parent node
@@ -48,7 +49,7 @@ export class InterviewNodeService {
 
     setCurrentNodeId(id: string) {
         this.currentNodeId = id;
-        this.debouncedUpdatUserInterview();
+        this.updateUserInterview();
     }
 
     generateNodeId() {
@@ -69,19 +70,19 @@ export class InterviewNodeService {
 
     updateCurrentNode(update: InterviewNode) {
         this.nodes[this.currentNodeId!] = { ...this.nodes[this.currentNodeId!], ...update };
-        this.debouncedUpdatUserInterview();
+        this.updateUserInterview();
     }
 
     updateNode(id: string, update: InterviewNode) {
         this.nodes[id] = { ...this.nodes[id], ...update };
-        this.debouncedUpdatUserInterview();
+        this.updateUserInterview();
     }
 
     activateNextNode() {
         const nextNodeId = this.nodes[this.currentNodeId!].nextNodeId
         if (nextNodeId) {
             this.currentNodeId = nextNodeId;
-            this.debouncedUpdatUserInterview();
+            this.updateUserInterview();
             return this.nodes[this.currentNodeId!]
         }
         return null;

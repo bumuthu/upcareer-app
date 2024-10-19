@@ -109,7 +109,9 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
             speechService.stopSpeechToText()
             setVisualizerStatus(VisualizerStatus.THINKING);
             interviewContext.handleUserAnswer!().then(res => {
-                setTextToSpeech(interviewContext.interviewNodeService?.getCurrentNode()?.question!)
+                const nextSpeech = (interviewContext.interviewNodeService?.getCurrentNode()?.previousAnswerFeedback ?? "") + " " +
+                    interviewContext.interviewNodeService?.getCurrentNode()?.question;
+                setTextToSpeech(nextSpeech)
                 setSpeakerOn(true)
                 setVisualizerStatus(VisualizerStatus.SPEAKING);
             })
@@ -180,7 +182,7 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
                                         justifyContent: 'center',
                                         marginTop: '35vh',
                                     }}>
-                                        <OngoingSpeechVisualizer status={visualizerStatus}/>
+                                        <OngoingSpeechVisualizer status={visualizerStatus} />
                                     </div>
                                 </div> :
                                 <div style={{

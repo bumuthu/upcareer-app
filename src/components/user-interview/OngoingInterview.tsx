@@ -14,8 +14,16 @@ import { Modal, Typography } from 'antd'
 import { useRouter } from 'next/navigation'
 import { getTimingInMinSec } from '../../utils/utils'
 import OngoingAudioPlayer from './OngoingAudioPlayer'
+import OngoingSpeechVisualizer from './OngoingSpeechVisualizer'
 
 const countDownLimit: number = 10;
+
+export enum VisualizerStatus {
+    IDLE = "Idle", // nothing to display
+    THINKING = "Thinking", // while processing
+    SPEAKING = "Speaking", // while AI is speaking
+    LISTENING = "Listening", // while AI is listening
+}
 
 interface OngoingUserInterviewProps {
 }
@@ -29,6 +37,7 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
     const [exitLoading, setExitLoading] = useState<boolean>(false);
     const [textToSpeech, setTextToSpeech] = useState<string>("")
     const [loadingNodes, setLoadingNodes] = useState<boolean>(false);
+    const [visualizerStatus, setVisualizerStatus] = useState<VisualizerStatus>(VisualizerStatus.IDLE);
     const privateRestService = new PrivateRestService()
     const speechService = new AzureAIClientService();
     const interviewContext = useInterviewContext();
@@ -59,12 +68,12 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
                 setSpeakerOn(true)
             }
         }
-        
+
         switch (interviewContext.activeUserInterview?.status) {
             case UserInterviewStatus.ORGANIZING:
                 onOrganizingStatus();
                 break;
-                case UserInterviewStatus.ONGOING:
+            case UserInterviewStatus.ONGOING:
                 onOngoingStatus();
                 break;
             default:
@@ -95,11 +104,14 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
         if (value) { // Mic ON
             speechService.startSpeechToText();
             interviewContext.handleQuestionRequest!();
+            setVisualizerStatus(VisualizerStatus.LISTENING);
         } else { // Mic OFF
             speechService.stopSpeechToText()
+            setVisualizerStatus(VisualizerStatus.THINKING);
             interviewContext.handleUserAnswer!().then(res => {
                 setTextToSpeech(interviewContext.interviewNodeService?.getCurrentNode()?.question!)
                 setSpeakerOn(true)
+                setVisualizerStatus(VisualizerStatus.SPEAKING);
             })
         }
         setMicOn(value);
@@ -117,6 +129,12 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
         setExitOpen(false);
     }
 
+    const onSpeechCompleted = () => {
+        setSpeakerOn(false)
+        setVisualizerStatus(VisualizerStatus.IDLE);
+        // handleMicEvent(true);
+    }
+
     return (
         <div>
             {interviewContext.activeUserInterview ?
@@ -129,32 +147,41 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
                     }}>
                         {
                             interviewContext.activeUserInterview?.status == UserInterviewStatus.ONGOING ?
-                                <div style={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    justifyContent: 'flex-end',
-                                    marginTop: '20px',
-                                    marginRight: '50px',
-                                }}>
-                                    {
-                                        ongoingTimer && <div style={{
-                                            backgroundColor: 'black',
-                                            height: '20px',
-                                            padding: '5px 10px',
-                                            borderRadius: '5px',
-                                            color: 'white',
-                                        }}>
-                                            <div style={{
-                                                borderRadius: "5px",
-                                                backgroundColor: 'red',
-                                                height: '10px',
-                                                width: '10px',
-                                                display: 'inline-block',
-                                                marginRight: "5px"
-                                            }} />
-                                            {ongoingTimer}
-                                        </div>
-                                    }
+                                <div style={{ display: 'flex', width: '100%', flexDirection: 'column', padding: '0px 50px' }}>
+                                    <div style={{
+                                        width: '100%',
+                                        display: 'flex',
+                                        justifyContent: 'flex-end',
+                                        marginTop: '20px',
+                                    }}>
+                                        {
+                                            ongoingTimer && <div style={{
+                                                backgroundColor: 'black',
+                                                height: '20px',
+                                                padding: '5px 10px',
+                                                borderRadius: '5px',
+                                                color: 'white',
+                                            }}>
+                                                <div style={{
+                                                    borderRadius: "5px",
+                                                    backgroundColor: 'red',
+                                                    height: '10px',
+                                                    width: '10px',
+                                                    display: 'inline-block',
+                                                    marginRight: "5px"
+                                                }} />
+                                                {ongoingTimer}
+                                            </div>
+                                        }
+                                    </div>
+                                    <div style={{
+                                        width: '100%',
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        marginTop: '35vh',
+                                    }}>
+                                        <OngoingSpeechVisualizer status={visualizerStatus}/>
+                                    </div>
                                 </div> :
                                 <div style={{
                                     width: '100%',
@@ -265,7 +292,7 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
                                 </Modal>
                             </div>
                         </div>
-                        <OngoingAudioPlayer text={textToSpeech} start={speakerOn} onComplete={() => { setSpeakerOn(false) }} />
+                        <OngoingAudioPlayer text={textToSpeech} start={speakerOn} onComplete={onSpeechCompleted} />
                     </div>
                 </>
                 : <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}><ClipLoader /></div>}

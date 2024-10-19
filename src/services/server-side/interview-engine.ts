@@ -46,7 +46,7 @@ export class InterviewEngine {
             Previous Question: ${question}
             Previous Answer: ${answer}
 
-            Generate the next question base on the previous question and answer. Give a short feedback of the previous answer given to the previous question in feedback field of the response.
+            Generate the next question based on the previous question and answer. Give a short feedback of the previous answer given to the previous question in feedback field of the response.
             
             Use Json format to give the response with object of question, feedback and answer fields as follows.
             { "response": { "question": "next question", "answer": "next answer", "feedback": "feedback for previous answer" } }

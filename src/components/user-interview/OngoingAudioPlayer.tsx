@@ -18,6 +18,7 @@ const OngoingAudioPlayer = (props: OngoingAudioPlayerProps) => {
         const onComplete = (url: any) => {
             setAudioUrl(url);
             props.onComplete()
+            console.log("Speaking completed")
         }
         if (props.start) {
             speechService.startTextToSpeech(props.text, onComplete)

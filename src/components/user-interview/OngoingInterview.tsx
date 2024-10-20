@@ -49,6 +49,10 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
     let countDownTimer: NodeJS.Timeout;
 
     useEffect(() => {
+        navigator.mediaDevices.getUserMedia({ audio: true }); // Request audio permissions when refreshing
+    }, []) 
+
+    useEffect(() => {
         if (countDown == null) return;
         if (countDown > 0) {
             countDownTimer = setTimeout(() => setCountDown(countDown - 1), 1000);
@@ -190,7 +194,7 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
         setExitOpen(false);
     }
 
-    const onSpeechCompleted = () => {
+    const onSpeechCompleted = () => { 
         setSpeakerOn(false)
         setVisualizerStatus(VisualizerStatus.IDLE);
         // handleMicEvent(true);

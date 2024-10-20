@@ -65,6 +65,14 @@ export const getMinuteDifference = (timestamp: number): number => {
     return Math.floor(timeDifference / 60000);
 }
 
+export const getSecondsDifference = (timestamp: number): number => {
+    if (!timestamp) {
+        return 0;
+    }
+    const timeDifference =  Date.now() - timestamp;
+    return Math.floor(timeDifference / 1000);
+}
+
 export const getTimingInMinSec = (timestamp: number): string => {
     if (!timestamp) {
         return '00:00';

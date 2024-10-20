@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { PrivateRestService } from '../../services/client-side/api-services/private-rest-service'
 import { AzureAIClientService } from '../../services/client-side/azure-ai-client-service'
 import { useInterviewContext } from '../../context/InterviewContext'
@@ -12,11 +12,14 @@ import { ClipLoader } from 'react-spinners'
 import { UserInterviewStatus } from '../../models/enum'
 import { Modal, Typography } from 'antd'
 import { useRouter } from 'next/navigation'
-import { getTimingInMinSec } from '../../utils/utils'
+import { getSecondsDifference, getTimingInMinSec } from '../../utils/utils'
 import OngoingAudioPlayer from './OngoingAudioPlayer'
 import OngoingSpeechVisualizer from './OngoingSpeechVisualizer'
+import { generateClosingMessage, generateReminderMessage } from '../../utils/prompts'
 
 const countDownLimit: number = 10;
+const idleTimeout: number = 60;
+const reminderTimeout: number = 30;
 
 export enum VisualizerStatus {
     IDLE = "Idle", // nothing to display
@@ -38,6 +41,7 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
     const [textToSpeech, setTextToSpeech] = useState<string>("")
     const [loadingNodes, setLoadingNodes] = useState<boolean>(false);
     const [visualizerStatus, setVisualizerStatus] = useState<VisualizerStatus>(VisualizerStatus.IDLE);
+    const [idleTimer, setIdleTimer] = useState<number>();
     const privateRestService = new PrivateRestService()
     const speechService = new AzureAIClientService();
     const interviewContext = useInterviewContext();
@@ -76,10 +80,65 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
             case UserInterviewStatus.ONGOING:
                 onOngoingStatus();
                 break;
+            case UserInterviewStatus.CANCELLED:
+                router.push(`/interview/${interviewContext.activeUserInterview?._id}/ended`);
+                break;
+            case UserInterviewStatus.COMPLETED:
+                router.push(`/interview/${interviewContext.activeUserInterview?._id}/ended`);
+                break;
             default:
                 break;
         }
     }, [interviewContext.activeUserInterview?.status, interviewContext.interviewNodeService])
+
+    useEffect(() => {
+        const onIdleStart = async () => {
+            if (!interviewContext.activeUserInterview) return;
+            setIdleTimer(Date.now());
+            let timedOut, shouldBreak, reminderGave = false;
+
+            while (true) {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                setIdleTimer(prevIdleTimer => {
+                    if (!prevIdleTimer) {
+                        shouldBreak = true;
+                        return prevIdleTimer;
+                    }
+                    if (!reminderGave && getSecondsDifference(prevIdleTimer!) > reminderTimeout) {
+                        setTextToSpeech(generateReminderMessage() + interviewContext.interviewNodeService?.getCurrentNode()?.question)
+                        setSpeakerOn(true)
+                        reminderGave = true;
+                    }
+                    timedOut = getSecondsDifference(prevIdleTimer!) > idleTimeout;
+                    if (timedOut) {
+                        setTextToSpeech(generateClosingMessage())
+                        setSpeakerOn(true)
+                        shouldBreak = true;
+                    }
+                    return prevIdleTimer;
+                })
+                if (shouldBreak) break;
+            }
+            if (timedOut) {
+                await new Promise(resolve => setTimeout(resolve, 3000));
+                await privateRestService.updateUserInterview({
+                    userInterviewId: interviewContext.activeUserInterview?._id,
+                    endedAt: Date.now(),
+                    status: UserInterviewStatus.CANCELLED
+                });
+                router.push(`/interview/${interviewContext.activeUserInterview?._id}/ended`);
+            }
+        }
+
+        switch (visualizerStatus) {
+            case VisualizerStatus.IDLE:
+                onIdleStart();
+                break;
+            default:
+                setIdleTimer(undefined);
+                break;
+        }
+    }, [visualizerStatus, interviewContext.activeUserInterview])
 
     const awaitForInitialNodes = async () => {
         while (Object.keys(interviewContext.interviewNodeService?.getAllNodes() ?? {}).length == 0) {
@@ -160,9 +219,11 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
                                             ongoingTimer && <div style={{
                                                 backgroundColor: 'black',
                                                 height: '20px',
-                                                padding: '5px 10px',
-                                                borderRadius: '5px',
+                                                padding: '5px 15px',
+                                                paddingTop: '10px',
+                                                borderRadius: '20px',
                                                 color: 'white',
+                                                fontSize: '14px',
                                             }}>
                                                 <div style={{
                                                     borderRadius: "5px",
@@ -170,7 +231,7 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
                                                     height: '10px',
                                                     width: '10px',
                                                     display: 'inline-block',
-                                                    marginRight: "5px"
+                                                    marginRight: "8px",
                                                 }} />
                                                 {ongoingTimer}
                                             </div>

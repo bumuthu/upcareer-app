@@ -18,7 +18,7 @@ import OngoingSpeechVisualizer from './OngoingSpeechVisualizer'
 import { generateClosingMessage, generateReminderMessage } from '../../utils/prompts'
 
 const countDownLimit: number = 10;
-const idleTimeout: number = 60;
+const idleTimeout: number = 6000;
 const reminderTimeout: number = 30;
 
 export enum VisualizerStatus {

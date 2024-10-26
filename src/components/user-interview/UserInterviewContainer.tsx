@@ -12,6 +12,8 @@ import React, { useEffect, useState } from 'react'
 import { ClipLoader } from 'react-spinners'
 import { UserInterviewStatus } from '../../models/enum'
 import { useInterviewContext } from '../../context/InterviewContext'
+import ReactMarkdown from 'react-markdown'
+
 interface UserInterviewProps {
     userInterview: UserInterviewModel
 }
@@ -96,7 +98,9 @@ const UserInterviewContainer = (props: UserInterviewProps) => {
                     <div>
                         <Title level={4}>Job Description</Title>
                         <Paragraph style={{ maxWidth: '500px', textAlign: "justify" }}>
-                            {baseInterview?.jobDescription}
+                            <ReactMarkdown className="text-sm" remarkPlugins={[]}>
+                                {baseInterview?.jobDescription}
+                            </ReactMarkdown>
                         </Paragraph>
                     </div>
 

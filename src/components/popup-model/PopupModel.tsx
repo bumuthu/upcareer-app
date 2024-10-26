@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import { useAuthContext } from "../../context/AuthContext";
 import { LoginLink } from "@kinde-oss/kinde-auth-nextjs";
 import { useInterviewContext } from "../../context/InterviewContext";
+import ReactMarkdown from "react-markdown";
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_BASE_URL;
 
@@ -135,7 +136,9 @@ const PopupModel = (props: popupProps) => {
                     <Row style={{ marginTop: "40px" }}>
                         <Col span={24}>
                             <h3>Job Description</h3>
-                            <p>{props.baseInterview?.jobDescription!}</p>
+                            <ReactMarkdown className="text-sm" remarkPlugins={[]}>
+                                {props.baseInterview?.jobDescription}
+                            </ReactMarkdown>
                         </Col>
                     </Row>
 
@@ -143,9 +146,9 @@ const PopupModel = (props: popupProps) => {
                     <Row style={{ marginTop: "40px" }}>
                         <Col span={24}>
                             <h3>About Interview</h3>
-                            <p>
+                            <ReactMarkdown className="text-sm" remarkPlugins={[]}>
                                 {props.baseInterview?.aboutInterview}
-                            </p>
+                            </ReactMarkdown>
                         </Col>
                     </Row>
 

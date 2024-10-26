@@ -1,4 +1,3 @@
-import { InterviewNode } from "../services/client-side/interview-node-service";
 import { SubscriptionEventType, SubscriptionStatus, SubscriptionTierKey, UserInterviewStatus, UserStatus } from "./enum";
 
 
@@ -55,6 +54,7 @@ export interface SubscriptionModel extends Entity {
 // Base Interview related
 export interface BaseInterviewModel extends Entity {
     title: string,
+    lookupKey: string,
     jobDescription: string,
     aboutInterview: string,
     category: string | CategoryModel,
@@ -63,12 +63,23 @@ export interface BaseInterviewModel extends Entity {
     uses?: number,
     rating?: number,
     openAIAssistantId: string,
-    opneAIVectorStoreId: string
 }
 
 
 
 // User Interview related
+export interface InterviewNode {
+    id: string;
+    isParentNode: boolean;
+    question: string;
+    expectedAnswer: string;
+    previousAnswerFeedback?: string,
+    userAnswer?: string;
+    dialogueId?: string;
+    parentNodeId?: string; // null for parent node
+    previousNodeId?: string; // null for the first node
+    nextNodeId?: string; // null for the last node
+}
 export interface ResumeMacthingScoreModel {
     score: number,
     matchingTexts: string[]

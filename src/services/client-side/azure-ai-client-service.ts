@@ -78,6 +78,8 @@ export class AzureAIClientService {
         console.log("Speaking text:", text)
         AzureAIClientService.synthesizer!.speakTextAsync(text,
             (result) => {
+                this.interviewContext.setAudioSynthensisData!(new Uint8Array(result.audioData));
+                console.log("Syntheised audio");
                 if (result.reason === ResultReason.SynthesizingAudioCompleted) {
                     const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
                     const url = URL.createObjectURL(audioBlob);

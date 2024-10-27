@@ -16,6 +16,8 @@ export interface InterviewContextType {
     ongoingText?: string,
     setOngoingText?: React.Dispatch<React.SetStateAction<string | undefined>>,
     interviewNodeService?: InterviewNodeService,
+    audioSynthesisData?: Uint8Array | undefined,
+    setAudioSynthensisData?: React.Dispatch<React.SetStateAction<Uint8Array | undefined>>,
     handleUserAnswer?: () => Promise<void>
     handleQuestionRequest?: () => Promise<void>
 }
@@ -27,6 +29,7 @@ export const InterviewContextProvider: React.FC<any> = ({ children }) => {
     const [ongoingText, setOngoingText] = useState<string | undefined>("");
     const [activeUserInterview, setActiveUserInterview] = useState<UserInterviewModel>();
     const [interviewNodeService, setInterviewNodeService] = useState<InterviewNodeService>();
+    const [audioSynthesisData, setAudioSynthensisData] = useState<Uint8Array | undefined>();
 
     const privateService = new PrivateRestService();
 
@@ -140,6 +143,8 @@ export const InterviewContextProvider: React.FC<any> = ({ children }) => {
 
     return (
         <InterviewContext.Provider value={{
+            audioSynthesisData,
+            setAudioSynthensisData,
             ongoingDialogue,
             setOngoingDialogue,
             activeUserInterview,

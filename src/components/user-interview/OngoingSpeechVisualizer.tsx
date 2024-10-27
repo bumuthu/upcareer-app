@@ -16,6 +16,11 @@ const OngoingSpeechVisualizer = (props: OngoingSpeechVisualizerProps) => {
   const [currentStatus, setCurrnetStauts] = useState<VisualizerStatus>()
 
   useEffect(() => {
+    console.log("Updating status:", props.status);
+    // TODO handle here
+  }, [props.status])
+
+  useEffect(() => {
     const getMicrophoneInput = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });

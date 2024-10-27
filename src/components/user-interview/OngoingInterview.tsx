@@ -245,7 +245,9 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
                                         width: '100%',
                                         display: 'flex',
                                         justifyContent: 'center',
-                                        marginTop: '35vh',
+                                        alignItems:"center",
+                            
+                                        marginTop: '12vh',
                                     }}>
                                         <OngoingSpeechVisualizer status={visualizerStatus} />
                                     </div>

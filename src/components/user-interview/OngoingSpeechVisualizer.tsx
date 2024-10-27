@@ -9,6 +9,7 @@ interface OngoingSpeechVisualizerProps {
 }
 const OngoingSpeechVisualizer = (props: OngoingSpeechVisualizerProps) => {
 
+  
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<AnalyserNode | null>(null);
   const animationRef = useRef<number | null>(null);
@@ -70,14 +71,14 @@ const OngoingSpeechVisualizer = (props: OngoingSpeechVisualizerProps) => {
     justifyContent: 'center',
     gap: "20px"
   }}>
-    <Typography>
+    {/* <Typography>
       {props.status}
-    </Typography>
+    </Typography> */}
 
     {/* status = listning, when using mic */}
-    <Card style={{ width: "400px", height: "300px", alignItems: "center", display: "flex", justifyContent: "center" }}>
+    <Card bordered style={{ width: "500px", height: "350px", alignItems: "center", display: "flex", justifyContent: "center", border: '3px solid #007bff'}}>
       <div
-        className={`visualizer-circle ${isPlaying ? "is-playing" : ""}`}
+        className={`visualizer-circle ${(isPlaying && props.status == VisualizerStatus.LISTENING) ? "is-playing" : ""}`}
         style={{
           width: '150px',
           height: '150px',
@@ -115,9 +116,9 @@ const OngoingSpeechVisualizer = (props: OngoingSpeechVisualizerProps) => {
     `}</style>
     </Card>
     {/* status = speaking ,when using browser speaker */}
-    <Card style={{ width: "400px", height: "300px", alignItems: "center", display: "flex", justifyContent: "center" }}>
+    <Card style={{ width: "500px", height: "350px", alignItems: "center", display: "flex", justifyContent: "center" }}>
       <div
-        className={`visualizer-circle ${isPlaying ? "is-playing" : ""} `}
+        className={`visualizer-circle ${(isPlaying && props.status == VisualizerStatus.SPEAKING) ? "is-playing" : ""} `}
         style={{
           width: '150px',
           height: '150px',

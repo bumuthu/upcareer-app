@@ -1,20 +1,7 @@
-import { UserInterviewModel } from "../../models/entities";
+import { InterviewNode, UserInterviewModel } from "../../models/entities";
 import { PrivateRestService } from "./api-services/private-rest-service";
 import { v4 as uuidv4 } from 'uuid';
 import { debounce } from 'lodash';
-
-export interface InterviewNode {
-    id: string;
-    isParentNode: boolean;
-    question: string;
-    expectedAnswer: string;
-    previousAnswerFeedback?: string,
-    userAnswer?: string;
-    dialogueId?: string;
-    parentNodeId?: string; // null for parent node
-    previousNodeId?: string; // null for the first node
-    nextNodeId?: string; // null for the last node
-}
 
 export class InterviewNodeService {
     private nodes: { [id: string]: InterviewNode } = {};

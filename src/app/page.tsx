@@ -14,7 +14,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     const queryBaseInterviews = async () => {
       const baseInterviewRes = await publicService.queryBaseInterviews({})
-      setBaseInterviews([...baseInterviewRes, ...baseInterviewRes, ...baseInterviewRes]) // TODO, remove this replicating. Just for testing
+      setBaseInterviews(baseInterviewRes)
     }
     queryBaseInterviews()
   }, [])

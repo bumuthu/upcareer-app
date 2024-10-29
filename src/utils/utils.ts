@@ -82,3 +82,13 @@ export const getTimingInMinSec = (timestamp: number): string => {
     const seconds = Math.floor((ms % 60000) / 1000);
     return `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 }
+
+export const calculateAverage = (dataArray: Uint8Array) => {
+	const bufferLength = dataArray.byteLength;
+	let sum = 0;
+	for (let i = 0; i < bufferLength; i++) {
+		sum += dataArray[i];
+	}
+	const average = sum / bufferLength;
+	return average;
+}

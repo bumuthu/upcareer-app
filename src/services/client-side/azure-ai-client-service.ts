@@ -1,4 +1,4 @@
-import { AudioConfig, Recognizer, ResultReason, SpeechConfig, SpeechRecognitionEventArgs, SpeechRecognizer, SpeechSynthesizer } from "microsoft-cognitiveservices-speech-sdk";
+import { AudioConfig, AudioOutputStream, Recognizer, ResultReason, SpeechConfig, SpeechRecognitionEventArgs, SpeechRecognizer, SpeechSynthesizer } from "microsoft-cognitiveservices-speech-sdk";
 import { ingress } from "../../models/ingress";
 import { PrivateRestService } from "./api-services/private-rest-service";
 import { useInterviewContext } from "../../context/InterviewContext";
@@ -76,8 +76,11 @@ export class AzureAIClientService {
 
         const audioChunks: any[] = [];
         console.log("Speaking text:", text)
+        const audioStream = AudioOutputStream.createPullStream();
+        this.interviewContext.setAudioSynthensisData!(audioStream);
         AzureAIClientService.synthesizer!.speakTextAsync(text,
             (result) => {
+                console.log("Syntheised audio");
                 if (result.reason === ResultReason.SynthesizingAudioCompleted) {
                     const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
                     const url = URL.createObjectURL(audioBlob);
@@ -89,8 +92,24 @@ export class AzureAIClientService {
             },
             (error) => {
                 console.error("Error while TTS", error);
-            }
+            },
+            audioStream
         );
+    }
+
+    async playAudioThroughSpeakers(uint8Array: Uint8Array) {
+        const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    
+        // Decode audio data to an AudioBuffer
+        const audioBuffer = await audioContext.decodeAudioData(uint8Array.buffer);
+    
+        // Create a buffer source and connect it to the speakers
+        const source = audioContext.createBufferSource();
+        source.buffer = audioBuffer;
+        source.connect(audioContext.destination);
+    
+        // Play the audio
+        source.start();
     }
 
 }

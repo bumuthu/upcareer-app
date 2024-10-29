@@ -5,6 +5,7 @@ import { DialogueModel, UserInterviewModel } from '../models/entities';
 import { PrivateRestService } from '../services/client-side/api-services/private-rest-service';
 import { InterviewNodeService } from '../services/client-side/interview-node-service';
 import { UserInterviewStatus } from '../models/enum';
+import { PullAudioOutputStream } from 'microsoft-cognitiveservices-speech-sdk';
 
 const mainNodeCount: number = Number(process.env.NEXT_PUBLIC_MAIN_NODES_COUNT || 10);
 
@@ -16,6 +17,8 @@ export interface InterviewContextType {
     ongoingText?: string,
     setOngoingText?: React.Dispatch<React.SetStateAction<string | undefined>>,
     interviewNodeService?: InterviewNodeService,
+    audioSynthesisData?: PullAudioOutputStream | undefined,
+    setAudioSynthensisData?: React.Dispatch<React.SetStateAction<PullAudioOutputStream | undefined>>,
     handleUserAnswer?: () => Promise<void>
     handleQuestionRequest?: () => Promise<void>
 }
@@ -27,6 +30,7 @@ export const InterviewContextProvider: React.FC<any> = ({ children }) => {
     const [ongoingText, setOngoingText] = useState<string | undefined>("");
     const [activeUserInterview, setActiveUserInterview] = useState<UserInterviewModel>();
     const [interviewNodeService, setInterviewNodeService] = useState<InterviewNodeService>();
+    const [audioSynthesisData, setAudioSynthensisData] = useState<PullAudioOutputStream | undefined>();
 
     const privateService = new PrivateRestService();
 
@@ -140,6 +144,8 @@ export const InterviewContextProvider: React.FC<any> = ({ children }) => {
 
     return (
         <InterviewContext.Provider value={{
+            audioSynthesisData,
+            setAudioSynthensisData,
             ongoingDialogue,
             setOngoingDialogue,
             activeUserInterview,

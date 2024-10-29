@@ -7,6 +7,9 @@ import { useInterviewContext } from "../../context/InterviewContext";
 import { calculateAverage } from '../../utils/utils';
 import { debounce } from 'lodash';
 
+const MIC_SENSITIVITY = 70;
+const SPEAKER_SENSITIVITY = 20;
+
 interface OngoingSpeechVisualizerProps {
 	status: VisualizerStatus
 }
@@ -67,7 +70,7 @@ const OngoingSpeechVisualizer = (props: OngoingSpeechVisualizerProps) => {
 						animationFrameRef.current = requestAnimationFrame(analyseAudio);
 						micAnalyserRef.current.getByteFrequencyData(dataArray);
 						const average = calculateAverage(dataArray);
-						if (average > 50) {
+						if (average > MIC_SENSITIVITY) {
 							debouncedListeningWave(props.status)
 						}
 					}
@@ -105,7 +108,7 @@ const OngoingSpeechVisualizer = (props: OngoingSpeechVisualizerProps) => {
 						requestAnimationFrame(analyzeAudio);
 						speakerAnalyserRef.current.getByteFrequencyData(dataArray);
 						const average = calculateAverage(dataArray) * 1000;
-						if (average > 20) {
+						if (average > SPEAKER_SENSITIVITY) {
 							setIsSpeaking(true)
 							debouncedSpeakingWave()
 						} else {
@@ -162,8 +165,8 @@ const OngoingSpeechVisualizer = (props: OngoingSpeechVisualizerProps) => {
 		gap: "20px"
 	}}>
 		<Card bordered style={{
-			width: "500px",
-			height: "350px",
+			width: "45%",
+			height: "55vh",
 			alignItems: "center",
 			display: "flex",
 			justifyContent: "center",
@@ -191,8 +194,8 @@ const OngoingSpeechVisualizer = (props: OngoingSpeechVisualizerProps) => {
 		</Card>
 
 		<Card style={{
-			width: "500px",
-			height: "350px",
+			width: "45%",
+			height: "55vh",
 			alignItems: "center",
 			display: "flex",
 			justifyContent: "center",

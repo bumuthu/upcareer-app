@@ -247,7 +247,7 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
                                         justifyContent: 'center',
                                         alignItems:"center",
                             
-                                        marginTop: '12vh',
+                                        marginTop: '10vh',
                                     }}>
                                         <OngoingSpeechVisualizer status={visualizerStatus} />
                                     </div>
@@ -295,6 +295,7 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
                             display: 'flex',
                             margin: "0px auto",
                             justifyContent: 'center',
+                            zIndex: 1,
                         }}>
                             {
                                 ((interviewContext.ongoingDialogue && interviewContext.ongoingDialogue?.userAnswer) || interviewContext.ongoingText) &&
@@ -314,7 +315,8 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
                         </div>
                         <div style={{
                             width: '100%',
-                            height: '200px',
+                            height: '100px',
+                            marginBottom: '50px',
                             position: 'relative',
                             bottom: '0',
                             left: '0',

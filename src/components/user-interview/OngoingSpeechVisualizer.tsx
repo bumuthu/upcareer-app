@@ -4,8 +4,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import { VisualizerStatus } from './OngoingInterview'
 import { Card } from 'antd'
 import { useInterviewContext } from "../../context/InterviewContext";
-import { calculateAverage } from '../../utils/utils';
+import { calculateAverage, getFirstLetterUpperCase } from '../../utils/utils';
 import { debounce } from 'lodash';
+import { useAuthContext } from '../../context/AuthContext';
 
 const MIC_SENSITIVITY = 70;
 const SPEAKER_SENSITIVITY = 20;
@@ -15,8 +16,9 @@ interface OngoingSpeechVisualizerProps {
 }
 
 const OngoingSpeechVisualizer = (props: OngoingSpeechVisualizerProps) => {
-
 	const [isSpeaking, setIsSpeaking] = useState(false);
+	const [listeningWaves, setListeningWaves] = useState<string[]>([])
+	const [speakingWaves, setSpeakingWaves] = useState<string[]>([])
 
 	const animationFrameRef = useRef<number | null>(null);
 	const micAnalyserRef = useRef<AnalyserNode | null>(null);
@@ -24,8 +26,7 @@ const OngoingSpeechVisualizer = (props: OngoingSpeechVisualizerProps) => {
 	const speakerAnalyserRef = useRef<AnalyserNode | null>(null);
 
 	const interviewContext = useInterviewContext();
-	const [listeningWaves, setListeningWaves] = useState<string[]>([])
-	const [speakingWaves, setSpeakingWaves] = useState<string[]>([])
+	const authContext = useAuthContext();
 
 	useEffect(() => {
 		console.log("Status", props.status)
@@ -189,7 +190,7 @@ const OngoingSpeechVisualizer = (props: OngoingSpeechVisualizerProps) => {
 					transition: 'transform 0.3s ease',
 				}}
 			>
-				<img src='/exptertable-blck-loog.png' width={100} height={100} alt='iamge'></img>
+				<img src='/icon-full-t.png' width={100} height={100} alt='iamge'></img>
 			</div>
 		</Card>
 
@@ -221,14 +222,14 @@ const OngoingSpeechVisualizer = (props: OngoingSpeechVisualizerProps) => {
 				<span
 					className="letter"
 					style={{
-						fontSize: '3rem',
+						fontSize: '4.5rem',
 						fontWeight: 'bold',
 						color: 'black',
 						position: 'relative',
 						zIndex: 2,
 					}}
 				>
-					B
+					{getFirstLetterUpperCase(authContext.currentUser?.name!)}
 				</span>
 			</div>
 		</Card>

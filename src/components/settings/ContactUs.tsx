@@ -60,7 +60,7 @@ const ContactUs: React.FC = () => {
                 paddingLeft: "10%",
                 paddingRight: "15%"
             }}>
-                <img src="/contact-us.svg" alt="upcareer contact us" />
+                <img src="/contact-us.svg" alt="talentuner contact us" />
             </div>
         </div>
     )

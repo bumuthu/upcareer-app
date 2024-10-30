@@ -44,8 +44,8 @@ export class UserService extends EntityService<UserModel, UserDocument> {
         let user: UserModel | null;
         const notification = {
             createdAt: Date.now(),
-            title: `Welcome to UpCareer!`,
-            description: `Welcome to UpCareer journey. You have recieved your free tier rewards.`,
+            title: `Welcome to TalentTuner!`,
+            description: `Welcome to TalentTuner journey. You have recieved your free tier rewards.`,
             hasRead: false
         }
         if (!existingUser) {

@@ -62,7 +62,7 @@ const TopNavBar = () => {
             <Row justify="space-around">
                 <Col span={4}>
                     <img
-                        src={"/logo-full-480.svg"}
+                        src={"/logo-full-960.png"}
                         style={{ width: 150, marginTop: 5, cursor: "pointer" }}
                         onClick={() => router.push("/")}
                     />

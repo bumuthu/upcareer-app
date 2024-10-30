@@ -92,3 +92,10 @@ export const calculateAverage = (dataArray: Uint8Array) => {
 	const average = sum / bufferLength;
 	return average;
 }
+
+export const getFirstLetterUpperCase = (text: string) => {
+    if (!text) {
+        return '';
+    }
+    return text.charAt(0).toUpperCase();
+}

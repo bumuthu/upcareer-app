@@ -189,6 +189,7 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
             endedAt: Date.now(),
             status: UserInterviewStatus.CANCELLED
         });
+        speechService.stopSpeechService();
         setExitLoading(false);
         router.push('/my-interviews');
         setExitOpen(false);

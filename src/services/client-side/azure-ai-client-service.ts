@@ -112,4 +112,14 @@ export class AzureAIClientService {
         source.start();
     }
 
+    stopSpeechService () {
+         if (AzureAIClientService.synthesizer) {
+            console.log("Closing synthesizer")
+            AzureAIClientService.synthesizer.close();
+        }
+        if (AzureAIClientService.recognizer) {
+            console.log("Closing recognizer")
+            AzureAIClientService.recognizer.close();
+        }
+    }
 }

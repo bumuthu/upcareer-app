@@ -114,9 +114,9 @@ export interface UserInterviewModel extends Entity {
 export interface InterviewFeedbackModel extends Entity {
     rating: number,
     comment?: string,
-    userInterviewId: string,
-    baseInterviewId: string,
-    userId: string
+    userInterview: string | UserInterviewModel,
+    baseInterview: string | BaseInterviewModel,
+    user: string | UserModel
 }
 
 

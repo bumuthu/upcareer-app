@@ -1,4 +1,4 @@
-import { InterviewNode } from "./entities"
+import { InterviewNode, UserInterviewModel } from "./entities"
 import { SubscriptionTierKey, UserInterviewStatus } from "./enum"
 
 export namespace egress {
@@ -79,7 +79,7 @@ export namespace egress {
     export interface UserFeedbackSubmitInput extends Request {
         rating: number,
         comment?: string,
-        userInterviewId: string,
+        userInterview: string | UserInterviewModel,
         
     }
 

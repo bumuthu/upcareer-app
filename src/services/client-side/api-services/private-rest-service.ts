@@ -65,6 +65,6 @@ export class PrivateRestService {
     }
     //Interview feedback
     async submitInterviewFeedback(feedbackData: egress.UserFeedbackSubmitInput): Promise<egress.UserFeedbackSubmitInput>{
-        return this.restClient.post<InterviewFeedbackModel>(`interview/${feedbackData.userInterviewId}/user-feedback`, feedbackData)
+        return this.restClient.post<InterviewFeedbackModel>(`interview/${feedbackData.userInterview}/user-feedback`, feedbackData)
     }
 }

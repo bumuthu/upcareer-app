@@ -9,7 +9,7 @@ import { errorMonitor } from "events";
 export const POST = async (req: Request) => {
     try {
         const requestBody = await req.json();
-        validateRequiredFields(requestBody, ["rating", "userInterviewId"]);
+        validateRequiredFields(requestBody, ["rating", "userInterview"]);
         const submitInterviewFeedback = (await enrichRequest(requestBody)) as egress.UserFeedbackSubmitInput;        
         const userInterviewService = new UserInterviewService();
         const userInterview = await userInterviewService.get(submitInterviewFeedback.userInterview as string);
@@ -17,7 +17,7 @@ export const POST = async (req: Request) => {
             rating: submitInterviewFeedback.rating,
             comment: submitInterviewFeedback.comment!,
             userInterview: submitInterviewFeedback.userInterview,
-            baseInterview: userInterview.baseInterview as string,
+            baseInterview: userInterview.baseInterview,
             user: submitInterviewFeedback.userId!
         };
         const userFeedbackService = new UserFeedbackService()

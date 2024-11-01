@@ -75,7 +75,13 @@ export namespace egress {
         nodes?: { [id: string]: InterviewNode };
         currentNodeId?: string
     }
-
+    //Interview feedback
+    export interface UserFeedbackSubmitInput extends Request {
+        rating: number,
+        comment?: string,
+        userInterviewId: string,
+        
+    }
 
 
     // Subscription

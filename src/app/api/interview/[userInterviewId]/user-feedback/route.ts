@@ -12,11 +12,11 @@ export const POST = async (req: Request) => {
         validateRequiredFields(requestBody, ["rating", "userInterviewId"]);
         const submitInterviewFeedback = (await enrichRequest(requestBody)) as egress.UserFeedbackSubmitInput;        
         const userInterviewService = new UserInterviewService();
-        const userInterview = await userInterviewService.get(submitInterviewFeedback.userInterviewId);
+        const userInterview = await userInterviewService.get(submitInterviewFeedback.userInterview as string);
         const newFeedbackModel: InterviewFeedbackModel = {
             rating: submitInterviewFeedback.rating,
             comment: submitInterviewFeedback.comment!,
-            userInterview: submitInterviewFeedback.userInterviewId,
+            userInterview: submitInterviewFeedback.userInterview,
             baseInterview: userInterview.baseInterview as string,
             user: submitInterviewFeedback.userId!
         };

@@ -20,7 +20,7 @@ const InterviewEndedNotice = () => {
             const submitInterviewFeedBack = await privateRestService.submitInterviewFeedback({
                 rating: ratingCount!,
                 comment:comment,
-                userInterviewId: interviewContext.activeUserInterview?._id
+                userInterview: interviewContext.activeUserInterview?._id
             })
             setIsLoading(false)
         }

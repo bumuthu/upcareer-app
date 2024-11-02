@@ -1,7 +1,6 @@
 "use client";
 
 import { useInterviewContext } from "@/context/InterviewContext";
-import { UserInterviewModel } from "@/models/entities";
 import { PrivateRestService } from "@/services/client-side/api-services/private-rest-service";
 import { Button, Rate, Typography } from "antd";
 import TextArea from "antd/es/input/TextArea";
@@ -17,7 +16,7 @@ const InterviewEndedNotice = () => {
     const submitUserFeedback = async() =>{
         try{
             setIsLoading(true)
-            const submitInterviewFeedBack = await privateRestService.submitInterviewFeedback({
+            await privateRestService.submitUserFeedback({
                 rating: ratingCount!,
                 comment:comment,
                 userInterview: interviewContext.activeUserInterview?._id
@@ -25,14 +24,11 @@ const InterviewEndedNotice = () => {
             setIsLoading(false)
         }
         catch(error){
-            console.log("submit ser feedback error: ", error)
+            console.log("submit user feedback error: ", error)
             setIsLoading(false)
         }
     }
 
-    useEffect(() => {
-        console.log("rating: ", ratingCount);
-    }, [ratingCount]);
     return (
         <div
             style={{
@@ -55,7 +51,7 @@ const InterviewEndedNotice = () => {
                 appreciate your feedback or any suggestions for improving the system
             </Typography.Paragraph>
             <Rate style={{marginBottom:"60px",marginTop:"20px"}} onChange={(number: any) => setRatingCount(number)} />
-            <TextArea rows={4} placeholder="Express your thoughts..." value={comment} onChange={(e)=>setComment(e.target.value)} style={{ height: 120, resize: 'none', width: "500px" }} />
+            <TextArea rows={4} placeholder="Express your thoughts..." value={comment} onChange={(e)=>setComment(e.target.value)} style={{ height: 120, resize: 'none', width: "500px", backgroundColor: "#f1f1f1" }} />
             <div style={{display: "flex", marginTop:"150px", gap:"10px"}}>
                 <Button type="text" style={{borderColor:"gray", paddingLeft:"30px", paddingRight:"30px"}}>Skip</Button>
                 <Button type = "primary"style={{paddingLeft:"30px", paddingRight:"30px"}} loading = {isLoading} onClick={()=>submitUserFeedback()} disabled = {(ratingCount == undefined || ratingCount == 0) ? true:false}>Rate & see Results</Button>

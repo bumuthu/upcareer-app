@@ -1,10 +1,9 @@
 import { egress } from "@/models/egress";
-import { InterviewFeedbackModel } from "@/models/entities";
+import { UserFeedbackModel } from "@/models/entities";
 import { UserFeedbackService } from "@/services/server-side/entity-services/user-feedback-service";
 import { UserInterviewService } from "@/services/server-side/entity-services/user-interview-service";
 import { handleNextError, handleNextSuccess } from "@/utils/response-generator";
 import { enrichRequest, validateRequiredFields } from "@/utils/validations";
-import { errorMonitor } from "events";
 
 export const POST = async (req: Request) => {
     try {
@@ -13,7 +12,7 @@ export const POST = async (req: Request) => {
         const submitInterviewFeedback = (await enrichRequest(requestBody)) as egress.UserFeedbackSubmitInput;        
         const userInterviewService = new UserInterviewService();
         const userInterview = await userInterviewService.get(submitInterviewFeedback.userInterview as string);
-        const newFeedbackModel: InterviewFeedbackModel = {
+        const newFeedbackModel: UserFeedbackModel = {
             rating: submitInterviewFeedback.rating,
             comment: submitInterviewFeedback.comment!,
             userInterview: submitInterviewFeedback.userInterview,

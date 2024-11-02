@@ -109,9 +109,10 @@ export interface UserInterviewModel extends Entity {
     nodes?: { [id: string]: InterviewNode }
     currentNodeId?: string
 }
-//Interview feedback related
 
-export interface InterviewFeedbackModel extends Entity {
+
+//Interview feedback related
+export interface UserFeedbackModel extends Entity {
     rating: number,
     comment?: string,
     userInterview: string | UserInterviewModel,

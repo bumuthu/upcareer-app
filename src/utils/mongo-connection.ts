@@ -6,6 +6,7 @@ import DialogueDBModel from '../models/db/dialogue.model';
 import SubscriptionDBModel from '../models/db/subscription.model';
 import SystemParameterDBModel from '../models/db/system-parameter.model';
 import CategoryDBModel from '../models/db/category.model';
+import UserFeedbackDBModel from '../models/db/interview-feedback.model';
 
 const connectToTheDatabase = async () => {
 
@@ -25,7 +26,8 @@ const connectToTheDatabase = async () => {
             DialogueDBModel,
             SubscriptionDBModel,
             SystemParameterDBModel,
-            CategoryDBModel
+            CategoryDBModel,
+            UserFeedbackDBModel
         ]
     }
 }

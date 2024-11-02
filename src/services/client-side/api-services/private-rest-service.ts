@@ -1,5 +1,5 @@
 import { RestClient } from "./rest-client";
-import { DialogueModel, InterviewFeedbackModel, SubscriptionModel, UserInterviewModel, UserModel } from "../../../models/entities";
+import { DialogueModel, UserFeedbackModel, SubscriptionModel, UserInterviewModel, UserModel } from "../../../models/entities";
 import { egress } from "../../../models/egress";
 import { ingress } from "../../../models/ingress";
 
@@ -64,7 +64,7 @@ export class PrivateRestService {
         return this.restClient.get<ingress.SpeechTokenResponse>(`speech-token`)
     }
     //Interview feedback
-    async submitInterviewFeedback(feedbackData: egress.UserFeedbackSubmitInput): Promise<egress.UserFeedbackSubmitInput>{
-        return this.restClient.post<InterviewFeedbackModel>(`interview/${feedbackData.userInterview}/user-feedback`, feedbackData)
+    async submitUserFeedback(feedbackData: egress.UserFeedbackSubmitInput): Promise<egress.UserFeedbackSubmitInput>{
+        return this.restClient.post<UserFeedbackModel>(`interview/${feedbackData.userInterview}/user-feedback`, feedbackData)
     }
 }

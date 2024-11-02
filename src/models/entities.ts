@@ -1,4 +1,4 @@
-import { SubscriptionEventType, SubscriptionStatus, SubscriptionTierKey, UserInterviewStatus, UserStatus } from "./enum";
+import { EndingReason, SubscriptionEventType, SubscriptionStatus, SubscriptionTierKey, UserInterviewStatus, UserStatus } from "./enum";
 
 
 export interface Entity {
@@ -105,10 +105,20 @@ export interface UserInterviewModel extends Entity {
     status: UserInterviewStatus,
     startedAt?: number,
     endedAt?: number,
+    endingReason?: EndingReason,
     nodes?: { [id: string]: InterviewNode }
     currentNodeId?: string
 }
 
+
+//Interview feedback related
+export interface UserFeedbackModel extends Entity {
+    rating: number,
+    comment?: string,
+    userInterview: string | UserInterviewModel,
+    baseInterview: string | BaseInterviewModel,
+    user: string | UserModel
+}
 
 
 // Dialogue related

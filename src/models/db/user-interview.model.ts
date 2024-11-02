@@ -12,6 +12,7 @@ const userInterviewSchema = new Schema({
     interviewScores: { type: Object, required: false }, // TODO: Add type
     status:{ type: String, required: true, enum: ["INITIALIZED","ONGOING", "COMPLETED", "CANCELLED"] },
     startedAt: { type: Number, required: false },
+    endingReason: {type: String, required: false, enum: ["TIMEOUT", "USER_CANCELLED", "COMPLETED"]}, 
     endedAt: { type: Number, required: false },
     nodes: { type: Object, required: false },
     currentNodeId: { type: String, required: false },

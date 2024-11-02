@@ -59,3 +59,9 @@ export enum SettingsTabsKey {
     SUBSCRIPTION = "subscription",
     CONTACT_US = "contact_us"
 }
+
+export enum EndingReason {
+    TIMEOUT = "TIMEOUT",
+    USER_CANCELLED = "USER_CANCELLED",
+    COMPLETING = "COMPLETED" 
+}

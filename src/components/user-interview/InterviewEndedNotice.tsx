@@ -4,10 +4,12 @@ import { useInterviewContext } from "@/context/InterviewContext";
 import { PrivateRestService } from "@/services/client-side/api-services/private-rest-service";
 import { Button, Rate, Typography } from "antd";
 import TextArea from "antd/es/input/TextArea";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const InterviewEndedNotice = () => {
     const interviewContext = useInterviewContext();
+    const router = useRouter();
     const privateRestService = new PrivateRestService();
     const [ratingCount, setRatingCount] = useState<number>();
     const [comment, setComment] = useState<string>()
@@ -21,12 +23,17 @@ const InterviewEndedNotice = () => {
                 comment:comment,
                 userInterview: interviewContext.activeUserInterview?._id
             })
+            router.push(`/my-interviews/${interviewContext.activeUserInterview?._id}`)
             setIsLoading(false)
         }
         catch(error){
             console.log("submit user feedback error: ", error)
             setIsLoading(false)
         }
+    }
+
+    const onSkip = () => {
+        router.push(`/my-interviews/${interviewContext.activeUserInterview?._id}`)
     }
 
     return (
@@ -53,8 +60,8 @@ const InterviewEndedNotice = () => {
             <Rate style={{marginBottom:"60px",marginTop:"20px"}} onChange={(number: any) => setRatingCount(number)} />
             <TextArea rows={4} placeholder="Express your thoughts..." value={comment} onChange={(e)=>setComment(e.target.value)} style={{ height: 120, resize: 'none', width: "500px", backgroundColor: "#f1f1f1" }} />
             <div style={{display: "flex", marginTop:"150px", gap:"10px"}}>
-                <Button type="text" style={{borderColor:"gray", paddingLeft:"30px", paddingRight:"30px"}}>Skip</Button>
-                <Button type = "primary"style={{paddingLeft:"30px", paddingRight:"30px"}} loading = {isLoading} onClick={()=>submitUserFeedback()} disabled = {(ratingCount == undefined || ratingCount == 0) ? true:false}>Rate & see Results</Button>
+                <Button type="text" style={{borderColor:"gray", paddingLeft:"30px", paddingRight:"30px"}} onClick={onSkip}>Skip</Button>
+                <Button type = "primary"style={{paddingLeft:"30px", paddingRight:"30px"}} loading = {isLoading} onClick={submitUserFeedback} disabled = {(ratingCount == undefined || ratingCount == 0) ? true:false}>Rate & See Results</Button>
             </div>
 
         </div>

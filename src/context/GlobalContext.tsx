@@ -74,11 +74,9 @@ export const GlobalContextProvider: React.FC<any> = ({ children }) => {
     const setNavBarSelection = () => {
         if (pathName == '/') {
             setSelectedSection(SelectableSection.EXPLORE_INTERVIEWS)
-        }
-        else if (pathName == '/my-interviews') {
+        } else if (pathName == '/my-interviews') {
             setSelectedSection(SelectableSection.MY_INTERVIEWS)
-        }
-        else if (pathName == '/my-progress') {
+        } else if (pathName == '/my-progress') {
             setSelectedSection(SelectableSection.MY_PROGRESS)
         } else {
             setSelectedSection(SelectableSection.MY_ACCOUNT)
@@ -87,9 +85,9 @@ export const GlobalContextProvider: React.FC<any> = ({ children }) => {
 
     useEffect(() => {
         const loadData = async () => {
-            setIsLoading(true);
             await fetchPublicData()
             if (!authUser.user) {
+                setIsLoading(false);
                 return
             }
             if (authUser.error) {
@@ -101,10 +99,10 @@ export const GlobalContextProvider: React.FC<any> = ({ children }) => {
             setIsLoading(false);
         }
 
-        loadData();
-
-        if (!authUser.user && !authUser.isLoading) {
-            setIsLoading(false);
+        if (authUser.isLoading) {
+            setIsLoading(true);
+        } else {
+            loadData();
         }
     }, [authUser.isLoading])
 

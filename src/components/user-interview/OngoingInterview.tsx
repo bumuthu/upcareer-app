@@ -191,7 +191,7 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
         });
         speechService.stopSpeechService();
         setExitLoading(false);
-        router.push('/my-interviews');
+        router.push(`/interview/${interviewContext.activeUserInterview?._id}/ended`);
         setExitOpen(false);
     }
 

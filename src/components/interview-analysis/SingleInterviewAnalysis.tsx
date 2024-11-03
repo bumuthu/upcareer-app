@@ -10,19 +10,24 @@ const { treeToGraphData } = G6;
 const SingleInterviewAnalysis = () => {
     const [data, setData] = useState<any>();
     const [graphSize, setGraphSize] = useState({ width: 500, height: 1000 });
-    
+    const isMounted = useRef(false);
+
     useEffect(() => {
-        try {
-            setData(treeToGraphData(reactInterviewTree))
-        } catch (error) {
-            console.log(error)
+        if (!isMounted.current) {
+            try {
+                setData(treeToGraphData(reactInterviewTree))
+            } catch (error) {
+                console.log(error)
+            }
+            isMounted.current = true;
         }
     }, []);
 
+    // Documentation: https://ant-design-charts.antgroup.com/en/examples/relations/indented-tree/#collapse-expand
     const options: IndentedTreeOptions = {
         type: 'boxed',
         autoFit: 'view',
-        animation: false,
+        animation: true,
         zoom: 0.1,
         data: data!,
         node: {
@@ -35,7 +40,7 @@ const SingleInterviewAnalysis = () => {
             });
             const size = graph.getCanvas().getSize();
             if (graphSize.width != size[0] || graphSize.height != size[1]) {
-                setGraphSize({ width:size[0], height: size[1] })
+                setGraphSize({ width: size[0], height: size[1] })
             }
         },
         onDestroy: () => {
@@ -44,8 +49,8 @@ const SingleInterviewAnalysis = () => {
     };
 
     return (
-        <div style={{ height: graphSize.height, width: '600px'}}>
-            {data && <IndentedTree {...options} />}
+        <div style={{ height: graphSize.height, width: '600px' }}>
+            {isMounted.current && data && <IndentedTree {...options} />}
         </div>
     )
 }

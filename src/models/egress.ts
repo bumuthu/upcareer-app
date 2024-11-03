@@ -1,5 +1,5 @@
 import { InterviewNode, UserInterviewModel } from "./entities"
-import { SubscriptionTierKey, UserInterviewStatus } from "./enum"
+import { EndingReason, SubscriptionTierKey, UserInterviewStatus } from "./enum"
 
 export namespace egress {
 
@@ -71,6 +71,7 @@ export namespace egress {
         jobDescription?: string,
         startedAt?: number,
         endedAt?: number,
+        endingReason?: EndingReason,
         status?: UserInterviewStatus,
         nodes?: { [id: string]: InterviewNode };
         currentNodeId?: string

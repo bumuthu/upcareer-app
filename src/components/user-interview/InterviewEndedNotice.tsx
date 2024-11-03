@@ -1,11 +1,18 @@
 "use client";
 
 import { useInterviewContext } from "@/context/InterviewContext";
+import { EndingReason } from "@/models/enum";
 import { PrivateRestService } from "@/services/client-side/api-services/private-rest-service";
 import { Button, Rate, Typography } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+
+enum DisplayedEndReasonMessage {
+    TIMEOUT_MESSAGE = "Timed out",
+    COMPLETED_MESSAGE = "Successfully completed",
+    CANCELLED_MESSAGE = "Cancelled"
+}
 
 const InterviewEndedNotice = () => {
     const interviewContext = useInterviewContext();
@@ -36,6 +43,17 @@ const InterviewEndedNotice = () => {
         router.push(`/my-interviews/${interviewContext.activeUserInterview?._id}`)
     }
 
+    const showEndingReason =()=>{
+        switch (interviewContext.activeUserInterview?.endingReason) {
+            case EndingReason.COMPLETING:
+                return DisplayedEndReasonMessage.COMPLETED_MESSAGE
+            case EndingReason.TIMEOUT:
+                return DisplayedEndReasonMessage.TIMEOUT_MESSAGE
+            case EndingReason.USER_CANCELLED:
+                return DisplayedEndReasonMessage.CANCELLED_MESSAGE
+        }
+    }
+
     return (
         <div
             style={{
@@ -50,8 +68,8 @@ const InterviewEndedNotice = () => {
             <Typography style={{ fontSize: 32, fontWeight: 600 }}>
                 The interview has been ended. How was it?
             </Typography>
-            <Typography.Paragraph style={{ fontWeight: "bold" }}>
-                Timed Out
+            <Typography.Paragraph style={{ fontWeight: "bold", fontSize:"18px"}}>
+                {showEndingReason()}
             </Typography.Paragraph>
             <Typography.Paragraph style={{ textAlign: "center", width: "500px" }}>
                 Tell us about your experience during the interview. We would also

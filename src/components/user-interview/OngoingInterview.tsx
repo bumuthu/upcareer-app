@@ -9,7 +9,7 @@ import { StopIcon } from '../../icons/StopIcon'
 import { MicIcon } from '../../icons/MicIcon'
 import Paragraph from 'antd/es/typography/Paragraph'
 import { ClipLoader } from 'react-spinners'
-import { UserInterviewStatus } from '../../models/enum'
+import { EndingReason, UserInterviewStatus } from '../../models/enum'
 import { Modal, Typography } from 'antd'
 import { useRouter } from 'next/navigation'
 import { getSecondsDifference, getTimingInMinSec } from '../../utils/utils'
@@ -184,11 +184,13 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
 
     const handleExit = async () => {
         setExitLoading(true);
-        await privateRestService.updateUserInterview({
+        const updatedUserInterview = await privateRestService.updateUserInterview({
             userInterviewId: interviewContext.activeUserInterview?._id,
             endedAt: Date.now(),
-            status: UserInterviewStatus.CANCELLED
+            status: UserInterviewStatus.CANCELLED,
+            endingReason: EndingReason.USER_CANCELLED
         });
+        interviewContext.setActiveUserInterview!(updatedUserInterview);
         speechService.stopSpeechService();
         setExitLoading(false);
         router.push(`/interview/${interviewContext.activeUserInterview?._id}/ended`);

@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { G6, IndentedTree, IndentedTreeOptions } from '@ant-design/graphs';
 import { Graph } from '@antv/g6';
-import { reactInterviewTree } from './SampleTree';
+import { useInterviewContext } from '../../context/InterviewContext';
 
 const { treeToGraphData } = G6;
 
@@ -11,23 +11,23 @@ const SingleInterviewAnalysis = () => {
     const [data, setData] = useState<any>();
     const [graphSize, setGraphSize] = useState({ width: 500, height: 1000 });
     const isMounted = useRef(false);
+    const interviewContext = useInterviewContext();
 
     useEffect(() => {
-        if (!isMounted.current) {
-            try {
-                setData(treeToGraphData(reactInterviewTree))
-            } catch (error) {
-                console.log(error)
-            }
             isMounted.current = true;
-        }
     }, []);
+
+    useEffect(() => {
+        if (interviewContext.interviewNodeService) {
+            setData(treeToGraphData(interviewContext.interviewNodeService!.formatTree()))
+        }
+    }, [interviewContext.interviewNodeService])
 
     // Documentation: https://ant-design-charts.antgroup.com/en/examples/relations/indented-tree/#collapse-expand
     const options: IndentedTreeOptions = {
         type: 'boxed',
         autoFit: 'view',
-        animation: true,
+        animation: false,
         zoom: 0.1,
         data: data!,
         node: {
@@ -49,7 +49,7 @@ const SingleInterviewAnalysis = () => {
     };
 
     return (
-        <div style={{ height: graphSize.height, width: '600px' }}>
+        <div style={{ height: graphSize.height, width: '600px', cursor: "pointer" }}>
             {isMounted.current && data && <IndentedTree {...options} />}
         </div>
     )

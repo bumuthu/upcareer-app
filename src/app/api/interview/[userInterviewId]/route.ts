@@ -9,7 +9,7 @@ export const GET = async (req: Request) => {
     const userInterviewId = splits[splits.length - 1];
 
     const userInterviewService = new UserInterviewService();
-    const baseInterview = await userInterviewService.get(userInterviewId);
+    const baseInterview = await userInterviewService.get(userInterviewId, "baseInterview");
     return handleNextSuccess(baseInterview);
   } catch (error) {
     console.log("Error in GET:/interview/:id", error);

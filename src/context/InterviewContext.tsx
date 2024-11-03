@@ -6,6 +6,7 @@ import { PrivateRestService } from '../services/client-side/api-services/private
 import { InterviewNodeService } from '../services/client-side/interview-node-service';
 import { UserInterviewStatus } from '../models/enum';
 import { PullAudioOutputStream } from 'microsoft-cognitiveservices-speech-sdk';
+import { currentUrlIncludes } from '../utils/utils';
 
 const mainNodeCount: number = Number(process.env.NEXT_PUBLIC_MAIN_NODES_COUNT || 10);
 
@@ -35,16 +36,21 @@ export const InterviewContextProvider: React.FC<any> = ({ children }) => {
     const privateService = new PrivateRestService();
 
     useEffect(() => {
-        const currentPath = window?.location?.href;
-        if (currentPath.includes('/interview/')) {
+        const setActiveInterview = (currentPath: string, path: string) => {
             const splits = currentPath.split('/');
-            const userInterviewId = splits[splits.indexOf('interview') + 1];
+            const userInterviewId = splits[splits.indexOf(path) + 1];
             if (userInterviewId) {
                 console.log("Setting active user interview as:", userInterviewId)
                 privateService.getUserInterviewById({ userInterviewId }).then((userInterview) => {
                     setActiveUserInterview(userInterview)
                 })
             }
+        }
+        const currentPath = window?.location?.href;
+        if (currentPath.includes('/interview/')) {
+            setActiveInterview(currentPath, "interview")
+        } else if (currentPath.includes('/my-interviews/')) {
+            setActiveInterview(currentPath, "my-interviews")
         }
     }, [])
 
@@ -57,6 +63,9 @@ export const InterviewContextProvider: React.FC<any> = ({ children }) => {
 
     useEffect(() => {
         const onOrganizingStatus = async () => {
+            if (!currentUrlIncludes('ongoing')) {
+                return;
+            }
             if (Object.keys(interviewNodeService?.getAllNodes() ?? {}).length >= mainNodeCount) {
                 return;
             }

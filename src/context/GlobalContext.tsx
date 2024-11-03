@@ -99,10 +99,10 @@ export const GlobalContextProvider: React.FC<any> = ({ children }) => {
             setIsLoading(false);
         }
 
-        if (authUser.isLoading) {
-            setIsLoading(true);
-        } else {
+        if (!authUser.isLoading) {
             loadData();
+        } else {
+            setIsLoading(true);
         }
     }, [authUser.isLoading])
 

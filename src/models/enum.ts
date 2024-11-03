@@ -61,7 +61,7 @@ export enum SettingsTabsKey {
 }
 
 export enum EndingReason {
-    TIMEOUT = "TIMEOUT",
-    USER_CANCELLED = "USER_CANCELLED",
-    COMPLETING = "COMPLETED" 
+    TIMEOUT = "TIMEOUT", // Timed out
+    USER_CANCELLED = "USER_CANCELLED", // Cancelled
+    COMPLETING = "COMPLETED"  // Successfully completed 
 }

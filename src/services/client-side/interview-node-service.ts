@@ -1,7 +1,14 @@
-import { InterviewNode, UserInterviewModel } from "../../models/entities";
+import { BaseInterviewModel, InterviewNode, UserInterviewModel } from "../../models/entities";
 import { PrivateRestService } from "./api-services/private-rest-service";
 import { v4 as uuidv4 } from 'uuid';
 import { debounce } from 'lodash';
+
+export type FormattedTreeData = {
+    id: string;
+    depth: number;
+    originalId: string;
+    children?: FormattedTreeData[];
+};
 
 export class InterviewNodeService {
     private nodes: { [id: string]: InterviewNode } = {};
@@ -73,6 +80,37 @@ export class InterviewNodeService {
             return this.nodes[this.currentNodeId!]
         }
         return null;
+    }
+
+    formatTree() {
+        const formattedTree: FormattedTreeData = {
+            id: (this.userInterview?.baseInterview as BaseInterviewModel).title,
+            depth: 0,
+            originalId: 'root',
+            children: []
+        };
+        // Setting parent nodes
+        for (const id in this.nodes) {
+            const node = this.nodes[id];
+            if (node.parentNodeId) continue;
+            formattedTree.children?.push({
+                id: node.question,
+                depth: 1,
+                originalId: node.id,
+                children: []
+            })
+        }
+        // Setting child nodes
+        for (const id in this.nodes) {
+            const node = this.nodes[id];
+            if (!node.parentNodeId) continue;
+            formattedTree.children?.find(x => x.originalId == node.parentNodeId)?.children?.push({
+                id: node.question,
+                depth: 2,
+                originalId: node.id,
+            })
+        }
+        return formattedTree;
     }
 
     private debouncedUpdatUserInterview = debounce(this.updateUserInterview.bind(this), 1000)

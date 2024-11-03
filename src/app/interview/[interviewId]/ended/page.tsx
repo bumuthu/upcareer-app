@@ -1,11 +1,19 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import InterviewEndedNotice from '../../../../components/user-interview/InterviewEndedNotice'
 import WithoutTopNavBar from '../../../../components/layouts/WithoutTopNavBar'
+import { useParams } from 'next/navigation'
+import { useInterviewContext } from '../../../../context/InterviewContext'
 
 const InterviewEndedPage = () => {
+    const params = useParams()
+    const interviewContext = useInterviewContext();
 
+    useEffect(() => {
+        interviewContext.setInterviewId!(params.interviewId as string)
+    }, [params.interviewId])
+    
     return (
         <WithoutTopNavBar>
             <div style={{

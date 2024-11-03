@@ -7,6 +7,7 @@ import { InterviewNodeService } from '../services/client-side/interview-node-ser
 import { UserInterviewStatus } from '../models/enum';
 import { PullAudioOutputStream } from 'microsoft-cognitiveservices-speech-sdk';
 import { currentUrlIncludes } from '../utils/utils';
+import { useGlobalContext } from './GlobalContext';
 
 const mainNodeCount: number = Number(process.env.NEXT_PUBLIC_MAIN_NODES_COUNT || 10);
 
@@ -20,8 +21,9 @@ export interface InterviewContextType {
     interviewNodeService?: InterviewNodeService,
     audioSynthesisData?: PullAudioOutputStream | undefined,
     setAudioSynthensisData?: React.Dispatch<React.SetStateAction<PullAudioOutputStream | undefined>>,
-    handleUserAnswer?: () => Promise<void>
-    handleQuestionRequest?: () => Promise<void>
+    handleUserAnswer?: () => Promise<void>,
+    handleQuestionRequest?: () => Promise<void>,
+    setInterviewId?: React.Dispatch<React.SetStateAction<string | undefined>>,
 }
 
 const InterviewContext = createContext<InterviewContextType>({});
@@ -32,27 +34,21 @@ export const InterviewContextProvider: React.FC<any> = ({ children }) => {
     const [activeUserInterview, setActiveUserInterview] = useState<UserInterviewModel>();
     const [interviewNodeService, setInterviewNodeService] = useState<InterviewNodeService>();
     const [audioSynthesisData, setAudioSynthensisData] = useState<PullAudioOutputStream | undefined>();
+    const [interviewId, setInterviewId] = useState<string>();
 
     const privateService = new PrivateRestService();
 
     useEffect(() => {
-        const setActiveInterview = (currentPath: string, path: string) => {
-            const splits = currentPath.split('/');
-            const userInterviewId = splits[splits.indexOf(path) + 1];
-            if (userInterviewId) {
-                console.log("Setting active user interview as:", userInterviewId)
-                privateService.getUserInterviewById({ userInterviewId }).then((userInterview) => {
+        const setActiveInterview = () => {
+            if (interviewId) {
+                console.log("Setting active user interview as:", interviewId)
+                privateService.getUserInterviewById({ userInterviewId: interviewId }).then((userInterview) => {
                     setActiveUserInterview(userInterview)
                 })
             }
         }
-        const currentPath = window?.location?.href;
-        if (currentPath.includes('/interview/')) {
-            setActiveInterview(currentPath, "interview")
-        } else if (currentPath.includes('/my-interviews/')) {
-            setActiveInterview(currentPath, "my-interviews")
-        }
-    }, [])
+        setActiveInterview();
+    }, [interviewId])
 
     useEffect(() => {
         if (!interviewNodeService && activeUserInterview) {
@@ -164,6 +160,7 @@ export const InterviewContextProvider: React.FC<any> = ({ children }) => {
             interviewNodeService,
             handleQuestionRequest,
             handleUserAnswer,
+            setInterviewId
         }}>
             {children}
         </InterviewContext.Provider>

@@ -68,7 +68,7 @@ const InterviewEndedNotice = () => {
             <Typography style={{ fontSize: 32, fontWeight: 600 }}>
                 The interview has been ended. How was it?
             </Typography>
-            <Typography.Paragraph style={{ fontWeight: "bold" }}>
+            <Typography.Paragraph style={{ fontWeight: "bold", fontSize:"18px"}}>
                 {showEndingReason()}
             </Typography.Paragraph>
             <Typography.Paragraph style={{ textAlign: "center", width: "500px" }}>

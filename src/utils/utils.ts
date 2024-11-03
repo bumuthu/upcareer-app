@@ -99,3 +99,8 @@ export const getFirstLetterUpperCase = (text: string) => {
     }
     return text.charAt(0).toUpperCase();
 }
+
+export const currentUrlIncludes = (subPath: string) => {
+    const currentPath = window?.location?.href;
+    return currentPath.includes(subPath)
+}

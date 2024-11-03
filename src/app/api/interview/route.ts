@@ -4,6 +4,7 @@ import { UserInterviewStatus } from "@/models/enum";
 import { UserInterviewService } from "@/services/server-side/entity-services/user-interview-service";
 import { handleNextError, handleNextSuccess } from "@/utils/response-generator";
 import { enrichRequest, validateRequiredFields } from "@/utils/validations";
+import { BaseInterviewService } from "../../../services/server-side/entity-services/base-interview-service";
 
 export const POST = async (req: Request) => {
     try {
@@ -18,6 +19,9 @@ export const POST = async (req: Request) => {
             status: UserInterviewStatus.INITIALIZED,
         };
         const res = await userInterviewService.create(newInterviewModel);
+        const baseInterviewService = new BaseInterviewService();
+        const baseInterview = await baseInterviewService.get(createUserInterview.baseInterviewId)
+        res.baseInterview = baseInterview
         return handleNextSuccess(res);
     } catch (error) {
         console.log("Error in POST: interview/id");

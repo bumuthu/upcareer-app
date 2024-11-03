@@ -24,7 +24,6 @@ interface UserInterviewProps {
     userInterview: UserInterviewModel
 }
 const UserInterviewContainer = (props: UserInterviewProps) => {
-    const [baseInterview, setBaseInterview] = useState<BaseInterviewModel>()
     const [customJobDescription, setCustomJobDescription] = useState<string>('')
     const [loading, setIsloading] = useState<boolean>(false)
     const [startLoading, setStartLoading] = useState<boolean>(false)
@@ -40,7 +39,6 @@ const UserInterviewContainer = (props: UserInterviewProps) => {
 
     useEffect(() => {
         if (props.userInterview) {
-            getBaseInterview()
             setCustomJobDescription(props.userInterview?.jobDescription!)
             if (props.userInterview?.jobDescription) setIsChecked(true)
         }
@@ -59,12 +57,6 @@ const UserInterviewContainer = (props: UserInterviewProps) => {
         if (!isChecked) setCustomJobDescription("")
         if (isChecked) setApplyButton(SubmitButton.APPLY)
     }, [isChecked])
-
-    const getBaseInterview = async () => {
-        console.log("userInterview in containr: ", props.userInterview)
-        const baseInterviewdata = await publicRestService.getBaseInterviewById({ baseInterviewId: props.userInterview?.baseInterview as string })
-        setBaseInterview!(baseInterviewdata)
-    }
 
     const onClickApply = async () => {
         try {
@@ -99,13 +91,13 @@ const UserInterviewContainer = (props: UserInterviewProps) => {
 
     return (
         < >
-            {props.userInterview ? <>{/* Title Section */}
+            {props.userInterview ? <div style={{ margin: "auto 50px" }}>{/* Title Section */}
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <div>
-                        <Title level={2} style={{ margin: 0 }}>{baseInterview?.title}</Title>
+                        <Title level={2} style={{ margin: 0 }}>{(props.userInterview.baseInterview as BaseInterviewModel)?.title}</Title>
                         {
-                            baseInterview?.category &&
-                            <Paragraph style={{ color: "blue" }}>{(baseInterview?.category as CategoryModel).name}</Paragraph>
+                            (props.userInterview.baseInterview as BaseInterviewModel)?.category &&
+                            <Paragraph style={{ color: "blue" }}>{((props.userInterview.baseInterview as BaseInterviewModel)?.category as CategoryModel).name}</Paragraph>
                         }
                     </div>
 
@@ -131,7 +123,7 @@ const UserInterviewContainer = (props: UserInterviewProps) => {
                         <Title level={4}>Job Description</Title>
                         <Paragraph style={{ width: "100%" , textAlign: "justify", overflowY: "auto", maxHeight: "400px", padding: "20px" }}>
                             <ReactMarkdown className="text-sm" remarkPlugins={[]}>
-                                {baseInterview?.jobDescription}
+                                {(props.userInterview.baseInterview as BaseInterviewModel)?.jobDescription}
                             </ReactMarkdown>
                         </Paragraph>
                     </div>
@@ -176,7 +168,7 @@ const UserInterviewContainer = (props: UserInterviewProps) => {
                 <Upload >
                     <Button style={{ marginTop: "20px" }} icon={<UploadOutlined />}>Upload CV</Button>
                 </Upload>
-            </> : <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "600px" }}><ClipLoader /></div>}</>
+            </div> : <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "600px" }}><ClipLoader /></div>}</>
     );
 };
 

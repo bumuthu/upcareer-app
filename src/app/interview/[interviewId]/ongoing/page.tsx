@@ -7,7 +7,6 @@ import { useParams } from 'next/navigation';
 import { useInterviewContext } from '../../../../context/InterviewContext';
 
 const UserInterviewPage = () => {
-
     const params = useParams()
     const interviewContext = useInterviewContext();
 

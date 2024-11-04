@@ -78,7 +78,7 @@ export const GlobalContextProvider: React.FC<any> = ({ children }) => {
             setSelectedSection(SelectableSection.MY_INTERVIEWS)
         } else if (pathName == '/my-progress') {
             setSelectedSection(SelectableSection.MY_PROGRESS)
-        } else {
+        } else if (pathName == '/my-account') {
             setSelectedSection(SelectableSection.MY_ACCOUNT)
         }
     }

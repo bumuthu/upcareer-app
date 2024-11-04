@@ -7,7 +7,6 @@ const userInterviewSchema = new Schema({
     user: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },
     baseInterview: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'BaseInterview' },
     jobDescription: { type: String, required: false },
-    resumeMatchingScores: { type: Object, required: false }, // TODO: Add type
     interviewScores: { type: Object, required: false }, // TODO: Add type
     status:{ type: String, required: true, enum: ["INITIALIZED","ONGOING", "COMPLETED", "CANCELLED"] },
     startedAt: { type: Number, required: false },

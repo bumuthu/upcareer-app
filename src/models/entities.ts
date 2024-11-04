@@ -79,29 +79,23 @@ export interface InterviewNode {
     parentNodeId?: string; // null for parent node
     previousNodeId?: string; // null for the first node
     nextNodeId?: string; // null for the last node
+    scores?: QuestionScoreModel
 }
-export interface ResumeMacthingScoreModel {
+export interface MacthingScoreModel {
     score: number,
     matchingTexts: string[]
 }
-export interface UserMatchingScoreModel {
-    experienceScore: ResumeMacthingScoreModel,
-    skillsScore: ResumeMacthingScoreModel,
-    educationScore: ResumeMacthingScoreModel,
-    createdAt: number
-}
-export interface UserInterviewScoreModel {
-    technicalScore: number,
-    communicationScore: number,
-    confidenceScore: number,
-    overallFeedback: string
+export interface QuestionScoreModel {
+    communication: number,
+    accuracy: number,
+    confidence: number,
+    feedback?: string
 }
 export interface UserInterviewModel extends Entity {
     user: string | UserModel,
     baseInterview: string | BaseInterviewModel,
     jobDescription?: string, // append to baseInterview jobDescription
-    resumeMatchingScores?: UserMatchingScoreModel,
-    interviewScores?: UserInterviewScoreModel, // if status is COMPLETED, required
+    interviewScores?: QuestionScoreModel, // if status is COMPLETED, required
     status: UserInterviewStatus,
     startedAt?: number,
     endedAt?: number,

@@ -13,7 +13,6 @@
     "@ant-design/graphs": "^2.0.0",
     "@ant-design/icons": "^5.5.1",
     "@ant-design/nextjs-registry": "^1.0.1",
-    "@antv/g6": "^5.0.27",
     "@heroicons/react": "^2.1.1",
     "@kinde-oss/kinde-auth-nextjs": "^2.2.10",
     "@stripe/react-stripe-js": "^2.7.0",

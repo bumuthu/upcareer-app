@@ -48,7 +48,6 @@ export function validateAllowedFields(data: any, fields: string[]) {
 }
 
 export async function enrichRequest( request?: egress.Request): Promise<egress.Request> {
-    console.log("Request:", request);
     if (request == null) request = {};
 
     const authUser = await ServerAuthService.getUser();

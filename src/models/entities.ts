@@ -1,4 +1,4 @@
-import { EndingReason, SubscriptionEventType, SubscriptionStatus, SubscriptionTierKey, UserInterviewStatus, UserStatus } from "./enum";
+import { EndingReason, InterviewDifficulty, InterviewMode, SubscriptionEventType, SubscriptionStatus, SubscriptionTierKey, UserInterviewStatus, UserStatus } from "./enum";
 
 
 export interface Entity {
@@ -97,11 +97,14 @@ export interface UserInterviewModel extends Entity {
     jobDescription?: string, // append to baseInterview jobDescription
     interviewScores?: QuestionScoreModel, // if status is COMPLETED, required
     status: UserInterviewStatus,
+    difficulty: InterviewDifficulty,
+    mode: InterviewMode,
     startedAt?: number,
     endedAt?: number,
     endingReason?: EndingReason,
     nodes?: { [id: string]: InterviewNode }
-    currentNodeId?: string
+    currentNodeId?: string,
+    threadId?: string
 }
 
 

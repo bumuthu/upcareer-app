@@ -15,8 +15,8 @@ export const POST = async (req: Request) => {
         const userInterviewService = new UserInterviewService();
         const userInterview = await userInterviewService.get(organizeRequest.userInterviewId, "baseInterview");
 
-        const interviewEngine: InterviewEngine = new InterviewEngine((userInterview?.baseInterview as BaseInterviewModel).openAIAssistantId);
-        const organizePromptRes = await interviewEngine.handleOrganizePrompt(userInterview);
+        const interviewEngine: InterviewEngine = new InterviewEngine((userInterview?.baseInterview as BaseInterviewModel).openAIAssistantId, userInterview);
+        const organizePromptRes = await interviewEngine.handleOrganizePrompt();
         return handleNextSuccess(organizePromptRes)
     } catch (error) {
         console.log("Error in POST:interview/ai/organize", error)

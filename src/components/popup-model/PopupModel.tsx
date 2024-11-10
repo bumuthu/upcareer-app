@@ -11,6 +11,7 @@ import { useAuthContext } from "../../context/AuthContext";
 import { LoginLink } from "@kinde-oss/kinde-auth-nextjs";
 import { useInterviewContext } from "../../context/InterviewContext";
 import ReactMarkdown from "react-markdown";
+import { InterviewDifficulty, InterviewMode } from "../../models/enum";
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_BASE_URL;
 
@@ -31,6 +32,8 @@ const PopupModel = (props: popupProps) => {
             const privateRestService = new PrivateRestService();
             const userInterview = await privateRestService.createUserInterview({
                 baseInterviewId: props.baseInterview._id,
+                difficulty: InterviewDifficulty.INTERMEDIATE, // TODO : Add difficulty
+                mode: InterviewMode.LEARNING // TODO Add mode
             });
             interviewContext.setActiveUserInterview!(userInterview);
             setIsloading(false)

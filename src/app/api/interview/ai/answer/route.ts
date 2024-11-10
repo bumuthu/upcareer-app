@@ -15,7 +15,7 @@ export const POST = async (req: Request) => {
         const userInterviewService = new UserInterviewService();
         const userInterview = await userInterviewService.get(promptRequest.userInterviewId, "baseInterview");
 
-        const interviewEngine: InterviewEngine = new InterviewEngine((userInterview?.baseInterview as BaseInterviewModel).openAIAssistantId);
+        const interviewEngine: InterviewEngine = new InterviewEngine((userInterview?.baseInterview as BaseInterviewModel).openAIAssistantId, userInterview);
         const userPromptRes = await interviewEngine.handleAnswerPrompt(promptRequest.dialogueId);
         return handleNextSuccess(userPromptRes)
     } catch (error) {

@@ -19,6 +19,7 @@ export namespace ingress {
     export interface InterviewPromptResponse {
         question: string,
         answer: string,
-        feedback?: string
+        followUp?: boolean
+        feedback?: string,
     }
 }

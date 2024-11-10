@@ -65,3 +65,13 @@ export enum EndingReason {
     USER_CANCELLED = "USER_CANCELLED", // Cancelled
     COMPLETING = "COMPLETED"  // Successfully completed 
 }
+
+export enum InterviewDifficulty {
+    INTERMEDIATE = "INTERMEDIATE",
+    ADVANCED = "ADVANCED"
+}
+
+export enum InterviewMode {
+    LEARNING = "LEARNING",
+    WARMUP = "WARMUP"
+}

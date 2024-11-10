@@ -16,6 +16,8 @@ export const POST = async (req: Request) => {
             user: createUserInterview.userId!,
             baseInterview: createUserInterview.baseInterviewId,
             status: UserInterviewStatus.INITIALIZED,
+            difficulty: createUserInterview.difficulty,
+            mode: createUserInterview.mode
         };
         const res = await userInterviewService.create(newInterviewModel, "baseInterview");
         return handleNextSuccess(res);

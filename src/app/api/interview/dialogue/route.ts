@@ -10,7 +10,7 @@ export const POST = async (req: Request) => {
         const dialogueRequest = await enrichRequest(requestBody) as egress.DialogueCreateInput;
 
         const dialogueService = new DialogueService();
-        const res = await dialogueService.create({ text: dialogueRequest.userAnswer, userInterview: dialogueRequest.userInterviewId, createdAt: Date.now() })
+        const res = await dialogueService.create({ systemQuestion: dialogueRequest.systemQuestion, userAnswer: dialogueRequest.userAnswer, userInterview: dialogueRequest.userInterviewId, createdAt: Date.now() })
         return handleNextSuccess(res)
     } catch (error) {
         console.log("Error in POST:interview/dialogue", error)

@@ -91,11 +91,11 @@ export const InterviewContextProvider: React.FC<any> = ({ children }) => {
     useEffect(() => {
         const syncDialogue = async () => {
             if (ongoingDialogue && ongoingDialogue?._id == undefined) {
-                const dialogueRes = await privateService.createDialogue({ userAnswer: ongoingDialogue.userAnswer, userInterviewId: activeUserInterview?._id, parentDialogueId: ongoingDialogue.parentDialogue as string })
+                const dialogueRes = await privateService.createDialogue({ systemQuestion: ongoingDialogue.systemQuestion, userAnswer: ongoingDialogue.userAnswer, userInterviewId: activeUserInterview?._id, parentDialogueId: ongoingDialogue.parentDialogue as string })
                 setOngoingDialogue(dialogueRes);
             }
             if (ongoingDialogue?._id && ongoingDialogue?.userAnswer) {
-                privateService.updateDialogue({ dialogueId: ongoingDialogue._id, userAnswer: ongoingDialogue.userAnswer })
+                privateService.updateDialogue({ systemQuestion: ongoingDialogue.systemQuestion, dialogueId: ongoingDialogue._id, userAnswer: ongoingDialogue.userAnswer })
             }
         }
         syncDialogue();
@@ -120,16 +120,18 @@ export const InterviewContextProvider: React.FC<any> = ({ children }) => {
             dialogueId: ongoingDialogue?._id,
             userInterviewId: activeUserInterview?._id
         });
-
-        interviewNodeService?.addNode(interviewNodeService.getCurrentNode()?.id, {
-            id: interviewNodeService.generateNodeId(),
-            isParentNode: false,
-            question: promptRes.question,
-            previousAnswerFeedback: promptRes.feedback,
-            expectedAnswer: promptRes.answer,
-            parentNodeId: interviewNodeService.getCurrentNode()?.parentNodeId
-        })
-        interviewNodeService?.activateNextNode();
+        if (promptRes.followUp) {
+            console.log("Handling follow up question")
+            interviewNodeService?.addNode(interviewNodeService.getCurrentNode()?.id, {
+                id: interviewNodeService.generateNodeId(),
+                isParentNode: true,
+                question: promptRes.question,
+                previousAnswerFeedback: promptRes.feedback,
+                expectedAnswer: promptRes.answer,
+                parentNodeId: interviewNodeService.getCurrentNode()?.parentNodeId
+            })
+        }
+        interviewNodeService?.activateNextNode(promptRes.feedback);
         console.log("Next node:", interviewNodeService?.getCurrentNode())
 
         setOngoingDialogue!(undefined);

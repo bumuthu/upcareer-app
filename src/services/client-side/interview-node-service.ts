@@ -72,10 +72,11 @@ export class InterviewNodeService {
         this.updateUserInterview();
     }
 
-    activateNextNode() {
+    activateNextNode(feedback?: string) {
         const nextNodeId = this.nodes[this.currentNodeId!].nextNodeId
         if (nextNodeId) {
             this.currentNodeId = nextNodeId;
+            this.nodes[this.currentNodeId!].previousAnswerFeedback = feedback;
             this.updateUserInterview();
             return this.nodes[this.currentNodeId!]
         }

@@ -14,6 +14,9 @@ const userInterviewSchema = new Schema({
     endedAt: { type: Number, required: false },
     nodes: { type: Object, required: false },
     currentNodeId: { type: String, required: false },
+    threadId: { type: String, required: false },
+    mode: {type: String, required: false, enum: ["LEARNING", "WARMUP"]}, 
+    difficulty: {type: String, required: false, enum: ["INTERMEDIATE", "ADVANCED"]}, 
 });
 
 const UserInterviewDBModel = (mongoose.models || {})['UserInterview'] || mongoose.model<UserInterviewDocument>('UserInterview', userInterviewSchema);

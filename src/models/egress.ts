@@ -1,5 +1,5 @@
 import { InterviewNode, UserInterviewModel } from "./entities"
-import { EndingReason, SubscriptionTierKey, UserInterviewStatus } from "./enum"
+import { EndingReason, InterviewDifficulty, InterviewMode, SubscriptionTierKey, UserInterviewStatus } from "./enum"
 
 export namespace egress {
 
@@ -64,6 +64,8 @@ export namespace egress {
 
     export interface UserInterviewCreateInput extends Request {
         baseInterviewId: string,
+        difficulty: InterviewDifficulty,
+        mode: InterviewMode
     }
 
     export interface UserInterviewUpdateInput extends Request {

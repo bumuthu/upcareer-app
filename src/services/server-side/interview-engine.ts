@@ -49,12 +49,14 @@ export class InterviewEngine {
             Previous Question: ${question ?? ""}
             Previous Answer: ${answer ?? ""}
 
-            Give a short feedback of the previous answer given to the previous question in feedback field of the response.
+            Give a short feedback of the previous answer given to the previous question in feedback field of the response. Ignore typo errors.
             If the previous answer is not accurate only, generate the next question based on the previous question and previous answer, and make followUp field true.
             if the previous answer is accurate enough, generate the feedback only, make followUp field false. Do not generate the next question and answer.
+
+            Give scores for the previous answer in communicationScore, accuracyScore and confidenceScore fields. Range of scores is 0 to 10.
             
             Use Json format to give the response with object of question, feedback, answer and follow up or not fields as follows.
-            { "response": { "question": "next question", "answer": "expected answer for next question", "feedback": "feedback for previous answer", followUp: true } }
+            { "response": { "question": "next question", "answer": "expected answer for next question", "feedback": "feedback for previous answer", followUp: true, communicationScore: 8, accuracyScore: 9, confidenceScore: 7 } }
         `
     }
 

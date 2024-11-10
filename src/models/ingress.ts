@@ -21,5 +21,8 @@ export namespace ingress {
         answer: string,
         followUp?: boolean
         feedback?: string,
+        communicationScore?: number,
+        accuracyScore?: number,
+        confidenceScore?: number
     }
 }

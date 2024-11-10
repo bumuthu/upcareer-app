@@ -5,13 +5,14 @@ import React, { useEffect, useState } from 'react'
 
 const QuestionTreeContainer = () => {
 	const interviewContext = useInterviewContext()
-	const [selectedCardId, setSelectedCardId] = useState<string>(interviewContext.interviewNodeService?.formatTree()[0].id!);
+	const [selectedCardId, setSelectedCardId] = useState<string>();
 	const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
 
-	useEffect(()=>{
-		interviewContext.setSelectedCardId!(interviewContext.interviewNodeService?.formatTree()[0].id!)
-
-	},[])
+	useEffect(() => {
+		if (interviewContext.interviewNodeService) {
+			interviewContext.setSelectedCardId!(interviewContext.interviewNodeService?.formatTree()[0].id!)
+		}
+	}, [interviewContext.interviewNodeService])
 	const handleCardClick = (cardId: string) => {
 		setSelectedCardId(cardId);
 		interviewContext.setSelectedCardId!(cardId)
@@ -22,8 +23,8 @@ const QuestionTreeContainer = () => {
 	}
 	return (
 		<div>
-			<Card style={{ overflowY: "auto", maxHeight: "860px"}}>
-				{interviewContext.interviewNodeService?.formatTree().map((tree: FormattedTreeData) => (
+			<Card style={{ overflowY: "auto", maxHeight: "860px" }}>
+				{interviewContext.interviewNodeService?.formatTree() && interviewContext.interviewNodeService?.formatTree().map((tree: FormattedTreeData) => (
 					<div key={tree.id}>
 						{tree.depth == 1 &&
 							<Card onMouseEnter={() => setHoveredCardId(tree.id)}
@@ -33,7 +34,7 @@ const QuestionTreeContainer = () => {
 									transition: "background-color 0.3s ease",
 									border: "solid 1px", borderColor: "#0D99FF", width: "100%", marginBottom: "20px", marginLeft: checkIsParent(tree.depth)
 								}}>
-								<Typography style={{ fontWeight:"bold",color: selectedCardId === tree.id ? "white" : "#0D99FF"}}>{tree.node.question}</Typography>
+								<Typography style={{ fontWeight: "bold", color: selectedCardId === tree.id ? "white" : "#0D99FF" }}>{tree.node.question}</Typography>
 							</Card>}
 						{tree.children!.length > 0 && tree.children?.map((childNode) =>
 							< Card key={childNode.id} onClick={() => handleCardClick(childNode.id)} style={{

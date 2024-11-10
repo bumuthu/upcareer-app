@@ -6,9 +6,9 @@ import { PrivateRestService } from '../services/client-side/api-services/private
 import { InterviewNodeService } from '../services/client-side/interview-node-service';
 import { UserInterviewStatus } from '../models/enum';
 import { PullAudioOutputStream } from 'microsoft-cognitiveservices-speech-sdk';
-import { currentUrlIncludes } from '../utils/utils';
 
 const mainNodeCount: number = Number(process.env.NEXT_PUBLIC_MAIN_NODES_COUNT || 10);
+const followUpThreashold: number = 1;
 
 export interface InterviewContextType {
     activeUserInterview?: UserInterviewModel,
@@ -23,7 +23,7 @@ export interface InterviewContextType {
     handleUserAnswer?: () => Promise<void>,
     handleQuestionRequest?: () => Promise<void>,
     setInterviewId?: React.Dispatch<React.SetStateAction<string | undefined>>,
-    setSelectedCardId?: React.Dispatch<React.SetStateAction<string>>,
+    setSelectedCardId?: React.Dispatch<React.SetStateAction<string | undefined>>,
     selectedCardId?: string
 }
 
@@ -36,7 +36,8 @@ export const InterviewContextProvider: React.FC<any> = ({ children }) => {
     const [interviewNodeService, setInterviewNodeService] = useState<InterviewNodeService>();
     const [audioSynthesisData, setAudioSynthensisData] = useState<PullAudioOutputStream | undefined>();
     const [interviewId, setInterviewId] = useState<string>();
-    const [selectedCardId, setSelectedCardId] = useState<string>(interviewNodeService?.formatTree()[0].id!);
+    const [selectedCardId, setSelectedCardId] = useState<string>();
+    const [consecutiveFollowUps, setConsecutiveFollowUps] = useState<number>(0);
 
     const privateService = new PrivateRestService();
 
@@ -123,16 +124,29 @@ export const InterviewContextProvider: React.FC<any> = ({ children }) => {
             dialogueId: ongoingDialogue?._id,
             userInterviewId: activeUserInterview?._id
         });
-        if (promptRes.followUp) {
+        if (promptRes.followUp && consecutiveFollowUps < followUpThreashold) {
+            setConsecutiveFollowUps(prev => prev + 1);
             console.log("Handling follow up question")
+
+            const getParentNodeId = () => {
+                const current = interviewNodeService?.getCurrentNode();
+                if (current?.isParentNode) {
+                    return current.id;
+                } else if (current?.parentNodeId) {
+                    return current?.parentNodeId;
+                }
+                return;
+            }
             interviewNodeService?.addNode(interviewNodeService.getCurrentNode()?.id, {
                 id: interviewNodeService.generateNodeId(),
-                isParentNode: true,
+                isParentNode: false,
                 question: promptRes.question,
                 previousAnswerFeedback: promptRes.feedback,
                 expectedAnswer: promptRes.answer,
-                parentNodeId: interviewNodeService.getCurrentNode()?.parentNodeId
+                parentNodeId: getParentNodeId()
             })
+        } else {
+            setConsecutiveFollowUps(0);
         }
         interviewNodeService?.activateNextNode(promptRes.feedback);
         console.log("Next node:", interviewNodeService?.getCurrentNode())

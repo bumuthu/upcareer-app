@@ -27,8 +27,6 @@ export class InterviewNodeService {
             this.nodes[node.id] = node;
         } else {
             node.previousNodeId = previousNodeId;
-            this.nodes[previousNodeId].nextNodeId = node.id;
-
             const nextNodeId = this.nodes[previousNodeId].nextNodeId
             if (nextNodeId) {
                 node.nextNodeId = nextNodeId;
@@ -36,6 +34,7 @@ export class InterviewNodeService {
                     this.nodes[nextNodeId].previousNodeId = node.id;
                 }
             }
+            this.nodes[previousNodeId].nextNodeId = node.id;
             this.nodes[node.id] = node;
         }
         this.debouncedUpdatUserInterview();
@@ -83,14 +82,14 @@ export class InterviewNodeService {
         return null;
     }
 
-    formatTree() {
+    formatTree(): FormattedTreeData[] {
         const formattedTree: FormattedTreeData[] = []
         // Setting parent nodes
         for (const id in this.nodes) {
             const node = this.nodes[id];
-            if (node.parentNodeId) continue;
+            if (!node.isParentNode) continue;
             formattedTree.push({
-                id: node.question,
+                id: node.id,
                 depth: 1,
                 node: node,
                 children: []
@@ -99,9 +98,10 @@ export class InterviewNodeService {
         // Setting child nodes
         for (const id in this.nodes) {
             const node = this.nodes[id];
-            if (!node.parentNodeId) continue;
-            formattedTree.find(x => x.id == node.parentNodeId)?.children?.push({
-                id: node.question,
+            if (node.isParentNode) continue;
+            const elementIndex = formattedTree.findIndex(x => x.id == node.parentNodeId);
+            formattedTree[elementIndex]?.children?.push({
+                id: node.id,
                 depth: 2,
                 node: node
             })

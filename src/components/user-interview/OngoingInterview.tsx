@@ -311,7 +311,7 @@ const OngoingUserInterview = (props: OngoingUserInterviewProps) => {
                                     fontSize: '18px',
                                 }}>
                                     {interviewContext.ongoingDialogue ?
-                                        interviewContext.ongoingDialogue?.userAnswer ?? "" + interviewContext.ongoingText :
+                                        (interviewContext.ongoingDialogue?.userAnswer ?? "") + interviewContext.ongoingText :
                                         interviewContext.ongoingText}
                                 </Paragraph>
                             }

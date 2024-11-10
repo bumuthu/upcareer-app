@@ -26,7 +26,7 @@ export const PUT = async (req: Request) => {
 
       const userInterviewService = new UserInterviewService()
       const update: any = { ...updateUserInterview, updatedAt: Date.now() }
-      const res = await userInterviewService.update(updateUserInterview.userInterviewId, update)
+      const res = await userInterviewService.update(updateUserInterview.userInterviewId, update, "baseInterview")
 
       return handleNextSuccess(res)
   }

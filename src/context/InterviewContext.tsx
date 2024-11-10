@@ -7,7 +7,6 @@ import { InterviewNodeService } from '../services/client-side/interview-node-ser
 import { UserInterviewStatus } from '../models/enum';
 import { PullAudioOutputStream } from 'microsoft-cognitiveservices-speech-sdk';
 import { currentUrlIncludes } from '../utils/utils';
-import { useGlobalContext } from './GlobalContext';
 
 const mainNodeCount: number = Number(process.env.NEXT_PUBLIC_MAIN_NODES_COUNT || 10);
 
@@ -59,9 +58,6 @@ export const InterviewContextProvider: React.FC<any> = ({ children }) => {
 
     useEffect(() => {
         const onOrganizingStatus = async () => {
-            if (!currentUrlIncludes('ongoing')) {
-                return;
-            }
             if (Object.keys(interviewNodeService?.getAllNodes() ?? {}).length >= mainNodeCount) {
                 return;
             }
@@ -95,7 +91,7 @@ export const InterviewContextProvider: React.FC<any> = ({ children }) => {
     useEffect(() => {
         const syncDialogue = async () => {
             if (ongoingDialogue && ongoingDialogue?._id == undefined) {
-                const dialogueRes = await privateService.createDialogue({ userAnswer: "", userInterviewId: activeUserInterview?._id, parentDialogueId: ongoingDialogue.parentDialogue as string })
+                const dialogueRes = await privateService.createDialogue({ userAnswer: ongoingDialogue.userAnswer, userInterviewId: activeUserInterview?._id, parentDialogueId: ongoingDialogue.parentDialogue as string })
                 setOngoingDialogue(dialogueRes);
             }
             if (ongoingDialogue?._id && ongoingDialogue?.userAnswer) {

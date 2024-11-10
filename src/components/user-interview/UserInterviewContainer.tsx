@@ -34,8 +34,23 @@ const UserInterviewContainer = (props: UserInterviewProps) => {
     const router = useRouter()
     const interviewContext = useInterviewContext();
     const privateService = new PrivateRestService()
-    const publicRestService = new PublicRestService()
     const isSmallScreen = useMediaQuery({ maxWidth: breakpoints.xl })
+
+    useEffect(() => {
+        switch (interviewContext.activeUserInterview?.status) {
+            case UserInterviewStatus.ORGANIZING:
+            case UserInterviewStatus.ONGOING:
+                router.push(`/interview/${interviewContext.activeUserInterview?._id}/ongoing`);
+                break;
+            case UserInterviewStatus.CANCELLED:
+            case UserInterviewStatus.COMPLETED:
+                router.push(`/interview/${interviewContext.activeUserInterview?._id}/ended`);
+                break;
+            default:
+                break;
+        }
+    }, [interviewContext.activeUserInterview?.status])
+
 
     useEffect(() => {
         if (props.userInterview) {

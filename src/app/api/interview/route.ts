@@ -4,7 +4,6 @@ import { UserInterviewStatus } from "@/models/enum";
 import { UserInterviewService } from "@/services/server-side/entity-services/user-interview-service";
 import { handleNextError, handleNextSuccess } from "@/utils/response-generator";
 import { enrichRequest, validateRequiredFields } from "@/utils/validations";
-import { BaseInterviewService } from "../../../services/server-side/entity-services/base-interview-service";
 
 export const POST = async (req: Request) => {
     try {

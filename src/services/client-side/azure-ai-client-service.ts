@@ -28,11 +28,11 @@ export class AzureAIClientService {
             console.log(`Recognized:`, event.result.text);
             if (event.result.text) {
                 this.interviewContext.setOngoingDialogue!((d => {
-                    if (d) return { ...d!, userAnswer: d!.userAnswer ?? "" + " " + event.result.text }
+                    if (d) return { ...d, userAnswer: (d.userAnswer ?? "") + " " + event.result.text }
                     return { ...d!, userAnswer: event.result.text }
                 }))
+                this.interviewContext.setOngoingText!("");
             }
-            this.interviewContext.setOngoingText!("");
         }
 
         // TTS

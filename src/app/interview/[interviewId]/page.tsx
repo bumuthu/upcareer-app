@@ -3,7 +3,7 @@ import WithTopNavBar from '@/components/layouts/WithTopNavBar'
 import UserInterviewContainer from '@/components/user-interview/UserInterviewContainer'
 import { useParams } from 'next/navigation'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useInterviewContext } from '../../../context/InterviewContext'
 
 const UserInterviewPage = () => {

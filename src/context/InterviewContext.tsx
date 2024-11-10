@@ -23,6 +23,8 @@ export interface InterviewContextType {
     handleUserAnswer?: () => Promise<void>,
     handleQuestionRequest?: () => Promise<void>,
     setInterviewId?: React.Dispatch<React.SetStateAction<string | undefined>>,
+    setSelectedCardId?: React.Dispatch<React.SetStateAction<string>>,
+    selectedCardId?: string
 }
 
 const InterviewContext = createContext<InterviewContextType>({});
@@ -34,6 +36,7 @@ export const InterviewContextProvider: React.FC<any> = ({ children }) => {
     const [interviewNodeService, setInterviewNodeService] = useState<InterviewNodeService>();
     const [audioSynthesisData, setAudioSynthensisData] = useState<PullAudioOutputStream | undefined>();
     const [interviewId, setInterviewId] = useState<string>();
+    const [selectedCardId, setSelectedCardId] = useState<string>(interviewNodeService?.formatTree()[0].id!);
 
     const privateService = new PrivateRestService();
 
@@ -158,7 +161,9 @@ export const InterviewContextProvider: React.FC<any> = ({ children }) => {
             interviewNodeService,
             handleQuestionRequest,
             handleUserAnswer,
-            setInterviewId
+            setInterviewId,
+            setSelectedCardId,
+            selectedCardId
         }}>
             {children}
         </InterviewContext.Provider>

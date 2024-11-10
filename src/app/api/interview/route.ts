@@ -18,10 +18,7 @@ export const POST = async (req: Request) => {
             baseInterview: createUserInterview.baseInterviewId,
             status: UserInterviewStatus.INITIALIZED,
         };
-        const res = await userInterviewService.create(newInterviewModel);
-        const baseInterviewService = new BaseInterviewService();
-        const baseInterview = await baseInterviewService.get(createUserInterview.baseInterviewId)
-        res.baseInterview = baseInterview
+        const res = await userInterviewService.create(newInterviewModel, "baseInterview");
         return handleNextSuccess(res);
     } catch (error) {
         console.log("Error in POST: interview/id");

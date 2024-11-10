@@ -26,10 +26,10 @@ export class EntityService<E extends Entity, D extends Document> {
         }
     }
 
-    async create(data: any): Promise<E> {
+    async create(data: any, populate?: any): Promise<E> {
         try {
             await this.before();
-            return this.dbModel.create(data) as any;
+            return (await this.dbModel.create(data)).populate(populate) as any;
         } catch (e: any) {
             console.error("Error: create,", e);
             throw e;

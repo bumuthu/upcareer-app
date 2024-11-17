@@ -8,31 +8,28 @@ const OverallScoreContainer = () => {
     const data = [
         {
             title: 'Communication',
-            ranges: 100, // The target bar length
-            measures: 86, // The actual value
-            target: 86,
+            measures: 50,
+            target: 90,
 
         },
         {
             title: 'Accuracy',
-            ranges: 100,
             measures: 45,
-            target: 92,
+            target: 90,
 
         },
         {
             title: 'Confidence',
-            ranges: 100,
             measures: 92,
-            target: 92,
+            target: 90,
 
         },
     ];
 
     const config = {
         data,
-        height: 100,
-        measureSize: 12,
+        height: 200,
+        measureSize: 5,
         colorField: "title",
         color: (title: string) => {
             if (title === 'Communication') return '#A19DFF';
@@ -41,19 +38,12 @@ const OverallScoreContainer = () => {
             return '#d9d9d9';
         },
         xField: 'title',
-        yField: 'measures',
         layout: 'horizontal',
-        label: {
-            position: 'left',
-            style: {
-                fill: 'gray',
-                fontSize: 12,
-            },
-        },
+
     };
     return (
         <div style={{ width: "100%" }}>
-            <Card style={{backgroundColor:"#dddddd"}}>
+            <Card style={{ backgroundColor: "#dddddd" }}>
                 <div style={{ display: "flex", flexDirection: "row", gap: "20px" }}>
                     <div>
                         <Typography.Title level={3} style={{ marginBottom: "10px" }}>Overall Score</Typography.Title>
@@ -73,14 +63,9 @@ const OverallScoreContainer = () => {
                     </div>
                 </div>
 
-                {data.map((item, index) => (
-                    <div key={index} >
-
-                        <Bullet
-                            {...config} data={[item]}
-                        />
-                    </div>
-                ))}
+                <Bullet
+                    {...config} data={data}
+                />
 
 
             </Card>

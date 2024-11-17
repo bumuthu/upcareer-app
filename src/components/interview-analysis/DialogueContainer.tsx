@@ -17,12 +17,12 @@ const DialogueContainer = () => {
         <Typography.Title level={4} style={{ marginBottom: "25px", marginLeft: "50px" }}>{treeNode?.node.question ?? "You haven’t selected any question yet. Click on a question to view details."}</Typography.Title>
         {/* your answer */}
         <Card bordered style={{ border: "solid 1px", marginLeft: "50px", borderColor: "#0D99FF", display: "flex", alignItems: "center" }}>
-          <Typography.Title level={5}>Your Answer</Typography.Title>
+          <Typography.Title style={{ marginTop: "10px" }} level={5}>Your Answer</Typography.Title>
           <Typography.Paragraph >{treeNode?.node.userAnswer ?? 'No Answer Provided'}</Typography.Paragraph>
         </Card>
         {/* Expected answer */}
         <Card bordered style={{ border: "solid 1px", marginLeft: "50px", borderColor: "black", marginTop: "20px", display: "flex", alignItems: "center" }}>
-          <Typography.Title level={5}>Expected Answer</Typography.Title>
+          <Typography.Title style={{ marginTop: "10px" }} level={5}>Expected Answer</Typography.Title>
           <Typography.Paragraph>{treeNode?.node.expectedAnswer ?? "No Expected Answer"}</Typography.Paragraph>
         </Card>
 

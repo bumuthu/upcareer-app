@@ -11,7 +11,9 @@ const QuestionTreeContainer = () => {
 	useEffect(() => {
 		if (interviewContext.interviewNodeService) {
 			interviewContext.setSelectedCardId!(interviewContext.interviewNodeService?.formatTree()[0]?.id!)
+			setSelectedCardId(interviewContext.interviewNodeService?.formatTree()[0]?.id!)
 		}
+		
 	}, [interviewContext.interviewNodeService])
 	const handleCardClick = (cardId: string) => {
 		setSelectedCardId(cardId);

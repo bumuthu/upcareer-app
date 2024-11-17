@@ -42,7 +42,7 @@ const OverallScoreContainer = () => {
 
     };
     return (
-        <div style={{ width: "100%" }}>
+        <div style={{ width: "500px" }}>
             <Card style={{ backgroundColor: "#dddddd" }}>
                 <div style={{ display: "flex", flexDirection: "row", gap: "20px" }}>
                     <div>
@@ -63,11 +63,7 @@ const OverallScoreContainer = () => {
                     </div>
                 </div>
 
-                <Bullet
-                    {...config} data={data}
-                />
-
-
+                <Bullet {...config} data={data} />
             </Card>
         </div>
     )

@@ -26,7 +26,7 @@ const QuestionTreeContainer = () => {
 	return (
 		<div>
 			{interviewContext.interviewNodeService ?
-				<Card style={{  overflowY: "auto", maxHeight: "720px", padding: "30px" }}>
+				<Card style={{  overflowY: "auto", maxHeight: "720px", padding: "10px" }}>
 					{interviewContext.interviewNodeService?.formatTree().length! > 0 ?
 						<>{interviewContext.interviewNodeService?.formatTree() && interviewContext.interviewNodeService?.formatTree().map((tree: FormattedTreeData) => (
 							<div key={tree.id}>
@@ -36,7 +36,7 @@ const QuestionTreeContainer = () => {
 											cursor: "pointer",
 											backgroundColor: selectedCardId === tree.id ? "#0D99FF" : hoveredCardId === tree.id ? "#f0f8ff" : "white",
 											transition: "background-color 0.3s ease",
-											border: "solid 1px", borderColor: "#0D99FF", width: "100%", marginBottom: "20px", marginLeft: checkIsParent(tree.depth)
+											border: "solid 1px", borderColor: "#0D99FF", width: "100%", marginBottom: "10px", marginLeft: checkIsParent(tree.depth),
 										}}>
 										<Typography style={{ fontWeight: "bold", color: selectedCardId === tree.id ? "white" : "#0D99FF" }}>{tree.node.question}</Typography>
 									</Card>}
@@ -45,7 +45,7 @@ const QuestionTreeContainer = () => {
 										cursor: "pointer",
 										backgroundColor: selectedCardId === childNode.id ? "#0D99FF": hoveredCardId === childNode.id ? "#f0f8ff" : "white",
 										transition: "background-color 0.3s ease",
-										border: "solid 1px", width: "100%", marginBottom: "20px", marginLeft: "20px",borderColor: "#0D99FF"
+										border: "solid 1px", width: "100%", marginBottom: "10px", marginLeft: "20px",borderColor: "#0D99FF",
 									}}>
 										<Typography style={{ fontWeight: "bold", color: selectedCardId === childNode.id ? "white" : "#0D99FF" }}>{childNode.node.question}</Typography>
 									</Card>)}

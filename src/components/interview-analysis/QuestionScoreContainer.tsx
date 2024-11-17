@@ -39,7 +39,7 @@ const QuestionScoreContainer = () => {
         layout: 'horizontal',
     };
     return (
-        <div style={{ width: "100%" }}>
+        <div style={{ width: "500px" }}>
             <Card>
                 <Typography.Title level={3} style={{ marginBottom: "10px" }}>Question Score</Typography.Title>
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -50,9 +50,7 @@ const QuestionScoreContainer = () => {
                     </Typography.Paragraph>
                 </div>
 
-                <Bullet
-                    {...config} data={data}
-                />
+                <Bullet {...config} data={data} />
             </Card>
         </div>
     )

@@ -9,12 +9,12 @@ const DialogueContainer = () => {
 
   useEffect(() => {
     setTreeNode(interviewContext.interviewNodeService?.formatTree().find(item => item.id === interviewContext.selectedCardId));
-  }, [interviewContext.interviewNodeService])
+  }, [interviewContext.selectedCardId])
 
   return (
     <>
       <Card style={{ width: "100%" }}>
-        <Typography.Title level={4} style={{ marginBottom: "25px", marginLeft: "50px" }}>{treeNode?.node.question}</Typography.Title>
+        <Typography.Title level={4} style={{ marginBottom: "25px", marginLeft: "50px" }}>{treeNode?.node.question ?? "You haven’t selected any question yet. Click on a question to view details."}</Typography.Title>
         {/* your answer */}
         <Card bordered style={{ border: "solid 1px", marginLeft: "50px", borderColor: "#0D99FF", display: "flex", alignItems: "center" }}>
           <Typography.Title level={5}>Your Answer</Typography.Title>

@@ -17,7 +17,7 @@ const MyInterview = () => {
    
    return <WithTopNavBar>
         <LeftNavBar>
-            <div style={{maxWidth:"1500px" ,width:"100%",margin: '100px auto' }}>
+            <div style={{maxWidth:"1500px" ,width:"100%",margin: '80px auto 0px auto'}}>
                 <SingleInterviewAnalysis />
             </div>
         </LeftNavBar>

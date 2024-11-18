@@ -7,7 +7,7 @@ import { breakpoints } from '@/common/AppThemeProvider'
 const LeftContainer = () => {
   const isSmallScreen = useMediaQuery({maxWidth: breakpoints.xl})
   return (
-    <div style={{display:"flex", flexDirection:"column",gap:"20px", width:isSmallScreen?"100%":"40%",height:"100vh"}}>
+    <div style={{display:"flex", flexDirection:"column",gap:"20px", width:isSmallScreen?"100%":"40%"}}>
         <TitleContainer/>
         <QuestionTreeContainer/>
     </div>

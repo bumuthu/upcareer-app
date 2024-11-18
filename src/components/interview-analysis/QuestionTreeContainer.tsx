@@ -26,7 +26,7 @@ const QuestionTreeContainer = () => {
 	return (
 		<div>
 			{interviewContext.interviewNodeService ?
-				<Card style={{  overflowY: "auto", maxHeight: "720px", padding: "10px" }}>
+				<Card style={{  overflowY: "auto", maxHeight: "630px", padding: "10px" }}>
 					{interviewContext.interviewNodeService?.formatTree().length! > 0 ?
 						<>{interviewContext.interviewNodeService?.formatTree() && interviewContext.interviewNodeService?.formatTree().map((tree: FormattedTreeData) => (
 							<div key={tree.id}>

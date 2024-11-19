@@ -18,7 +18,7 @@ const DialogueContainer = () => {
         {/* your answer */}
         <Card bordered style={{ border: "solid 1px", marginLeft: "50px", borderColor: "#0D99FF", display: "flex", alignItems: "center" }}>
           <Typography.Title style={{ marginTop: "10px" }} level={5}>Your Answer</Typography.Title>
-          <Typography.Paragraph >{treeNode?.node.userAnswer ?? 'No Answer Provided'}</Typography.Paragraph>
+          <Typography.Paragraph >{(treeNode?.node.userAnswer || treeNode?.node.userAnswer == "") ? treeNode?.node.userAnswer:'No Answer Provided'}</Typography.Paragraph>
         </Card>
         {/* Expected answer */}
         <Card bordered style={{ border: "solid 1px", marginLeft: "50px", borderColor: "black", marginTop: "20px", display: "flex", alignItems: "center" }}>

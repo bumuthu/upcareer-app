@@ -27,18 +27,19 @@ const TitleContainer = () => {
 	});
 	useEffect(() => {
 		console.log("sdsdsd", (interviewContext.activeUserInterview?.baseInterview as BaseInterviewModel)?.category as CategoryModel)
+		console.log("dateeeeee: ", formattedStartedAt)
 	}, [])
 
 	return (
 		<div>{interviewContext.activeUserInterview ?
 			<Card>
-				<Typography.Title level={3} style={{ marginBottom: "30px" }}>{(interviewContext.activeUserInterview?.baseInterview as BaseInterviewModel)?.title}</Typography.Title>
+				<Typography.Title level={3} style={{ marginBottom: "30px" }}>{(interviewContext.activeUserInterview?.baseInterview as BaseInterviewModel)?.title?? "No title to show"}</Typography.Title>
 				<Typography.Paragraph>{((interviewContext.activeUserInterview?.baseInterview as BaseInterviewModel)?.category as CategoryModel)?.name}</Typography.Paragraph>
 				<div style={{ display: "flex", flexDirection: "row", gap: "15px" }}>
 					<Typography.Paragraph>Duration</Typography.Paragraph>
-					<Typography.Title level={1} style={{ margin: "0" }} >{duration}</Typography.Title>
+					<Typography.Title level={1} style={{ margin: "0" }} >{interviewContext.activeUserInterview?.endedAt?duration: "N/A"}</Typography.Title>
 				</div>
-				<Typography.Title level={4} style={{ marginTop: "6px" }}>{formattedStartedAt}</Typography.Title>
+				<Typography.Title level={4} style={{ marginTop: "6px" }}>{interviewContext.activeUserInterview?.startedAt? formattedStartedAt: "No data available"}</Typography.Title>
 
 			</Card> :
 				<Card>

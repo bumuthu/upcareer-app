@@ -23,7 +23,7 @@ const SingleInterviewAnalysis = () => {
     }, [interviewContext.interviewNodeService])
 
     return (
-        <div style={{ display: "flex", flexDirection: isSmallScreen ? "column" : "row", gap: "50px", justifyContent: "center", alignItems: "center", width: "100%" }}>
+        <div style={{ display: "flex", flexDirection: isSmallScreen ? "column" : "row", gap: "20px", justifyContent: "center", width: "100%" ,height:"80vh" }}>
             <LeftContainer />
             <RightContainer />
         </div>
